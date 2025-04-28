@@ -1,30 +1,32 @@
 developer@ac-srv-141:~/autoMEMO$ python3 main.py video.mp4
-tokenizer_config.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3.07k/3.07k [00:00<00:00, 14.6MB/s]
-tokenizer.json: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 7.03M/7.03M [00:00<00:00, 14.4MB/s]
-config.json: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 680/680 [00:00<00:00, 3.10MB/s]
-model.safetensors.index.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 28.1k/28.1k [00:00<00:00, 70.9MB/s]
-model-00002-of-000002.safetensors: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6.62G/6.62G [02:18<00:00, 47.8MB/s]
-model-00001-of-000002.safetensors: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8.61G/8.61G [03:16<00:00, 43.7MB/s]
-Fetching 2 files: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [03:17<00:00, 98.72s/it]
-Sliding Window Attention is enabled but not implemented for `sdpa`; unexpected results may be encountered.██████████████████████████████████████████████████████████████████████████████████████████████| 8.61G/8.61G [03:16<00:00, 49.7MB/s]
-Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [01:10<00:00, 35.02s/it]
-generation_config.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 181/181 [00:00<00:00, 846kB/s]
+Sliding Window Attention is enabled but not implemented for `sdpa`; unexpected results may be encountered.
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [01:34<00:00, 47.17s/it]
 Device set to use cpu
 [1/6] Извлекаем аудио из видео...
 {'video_found': True, 'audio_found': True, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'encoder': 'Lavf59.16.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [1280, 720], 'bitrate': 227, 'fps': 30.0, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]'}}, {'input_number': 0, 'stream_number': 1, 'stream_type': 'audio', 'language': None, 'default': True, 'fps': 48000, 'bitrate': 70, 'metadata': {'Metadata': '', 'handler_name': 'SoundHandler', 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 2423.47, 'bitrate': 304, 'start': 0.0, 'default_video_input_number': 0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [1280, 720], 'video_bitrate': 227, 'video_fps': 30.0, 'default_audio_input_number': 0, 'default_audio_stream_number': 1, 'audio_fps': 48000, 'audio_bitrate': 70, 'video_duration': 2423.47, 'video_n_frames': 72704}
 /home/developer/.local/lib/python3.10/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2 -i video.mp4 -loglevel error -f image2pipe -vf scale=1280:720 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+MoviePy - Writing audio in audio.wav
+MoviePy - Done.
+[2/6] Расшифровываем аудио через Whisper...
+100%|███████████████████████████████████████| 139M/139M [00:02<00:00, 71.3MiB/s]
+/home/developer/.local/lib/python3.10/site-packages/whisper/transcribe.py:126: UserWarning: FP16 is not supported on CPU; using FP32 instead
+  warnings.warn("FP16 is not supported on CPU; using FP32 instead")
 Traceback (most recent call last):
-  File "/home/developer/autoMEMO/main.py", line 84, in <module>
-    audio_path = extract_audio(video_path)
-  File "/home/developer/autoMEMO/main.py", line 16, in extract_audio
-    clip.audio.write_audiofile(audio_path, verbose=False, logger=None)
-  File "/home/developer/.local/lib/python3.10/site-packages/decorator.py", line 234, in fun
-    args, kw = fix(args, kw, sig)
-  File "/home/developer/.local/lib/python3.10/site-packages/decorator.py", line 204, in fix
-    ba = sig.bind(*args, **kwargs)
-  File "/usr/lib/python3.10/inspect.py", line 3186, in bind
-    return self._bind(args, kwargs)
-  File "/usr/lib/python3.10/inspect.py", line 3175, in _bind
-    raise TypeError(
-TypeError: got an unexpected keyword argument 'verbose'
-developer@ac-srv-141:~/autoMEMO$
+  File "/home/developer/autoMEMO/main.py", line 87, in <module>
+    transcript = transcribe_audio(audio_path)
+  File "/home/developer/autoMEMO/main.py", line 22, in transcribe_audio
+    result = model.transcribe(audio_path, language="ru")
+  File "/home/developer/.local/lib/python3.10/site-packages/whisper/transcribe.py", line 133, in transcribe
+    mel = log_mel_spectrogram(audio, model.dims.n_mels, padding=N_SAMPLES)
+  File "/home/developer/.local/lib/python3.10/site-packages/whisper/audio.py", line 140, in log_mel_spectrogram
+    audio = load_audio(audio)
+  File "/home/developer/.local/lib/python3.10/site-packages/whisper/audio.py", line 58, in load_audio
+    out = run(cmd, capture_output=True, check=True).stdout
+  File "/usr/lib/python3.10/subprocess.py", line 503, in run
+    with Popen(*popenargs, **kwargs) as process:
+  File "/usr/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1863, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'ffmpeg'
+
