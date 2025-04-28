@@ -1,0 +1,10 @@
+developer@ac-srv-141:~/autoMEMO$ python main.py video.mp4
+Command 'python' not found, did you mean:
+  command 'python3' from deb python3
+  command 'python' from deb python-is-python3
+developer@ac-srv-141:~/autoMEMO$ python3 main.py video.mp4
+Traceback (most recent call last):
+  File "/home/developer/autoMEMO/main.py", line 6, in <module>
+    from moviepy.editor import VideoFileClip
+ModuleNotFoundError: No module named 'moviepy.editor'
+developer@ac-srv-141:~/autoMEMO$
