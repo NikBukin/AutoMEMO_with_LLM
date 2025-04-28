@@ -1,10 +1,78 @@
-developer@ac-srv-141:~/autoMEMO$ python main.py video.mp4
-Command 'python' not found, did you mean:
-  command 'python3' from deb python3
-  command 'python' from deb python-is-python3
 developer@ac-srv-141:~/autoMEMO$ python3 main.py video.mp4
+The repository for fixie-ai/ultravox-v0_5-llama-3_2-1b contains custom code which must be executed to correctly load the model. You can inspect the repository content at https://hf.co/fixie-ai/ultravox-v0_5-llama-3_2-1b.
+You can avoid this prompt in future by passing the argument `trust_remote_code=True`.
+
+Do you wish to run the custom code? [y/N] y
+ultravox_config.py: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6.54k/6.54k [00:00<00:00, 23.7MB/s]
+A new version of the following files was downloaded from https://huggingface.co/fixie-ai/ultravox-v0_5-llama-3_2-1b:
+- ultravox_config.py
+. Make sure to double-check they do not contain any added malicious code. To avoid downloading new versions of the code file, you can pin a revision.
 Traceback (most recent call last):
-  File "/home/developer/autoMEMO/main.py", line 6, in <module>
-    from moviepy.editor import VideoFileClip
-ModuleNotFoundError: No module named 'moviepy.editor'
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 409, in hf_raise_for_status
+    response.raise_for_status()
+  File "/home/developer/.local/lib/python3.10/site-packages/requests/models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/utils/hub.py", line 424, in cached_files
+    hf_hub_download(
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 961, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1068, in _hf_hub_download_to_cache_dir
+    _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1596, in _raise_on_head_call_error
+    raise head_call_error
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1484, in _get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1401, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 285, in _request_wrapper
+    response = _request_wrapper(
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 309, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/home/developer/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 426, in hf_raise_for_status
+    raise _format(GatedRepoError, message, response) from e
+huggingface_hub.errors.GatedRepoError: 401 Client Error. (Request ID: Root=1-680f867a-59f38e8f4ed9fe751a3ca049;6787a411-fc44-4620-a63f-66629a7184e5)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json.
+Access to model meta-llama/Llama-3.2-1B-Instruct is restricted. You must have access to it and be authenticated to access it. Please log in.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/developer/autoMEMO/main.py", line 60, in <module>
+    model = AutoModelForCausalLM.from_pretrained(llm_model)
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 531, in from_pretrained
+    config, kwargs = AutoConfig.from_pretrained(
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1126, in from_pretrained
+    return config_class.from_pretrained(pretrained_model_name_or_path, **kwargs)
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/configuration_utils.py", line 568, in from_pretrained
+    return cls.from_dict(config_dict, **kwargs)
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/configuration_utils.py", line 737, in from_dict
+    config = cls(**config_dict)
+  File "/home/developer/.cache/huggingface/modules/transformers_modules/fixie-ai/ultravox-v0_5-llama-3_2-1b/5190dda6cc8f2b088f7d2432e271ce39c2e08c04/ultravox_config.py", line 128, in __init__
+    transformers.AutoConfig.from_pretrained(text_model_id)
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1112, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/configuration_utils.py", line 590, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/configuration_utils.py", line 649, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/utils/hub.py", line 266, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+  File "/home/developer/.local/lib/python3.10/site-packages/transformers/utils/hub.py", line 481, in cached_files
+    raise OSError(
+OSError: You are trying to access a gated repo.
+Make sure to have access to it at https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct.
+401 Client Error. (Request ID: Root=1-680f867a-59f38e8f4ed9fe751a3ca049;6787a411-fc44-4620-a63f-66629a7184e5)
+
+Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json.
+Access to model meta-llama/Llama-3.2-1B-Instruct is restricted. You must have access to it and be authenticated to access it. Please log in.
 developer@ac-srv-141:~/autoMEMO$
