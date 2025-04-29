@@ -16,7 +16,7 @@ SUMMARY_FILE = "summary.md"
 # --- STEP 1: Extract audio from video ---
 def extract_audio(video_path, audio_path="audio.wav"):
     clip = VideoFileClip(video_path)
-    clip.audio.write_audiofile(audio_path, verbose=False, logger=None)
+    clip.audio.write_audiofile(audio_path)
     return audio_path
 
 # --- STEP 2: Transcribe using Whisper ---
@@ -58,9 +58,9 @@ def search_similar_chunks(query, index, chunks, embeddings, k=3):
     return [chunks[i] for i in I[0]]
 
 # --- STEP 6: Load LLM ---
-llm_model = "fixie-ai/ultravox-v0_5-llama-3_2-1b"
+llm_model = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
 tokenizer = AutoTokenizer.from_pretrained(llm_model)
-model = AutoModelForCausalLM.from_pretrained(llm_model)
+model = AutoModelForCausalLM.from_pretrained(llm_model, trust_remote_code=True)
 llm = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=300)
 
 # --- STEP 7: Ask question ---
