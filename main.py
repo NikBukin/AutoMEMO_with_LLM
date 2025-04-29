@@ -6,7 +6,7 @@ import numpy as np
 import multiprocessing
 import time
 from tqdm import tqdm
-from moviepy.editor import VideoFileClip
+from moviepy.video.io.VideoFileClip import VideoFileClip
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 from sentence_transformers import SentenceTransformer
 
@@ -58,7 +58,7 @@ def search_similar_chunks(query, index, chunks, embeddings, k=3):
     return [chunks[i] for i in I[0]]
 
 # --- STEP 6: Load LLM ---
-llm_model = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+llm_model = "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
 tokenizer = AutoTokenizer.from_pretrained(llm_model)
 model = AutoModelForCausalLM.from_pretrained(llm_model, trust_remote_code=True)
 llm = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=300)
