@@ -72,7 +72,7 @@ def answer_question(question, relevant_chunks):
 
 # --- STEP 8: Summarize meeting ---
 # --- Разделение текста на части с перекрытием ---
-def split_text_with_overlap(text, max_words=500, overlap_words=100):
+def split_text_with_overlap(text, max_words=1500, overlap_words=300):
     import re
     sentences = re.split(r'(?<=[.!?]) +', text)
 
@@ -108,7 +108,7 @@ def summarize_chunk(chunk):
     response = llm(prompt)[0]['generated_text']
     return response
 
-def summarize_transcript_sequential(transcript, max_words=500, overlap_words=100):
+def summarize_transcript_sequential(transcript, max_words=1500, overlap_words=300):
     chunks = split_text_with_overlap(transcript, max_words=max_words, overlap_words=overlap_words)
     print(f"🔹 Разбито на {len(chunks)} частей для последовательного суммирования...")
 
