@@ -3,6 +3,9 @@ import sys
 import whisper
 import faiss
 import numpy as np
+import multiprocessing
+import time
+from tqdm import tqdm
 from moviepy.editor import VideoFileClip
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 from sentence_transformers import SentenceTransformer
@@ -68,10 +71,71 @@ def answer_question(question, relevant_chunks):
     return response.split("Ответ:")[-1].strip()
 
 # --- STEP 8: Summarize meeting ---
-def summarize_transcript(transcript):
-    prompt = f"Вот транскрипт встречи:\n{transcript[:3000]}\n\nСделай краткое резюме основных тем и решений."
+# --- Разделение текста на части с перекрытием ---
+def split_text_with_overlap(text, max_words=500, overlap_words=100):
+    import re
+    sentences = re.split(r'(?<=[.!?]) +', text)
+    
+    chunks = []
+    chunk = []
+    chunk_len = 0
+
+    for sentence in sentences:
+        words = sentence.split()
+        if chunk_len + len(words) <= max_words:
+            chunk.append(sentence)
+            chunk_len += len(words)
+        else:
+            # Сохраняем текущий чанк
+            chunks.append(' '.join(chunk))
+            # Перекрёсток: начинаем следующий чанк с конца предыдущего
+            overlap = []
+            overlap_len = 0
+            for sent in reversed(chunk):
+                sent_words = sent.split()
+                overlap_len += len(sent_words)
+                overlap.insert(0, sent)
+                if overlap_len >= overlap_words:
+                    break
+            chunk = overlap + [sentence]
+            chunk_len = sum(len(s.split()) for s in chunk)
+
+    if chunk:
+        chunks.append(' '.join(chunk))
+    
+    return chunks
+
+# --- Резюмирование одного куска ---
+def summarize_chunk(chunk):
+    prompt = f"Вот часть транскрипта встречи:\n{chunk}\n\nСделай краткое резюме этой части."
     response = llm(prompt)[0]['generated_text']
     return response
+
+# --- Параллельное резюмирование всей встречи ---
+def summarize_transcript_map_reduce_multiprocessing(transcript, max_words=500, overlap_words=100, max_workers=None):
+    chunks = split_text_with_overlap(transcript, max_words=max_words, overlap_words=overlap_words)
+    total_chunks = len(chunks)
+
+    print(f"🔹 Разбито на {total_chunks} частей для мультипроцессной суммаризации...")
+
+    if max_workers is None:
+        max_workers = max(1, multiprocessing.cpu_count() - 1)  # использовать все ядра минус одно
+
+    start_time = time.time()
+
+    partial_summaries = []
+    with multiprocessing.Pool(processes=max_workers) as pool:
+        for summary in tqdm(pool.imap(summarize_chunk, chunks), total=total_chunks, desc="Резюмирование частей", unit="часть"):
+            partial_summaries.append(summary)
+
+    total_time = time.time() - start_time
+    print(f"\n✅ Все части резюмированы за {total_time:.1f} секунд.")
+
+    # Финальное объединение всех резюме
+    full_summary_prompt = "Вот краткие резюме частей встречи:\n\n" + "\n\n".join(partial_summaries) + \
+                          "\n\nНа основе этих резюме сделай полное краткое содержание всей встречи, выдели основные темы и принятые решения."
+    final_summary = llm(full_summary_prompt)[0]['generated_text']
+    return final_summary
 
 # --- MAIN ---
 if __name__ == "__main__":
@@ -91,7 +155,7 @@ if __name__ == "__main__":
     index, embeddings, chunk_store = build_index(chunks)
 
     print("[4/6] Генерируем краткое содержание встречи...")
-    summary = summarize_transcript(transcript)
+    summary = summarize_transcript_map_reduce_multiprocessing(transcript)
     with open(SUMMARY_FILE, "w", encoding="utf-8") as f:
         f.write("# 📝 Краткое содержание встречи\n\n" + summary)
 
