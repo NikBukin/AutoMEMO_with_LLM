@@ -28,7 +28,7 @@ def transcribe_audio(audio_path):
     return result["text"]
 
 # --- STEP 3: Split transcript into chunks ---
-def split_text(text, max_words=200):
+def split_text(text, max_words=500):
     import re
     sentences = re.split(r'(?<=[.!?]) +', text)
     chunks, chunk = [], ""
@@ -61,7 +61,7 @@ def search_similar_chunks(query, index, chunks, embeddings, k=3):
 llm_model = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
 tokenizer = AutoTokenizer.from_pretrained(llm_model)
 model = AutoModelForCausalLM.from_pretrained(llm_model, trust_remote_code=True)
-llm = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=300)
+llm = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=500)
 
 # --- STEP 7: Ask question ---
 def answer_question(question, relevant_chunks):
@@ -104,7 +104,7 @@ def split_text_with_overlap(text, max_words=1500, overlap_words=300):
     return chunks
 
 def summarize_chunk(chunk):
-    prompt = f"Вот часть транскрипта встречи:\n{chunk}\n\nСделай краткое резюме этой части."
+    prompt = f"Вот часть транскрипта встречи:\n{chunk}\n\nСделай краткое резюме этой части на 5-7 предложений. Используй русский язык и не задавай вопросы"
     response = llm(prompt)[0]['generated_text']
     return response
 
@@ -119,7 +119,7 @@ def summarize_transcript_sequential(transcript, max_words=1500, overlap_words=30
         partial_summaries.append(summary)
 
     full_prompt = "Вот краткие резюме частей встречи:\n\n" + "\n\n".join(partial_summaries) + \
-                  "\n\nНа основе этих резюме сделай полное краткое содержание всей встречи, выдели основные темы и принятые решения."
+                  "\n\nНа основе этих резюме сделай полное краткое содержание всей встречи, выдели основные темы и принятые решения. Используй русский язык и не задавай вопросы"
     final_summary = llm(full_prompt)[0]['generated_text']
     return final_summary
     
