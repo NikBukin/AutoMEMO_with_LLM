@@ -58,7 +58,7 @@ def search_similar_chunks(query, index, chunks, embeddings, k=3):
     return [chunks[i] for i in I[0]]
 
 # --- STEP 6: Load LLM ---
-llm_model = "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
+llm_model = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
 tokenizer = AutoTokenizer.from_pretrained(llm_model)
 model = AutoModelForCausalLM.from_pretrained(llm_model, trust_remote_code=True)
 llm = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=300)
@@ -75,7 +75,7 @@ def answer_question(question, relevant_chunks):
 def split_text_with_overlap(text, max_words=500, overlap_words=100):
     import re
     sentences = re.split(r'(?<=[.!?]) +', text)
-    
+
     chunks = []
     chunk = []
     chunk_len = 0
@@ -86,9 +86,8 @@ def split_text_with_overlap(text, max_words=500, overlap_words=100):
             chunk.append(sentence)
             chunk_len += len(words)
         else:
-            # Сохраняем текущий чанк
             chunks.append(' '.join(chunk))
-            # Перекрёсток: начинаем следующий чанк с конца предыдущего
+            # Начинаем новый чанк с перекрытием
             overlap = []
             overlap_len = 0
             for sent in reversed(chunk):
@@ -102,41 +101,28 @@ def split_text_with_overlap(text, max_words=500, overlap_words=100):
 
     if chunk:
         chunks.append(' '.join(chunk))
-    
     return chunks
 
-# --- Резюмирование одного куска ---
 def summarize_chunk(chunk):
     prompt = f"Вот часть транскрипта встречи:\n{chunk}\n\nСделай краткое резюме этой части."
     response = llm(prompt)[0]['generated_text']
     return response
 
-# --- Параллельное резюмирование всей встречи ---
-def summarize_transcript_map_reduce_multiprocessing(transcript, max_words=500, overlap_words=100, max_workers=None):
+def summarize_transcript_sequential(transcript, max_words=500, overlap_words=100):
     chunks = split_text_with_overlap(transcript, max_words=max_words, overlap_words=overlap_words)
-    total_chunks = len(chunks)
-
-    print(f"🔹 Разбито на {total_chunks} частей для мультипроцессной суммаризации...")
-
-    if max_workers is None:
-        max_workers = max(1, multiprocessing.cpu_count() - 1)  # использовать все ядра минус одно
-
-    start_time = time.time()
+    print(f"🔹 Разбито на {len(chunks)} частей для последовательного суммирования...")
 
     partial_summaries = []
-    with multiprocessing.Pool(processes=max_workers) as pool:
-        for summary in tqdm(pool.imap(summarize_chunk, chunks), total=total_chunks, desc="Резюмирование частей", unit="часть"):
-            partial_summaries.append(summary)
+    for i, chunk in enumerate(chunks):
+        print(f"🔸 Обрабатываем часть {i+1}/{len(chunks)}...")
+        summary = summarize_chunk(chunk)
+        partial_summaries.append(summary)
 
-    total_time = time.time() - start_time
-    print(f"\n✅ Все части резюмированы за {total_time:.1f} секунд.")
-
-    # Финальное объединение всех резюме
-    full_summary_prompt = "Вот краткие резюме частей встречи:\n\n" + "\n\n".join(partial_summaries) + \
-                          "\n\nНа основе этих резюме сделай полное краткое содержание всей встречи, выдели основные темы и принятые решения."
-    final_summary = llm(full_summary_prompt)[0]['generated_text']
+    full_prompt = "Вот краткие резюме частей встречи:\n\n" + "\n\n".join(partial_summaries) + \
+                  "\n\nНа основе этих резюме сделай полное краткое содержание всей встречи, выдели основные темы и принятые решения."
+    final_summary = llm(full_prompt)[0]['generated_text']
     return final_summary
-
+    
 # --- MAIN ---
 if __name__ == "__main__":
     if len(sys.argv) < 2:
