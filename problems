@@ -1,40 +1,3 @@
-Query failed: Cannot connect to host host.docker.internal:11434 ssl:default [Name or service not known]
-
-
-
-developer@ac-srv-141:~/Verba$ sudo systemctl edit ollama.service
-Editing "/etc/systemd/system/ollama.service.d/override.conf" canceled: temporary file is empty.
-developer@ac-srv-141:~/Verba$ nano docker-compose.yml
-developer@ac-srv-141:~/Verba$ nano docker-compose.yml
-developer@ac-srv-141:~/Verba$ cat /etc/systemd/system/ollama.service.d/override.conf
-cat: /etc/systemd/system/ollama.service.d/override.conf: No such file or directory
-developer@ac-srv-141:~/Verba$ sudo nano /etc/systemd/system/ollama.service.d/override.conf
-[sudo] password for developer:
-developer@ac-srv-141:~/Verba$ sudo mkdir /etc/systemd/system/ollama.service.d
-developer@ac-srv-141:~/Verba$ sudo nano /etc/systemd/system/ollama.service.d/override.conf
-developer@ac-srv-141:~/Verba$ cat /etc/systemd/system/ollama.service.d/override.conf
-[Service]
-Environment="OLLAMA_HOST=0.0.0.0"
-developer@ac-srv-141:~/Verba$ sudo systemctl daemon-reload
-developer@ac-srv-141:~/Verba$ sudo systemctl restart ollama
-developer@ac-srv-141:~/Verba$ sudo ss -tulnp | grep 11434
-tcp   LISTEN 0      4096               *:11434            *:*    users:(("ollama",pid=411859,fd=3))
-developer@ac-srv-141:~/Verba$ nano goldenverba/.env
-developer@ac-srv-141:~/Verba$ nano goldenverba/.env
-developer@ac-srv-141:~/Verba$ docker compose down
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "OLLAMA_MODEL" variable is not set. Defaulting to a blank string.
-WARN[0000] The "OLLAMA_EMBED_MODEL" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
-WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-[+] Running 3/3
- ✔ Container verba-verba-1      Removed                                                                                                                                                                                                 1.0s
- ✔ Container verba-weaviate-1   Removed                                                                                                                                                                                                 1.0s
- ✔ Network verba_ollama-docker  Removed                                                                                                                                                                                                 0.3s
 developer@ac-srv-141:~/Verba$ sudo docker compose --env-file goldenverba/.env up -d --build
 WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
 WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
@@ -71,4 +34,125 @@ developer@ac-srv-141:~/Verba$ docker ps
 CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS                    PORTS                                                                                      NAMES
 114f9be8616f   verba-verba                         "verba start --port …"   23 seconds ago   Up 16 seconds (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp                                                verba-verba-1
 0616f7e9b7a1   semitechnologies/weaviate:1.25.10   "/bin/weaviate --hos…"   23 seconds ago   Up 22 seconds (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp   verba-weaviate-1
-developer@ac-srv-141:~/Verba$
+developer@ac-srv-141:~/Verba$ nano goldenverba/.env
+developer@ac-srv-141:~/Verba$ nano .env
+developer@ac-srv-141:~/Verba$ cat .env
+cat: .env: No such file or directory
+developer@ac-srv-141:~/Verba$ cat goldenverba/.env
+# Weaviate configuration
+# WEAVIATE_URL_VERBA=http://weaviate:8080 # This is correct for Docker Compose
+WEAVIATE_URL_VERBA=http://weaviate:8080
+# WEAVIATE_API_KEY_VERBA= # Uncomment and set if you have an API key for Weaviate
+AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED="true"
+
+# Disable EmbeddedDB for Windows (and for Docker Compose on Linux this is not used)
+# PERSISTENCE_DATA_PATH="./verba-data"
+
+# Ollama configuration
+# Ollama is running directly on the host machine, so containers access it via host.docker.internal
+OLLAMA_URL=http://172.17.0.1:11434
+OLLAMA_MODEL=tinyllama
+OLLAMA_EMBED_MODEL=nomic-embed-text
+
+# Optional: OpenAI, Cohere, GitHub, Unstructured API keys if you plan to use them
+# OPENAI_API_KEY=
+# COHERE_API_KEY=
+# UNSTRUCTURED_API_KEY=
+# UNSTRUCTURED_API_URL=
+# GITHUB_TOKEN=
+developer@ac-srv-141:~/Verba$ cat docker-compose.yml
+---
+
+services:
+  verba:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    environment:
+      - WEAVIATE_URL_VERBA=http://weaviate:8080
+      - OPENAI_API_KEY=$OPENAI_API_KEY
+      - COHERE_API_KEY=$COHERE_API_KEY
+      - OLLAMA_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=$OLLAMA_MODEL
+      - OLLAMA_EMBED_MODEL=$OLLAMA_EMBED_MODEL
+      - UNSTRUCTURED_API_KEY=$UNSTRUCTURED_API_KEY
+      - UNSTRUCTURED_API_URL=$UNSTRUCTURED_API_URL
+      - GITHUB_TOKEN=$GITHUB_TOKEN
+
+    volumes:
+      - ./data:/data/
+    depends_on:
+      weaviate:
+        condition: service_healthy
+    healthcheck:
+      test: wget --no-verbose --tries=3 --spider http://localhost:8000 || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      - ollama-docker
+
+  weaviate:
+    command:
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8080'
+      - --scheme
+      - http
+    image: semitechnologies/weaviate:1.25.10
+    ports:
+      - 8080:8080
+      - 3000:8080
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    restart: on-failure:0
+    healthcheck:
+      test: wget --no-verbose --tries=3 --spider http://localhost:8080/v1/.well-known/ready || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    environment:
+      OPENAI_APIKEY: $OPENAI_API_KEY
+      COHERE_APIKEY: $COHERE_API_KEY
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      ENABLE_MODULES: 'e'
+      CLUSTER_HOSTNAME: 'node1'
+    networks:
+      - ollama-docker
+
+  # Uncomment to use Ollama within the same docker compose
+
+  # ollama:
+  #     image: ollama/ollama:latest
+  #     ports:
+  #       - 7869:11434
+  #     volumes:
+  #       - .:/code
+  #       - ./ollama/ollama:/root/.ollama
+  #     container_name: ollama
+  #     pull_policy: always
+  #     tty: true
+  #     restart: always
+  #     environment:
+  #       - OLLAMA_KEEP_ALIVE=24h
+  #       - OLLAMA_HOST=0.0.0.0
+  #     networks:
+  #       - ollama-docker
+
+volumes:
+  weaviate_data: {}
+
+
+networks:
+  ollama-docker:
+    external: false
+
+...
+
