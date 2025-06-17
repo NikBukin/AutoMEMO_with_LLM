@@ -1,2 +1,6 @@
-Query failed: Cannot connect to host host.docker.internal:11434 ssl:default [Name or service not known]
 
+developer@ac-srv-141:~/Verba$ docker ps
+CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS                      PORTS                                                                                      NAMES
+ec35544c30d0   verba-verba                         "verba start --port …"   39 seconds ago   Up 32 seconds (unhealthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp                                                verba-verba-1
+b345c4a49c80   semitechnologies/weaviate:1.25.10   "/bin/weaviate --hos…"   39 seconds ago   Up 38 seconds (healthy)     0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp   verba-weaviate-1
+developer@ac-srv-141:~/Verba$
