@@ -1,21 +1,88 @@
-# Weaviate configuration
-# WEAVIATE_URL_VERBA=http://weaviate:8080 # This is correct for Docker Compose
-WEAVIATE_URL_VERBA=http://weaviate:8080
-# WEAVIATE_API_KEY_VERBA= # Uncomment and set if you have an API key for Weaviate
-AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED="true"
+(venv) developer@ac-srv-141:~/Verba$ verba start
+ℹ Couldn't connect to Ollama http://host.docker.internal:11434
+ℹ Couldn't connect to Ollama http://host.docker.internal:11434
+INFO:     Will watch for changes in these directories: ['/home/developer/Verba']
+WARNING:  "workers" flag is ignored when reloading is enabled.
+INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [365385] using WatchFiles
+ℹ Couldn't connect to Ollama http://host.docker.internal:11434
+ℹ Couldn't connect to Ollama http://host.docker.internal:11434
+INFO:     Started server process [365417]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+^CINFO:     Shutting down
+INFO:     Waiting for application shutdown.
+⚠ Disconnecting Clients!
+INFO:     Application shutdown complete.
+INFO:     Finished server process [365417]
+INFO:     Stopping reloader process [365385]
+(venv) developer@ac-srv-141:~/Verba$ sudo apt allow ssh
+E: Invalid operation allow
+(venv) developer@ac-srv-141:~/Verba$ sudo apt install ufw -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+ufw is already the newest version (0.36.1-4ubuntu0.1).
+ufw set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 91 not upgraded.
+(venv) developer@ac-srv-141:~/Verba$ sudo ufw allow ssh
+Rule added
+Rule added (v6)
+(venv) developer@ac-srv-141:~/Verba$ sudo ufw allow 8000/tcp
+Rule added
+Rule added (v6)
+(venv) developer@ac-srv-141:~/Verba$ sudo ufw enable
+Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
+Firewall is active and enabled on system startup
+(venv) developer@ac-srv-141:~/Verba$ sudo ufw status
+Status: active
 
-# Disable EmbeddedDB for Windows (and for Docker Compose on Linux this is not used)
-# PERSISTENCE_DATA_PATH="./verba-data"
+To                         Action      From
+--                         ------      ----
+45718/tcp                  ALLOW       Anywhere
+22/tcp                     ALLOW       Anywhere
+8000/tcp                   ALLOW       Anywhere
+45718/tcp (v6)             ALLOW       Anywhere (v6)
+22/tcp (v6)                ALLOW       Anywhere (v6)
+8000/tcp (v6)              ALLOW       Anywhere (v6)
 
-# Ollama configuration
-# Ollama is running directly on the host machine, so containers access it via host.docker.internal
-OLLAMA_URL=http://host.docker.internal:11434
-OLLAMA_MODEL=tinyllama:latest
-OLLAMA_EMBED_MODEL=nomic-embed-text
+(venv) developer@ac-srv-141:~/Verba$ verba start
+ℹ Couldn't connect to Ollama http://host.docker.internal:11434
+ℹ Couldn't connect to Ollama http://host.docker.internal:11434
+INFO:     Will watch for changes in these directories: ['/home/developer/Verba']
+WARNING:  "workers" flag is ignored when reloading is enabled.
+INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [365688] using WatchFiles
+ℹ Couldn't connect to Ollama http://host.docker.internal:11434
+ℹ Couldn't connect to Ollama http://host.docker.internal:11434
+INFO:     Started server process [365720]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+^CINFO:     Shutting down
+INFO:     Waiting for application shutdown.
+⚠ Disconnecting Clients!
+INFO:     Application shutdown complete.
+INFO:     Finished server process [365720]
+INFO:     Stopping reloader process [365688]
+(venv) developer@ac-srv-141:~/Verba$ docker compose --env-file goldenverba/.env up -d --build
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+unable to get image 'semitechnologies/weaviate:1.25.10': permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.49/images/semitechnologies/weaviate:1.25.10/json": dial unix /var/run/docker.sock: connect: permission denied
+(venv) developer@ac-srv-141:~/Verba$ docker compose ps
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OLLAMA_MODEL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OLLAMA_EMBED_MODEL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.49/containers/json?filters=%7B%22label%22%3A%7B%22com.docker.compose.config-hash%22%3Atrue%2C%22com.docker.compose.oneoff%3DFalse%22%3Atrue%2C%22com.docker.compose.project%3Dverba%22%3Atrue%7D%7D": dial unix /var/run/docker.sock: connect: permission denied
+(venv) developer@ac-srv-141:~/Verba$ ^C
 
-# Optional: OpenAI, Cohere, GitHub, Unstructured API keys if you plan to use them
-# OPENAI_API_KEY=
-# COHERE_API_KEY=
-# UNSTRUCTURED_API_KEY=
-# UNSTRUCTURED_API_URL=
-# GITHUB_TOKEN=
