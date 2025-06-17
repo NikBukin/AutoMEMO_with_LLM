@@ -1,1 +1,163 @@
 Query failed: Cannot connect to host http:80 ssl:default [Temporary failure in name resolution]
+
+
+
+
+developer@ac-srv-141:~/Verba$ docker exec verba-verba-1 env | grep OLLAMA
+OLLAMA_MODEL=tinyllama
+OLLAMA_EMBED_MODEL=nomic-embed-text
+OLLAMA_URL=http://http://172.17.0.1:11434
+developer@ac-srv-141:~/Verba$ mv goldenverba/.env .env
+developer@ac-srv-141:~/Verba$ cat docker-compose.yml
+---
+
+services:
+  verba:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    environment:
+      - WEAVIATE_URL_VERBA=http://weaviate:8080
+      - OPENAI_API_KEY=$OPENAI_API_KEY
+      - COHERE_API_KEY=$COHERE_API_KEY
+      - OLLAMA_URL=http://$OLLAMA_URL
+      - OLLAMA_MODEL=$OLLAMA_MODEL
+      - OLLAMA_EMBED_MODEL=$OLLAMA_EMBED_MODEL
+      - UNSTRUCTURED_API_KEY=$UNSTRUCTURED_API_KEY
+      - UNSTRUCTURED_API_URL=$UNSTRUCTURED_API_URL
+      - GITHUB_TOKEN=$GITHUB_TOKEN
+
+    volumes:
+      - ./data:/data/
+    depends_on:
+      weaviate:
+        condition: service_healthy
+    healthcheck:
+      test: wget --no-verbose --tries=3 --spider http://localhost:8000 || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      - ollama-docker
+
+  weaviate:
+    command:
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8080'
+      - --scheme
+      - http
+    image: semitechnologies/weaviate:1.25.10
+    ports:
+      - 8080:8080
+      - 3000:8080
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    restart: on-failure:0
+    healthcheck:
+      test: wget --no-verbose --tries=3 --spider http://localhost:8080/v1/.well-known/ready || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    environment:
+      OPENAI_APIKEY: $OPENAI_API_KEY
+      COHERE_APIKEY: $COHERE_API_KEY
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      ENABLE_MODULES: 'e'
+      CLUSTER_HOSTNAME: 'node1'
+    networks:
+      - ollama-docker
+
+  # Uncomment to use Ollama within the same docker compose
+
+  # ollama:
+  #     image: ollama/ollama:latest
+  #     ports:
+  #       - 7869:11434
+  #     volumes:
+  #       - .:/code
+  #       - ./ollama/ollama:/root/.ollama
+  #     container_name: ollama
+  #     pull_policy: always
+  #     tty: true
+  #     restart: always
+  #     environment:
+  #       - OLLAMA_KEEP_ALIVE=24h
+  #       - OLLAMA_HOST=0.0.0.0
+  #     networks:
+  #       - ollama-docker
+
+volumes:
+  weaviate_data: {}
+
+
+networks:
+  ollama-docker:
+    external: false
+
+...
+developer@ac-srv-141:~/Verba$ docker compose down
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+[+] Running 3/3
+ ✔ Container verba-verba-1      Removed                                                                                                                                                                                                 1.0s
+ ✔ Container verba-weaviate-1   Removed                                                                                                                                                                                                 1.4s
+ ✔ Network verba_ollama-docker  Removed                                                                                                                                                                                                 0.4s
+developer@ac-srv-141:~/Verba$ sudo docker compose --env-file .env up -d --build
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+Compose can now delegate builds to bake for better performance.
+ To do so, set COMPOSE_BAKE=true.
+[+] Building 73.8s (10/10) FINISHED                                                                                                                                                                                           docker:default
+ => [verba internal] load build definition from Dockerfile                                                                                                                                                                              0.0s
+ => => transferring dockerfile: 175B                                                                                                                                                                                                    0.0s
+ => [verba internal] load metadata for docker.io/library/python:3.11                                                                                                                                                                    1.0s
+ => [verba internal] load .dockerignore                                                                                                                                                                                                 0.0s
+ => => transferring context: 2B                                                                                                                                                                                                         0.0s
+ => [verba 1/4] FROM docker.io/library/python:3.11@sha256:ce3b954c9285a7a145cba620bae03db836ab890b6b9e0d05a3ca522ea00dfbc9                                                                                                              0.0s
+ => [verba internal] load build context                                                                                                                                                                                                 0.7s
+ => => transferring context: 1.85MB                                                                                                                                                                                                     0.7s
+ => CACHED [verba 2/4] WORKDIR /Verba                                                                                                                                                                                                   0.0s
+ => [verba 3/4] COPY . /Verba                                                                                                                                                                                                           6.3s
+ => [verba 4/4] RUN pip install '.'                                                                                                                                                                                                    60.5s
+ => [verba] exporting to image                                                                                                                                                                                                          5.2s
+ => => exporting layers                                                                                                                                                                                                                 5.2s
+ => => writing image sha256:f465be1adc7a39a01ca7fa1723406951a16ca7a0656e0c0bbcf9d6e441b792e3                                                                                                                                            0.0s
+ => => naming to docker.io/library/verba-verba                                                                                                                                                                                          0.0s
+ => [verba] resolving provenance for metadata file                                                                                                                                                                                      0.0s
+[+] Running 4/4
+ ✔ verba                        Built                                                                                                                                                                                                   0.0s
+ ✔ Network verba_ollama-docker  Created                                                                                                                                                                                                 0.1s
+ ✔ Container verba-weaviate-1   Healthy                                                                                                                                                                                                 6.0s
+ ✔ Container verba-verba-1      Started                                                                                                                                                                                                 6.2s
+developer@ac-srv-141:~/Verba$ docker ps
+CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS                    PORTS                                                                                      NAMES
+4ab112e71468   verba-verba                         "verba start --port …"   24 seconds ago   Up 18 seconds (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp                                                verba-verba-1
+b0a88eb3a426   semitechnologies/weaviate:1.25.10   "/bin/weaviate --hos…"   24 seconds ago   Up 24 seconds (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp   verba-weaviate-1
+developer@ac-srv-141:~/Verba$ docker exec verba-verba-1 env | grep OLLAMA
+OLLAMA_EMBED_MODEL=nomic-embed-text
+OLLAMA_MODEL=tinyllama
+OLLAMA_URL=http://http://172.17.0.1:11434
+developer@ac-srv-141:~/Verba$ ollama list
+NAME                       ID              SIZE      MODIFIED
+nomic-embed-text:latest    0a109f422b47    274 MB    2 hours ago
+tinyllama:latest           2644915ede35    637 MB    2 hours ago
+developer@ac-srv-141:~/Verba$
+
