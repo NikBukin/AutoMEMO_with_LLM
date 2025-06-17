@@ -1,83 +1,28 @@
-developer@ac-srv-141:~/Verba$ ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'
-172.17.0.1
-developer@ac-srv-141:~/Verba$ docker exec verba-verba-1 env | grep OLLAMA
-OLLAMA_URL=http://172.17.0.1:11434
-OLLAMA_EMBED_MODEL=nomic-embed-text
-OLLAMA_MODEL=tinyllama
-developer@ac-srv-141:~/Verba$ ollama list
-NAME                       ID              SIZE      MODIFIED
-nomic-embed-text:latest    0a109f422b47    274 MB    3 hours ago
-tinyllama:latest           2644915ede35    637 MB    3 hours ago
-developer@ac-srv-141:~/Verba$ sudo ss -tulnp | grep LISTEN | grep 11434
-[sudo] password for developer:
-tcp   LISTEN 0      4096               *:11434            *:*    users:(("ollama",pid=411859,fd=3))
-developer@ac-srv-141:~/Verba$ curl http://172.17.0.1:11434
-Ollama is runningdeveloper@ac-srv-141:~/Verba$ curl http://172.17.0.1:11434
-Ollama is runningdeveloper@ac-srv-141:~/Verba$ docker compose down
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+developer@ac-srv-141:~/Verba$ docker compose rm -f verba
 WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
 WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
 WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
 WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
 WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
-[+] Running 3/3
- ✔ Container verba-verba-1     Removed                                                                                                                                                                                                  0.8s
- ✔ Container verba-weaviate-1  Removed                                                                                                                                                                                                  1.0s
- ✔ Network verba_default       Removed                                                                                                                                                                                                  0.3s
-developer@ac-srv-141:~/Verba$ docker compose up -d --build
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
 WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
-WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
 WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-Compose can now delegate builds to bake for better performance.
- To do so, set COMPOSE_BAKE=true.
-[+] Building 1.7s (10/10) FINISHED                                                                                                                                                                                            docker:default
- => [verba internal] load build definition from Dockerfile                                                                                                                                                                              0.0s
- => => transferring dockerfile: 175B                                                                                                                                                                                                    0.0s
- => [verba internal] load metadata for docker.io/library/python:3.11                                                                                                                                                                    0.9s
- => [verba internal] load .dockerignore                                                                                                                                                                                                 0.0s
- => => transferring context: 2B                                                                                                                                                                                                         0.0s
- => [verba 1/4] FROM docker.io/library/python:3.11@sha256:ce3b954c9285a7a145cba620bae03db836ab890b6b9e0d05a3ca522ea00dfbc9                                                                                                              0.0s
- => [verba internal] load build context                                                                                                                                                                                                 0.7s
- => => transferring context: 1.85MB                                                                                                                                                                                                     0.7s
- => CACHED [verba 2/4] WORKDIR /Verba                                                                                                                                                                                                   0.0s
- => CACHED [verba 3/4] COPY . /Verba                                                                                                                                                                                                    0.0s
- => CACHED [verba 4/4] RUN pip install '.'                                                                                                                                                                                              0.0s
- => [verba] exporting to image                                                                                                                                                                                                          0.0s
- => => exporting layers                                                                                                                                                                                                                 0.0s
- => => writing image sha256:2d831f8ad7fa2523b9ac1b2f9462e5b99ed5ad967f1be0cdca9196291af94976                                                                                                                                            0.0s
- => => naming to docker.io/library/verba-verba                                                                                                                                                                                          0.0s
- => [verba] resolving provenance for metadata file                                                                                                                                                                                      0.0s
-[+] Running 4/4
- ✔ verba                       Built                                                                                                                                                                                                    0.0s
- ✔ Network verba_default       Created                                                                                                                                                                                                  0.1s
- ✔ Container verba-weaviate-1  Healthy                                                                                                                                                                                                  5.9s
- ✔ Container verba-verba-1     Started                                                                                                                                                                                                  6.2s
-developer@ac-srv-141:~/Verba$ docker ps
-CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS                      PORTS                                                                                      NAMES
-aa1928fdc179   verba-verba                         "verba start --port …"   37 seconds ago   Up 31 seconds (unhealthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp                                                verba-verba-1
-736a4d1e222c   semitechnologies/weaviate:1.25.10   "/bin/weaviate --hos…"   37 seconds ago   Up 36 seconds (healthy)     0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp   verba-weaviate-1
-developer@ac-srv-141:~/Verba$ docker logs verba-verba-1
-developer@ac-srv-141:~/Verba$ docker compose stop verba
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
-WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-[+] Stopping 1/1
- ✔ Container verba-verba-1  Stopped                                                                                                                                                                                                    10.4s
-developer@ac-srv-141:~/Verba$ /usr/local/bin/python3 -m verba.cli start --port 8000
--bash: /usr/local/bin/python3: No such file or directory
-developer@ac-srv-141:~/Verba$ python3 -m verba.cli start --port 8000
-/usr/bin/python3: Error while finding module specification for 'verba.cli' (ModuleNotFoundError: No module named 'verba')
-developer@ac-srv-141:~/Verba$ verba start
-Command 'verba' not found, did you mean:
-  command 'verga' from deb tkgate (2.1+repack-5)
-Try: sudo apt install <deb name>
-developer@ac-srv-141:~/Verba$ verba start
+Going to remove verba-verba-1
+[+] Removing 1/1
+ ✔ Container verba-verba-1  Removed                                                                                                                                                                                                     0.0s
+developer@ac-srv-141:~/Verba$ docker run -it --rm \
+> -v "$(pwd)/data:data/" \
+> --env-file ./.env \
+> verba-verba /bin.bash
+docker: Error response from daemon: invalid volume specification: '/home/developer/Verba/data:data/': invalid mount config for type "bind": invalid mount path: 'data/' mount path must be absolute
+
+Run 'docker run --help' for more information
+developer@ac-srv-141:~/Verba$ source venv/bin/activate
+(venv) developer@ac-srv-141:~/Verba$ verba start
+INFO:     Will watch for changes in these directories: ['/home/developer/Verba']
+WARNING:  "workers" flag is ignored when reloading is enabled.
+INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [438522] using WatchFiles
+INFO:     Started server process [438575]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+
