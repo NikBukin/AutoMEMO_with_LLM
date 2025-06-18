@@ -4,4 +4,14 @@ root@67310d8d16cc:/Verba# curl http://weaviate:8080/v1/meta
 root@67310d8d16cc:/Verba# curl http://172.17.0.1:11434
 
 ^C
-root@67310d8d16cc:/Verba#
+root@67310d8d16cc:/Verba# curl http://host.docker.internal:11434
+curl: (6) Could not resolve host: host.docker.internal
+root@67310d8d16cc:/Verba# exit
+exit
+developer@ac-srv-141:~/Verba$ docker run -it --rm -v "$(pwd)/data:/data" --env-file ./.env --network host verba-verba /bin/bash
+root@ac-srv-141:/Verba# exit
+exit
+developer@ac-srv-141:~/Verba$ docker run -it --rm -v "$(pwd)/data:/data" --env-file ./.env --network verba_default verba-verba /bin/bash
+root@7faa02120c0e:/Verba#
+
+
