@@ -1,246 +1,48 @@
-Query failed: Query call with protocol GRPC search failed with message <AioRpcError of RPC that terminated with:
-	status = StatusCode.UNKNOWN
-	details = "object search at index verba_embedding_nomic_embed_text: No properties provided, and no indexed properties found in class"
-	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"object search at index verba_embedding_nomic_embed_text: No properties provided, and no indexed properties found in class", grpc_status:2}"
->.
-
-
-
-developer@ac-srv-141:~/Verba$ ss -tulnp | grep 1434
-tcp   LISTEN 0      4096               *:11434            *:*
-developer@ac-srv-141:~/Verba$ sudo ufw status
-Status: active
-
-To                         Action      From
---                         ------      ----
-45718/tcp                  ALLOW       Anywhere
-22/tcp                     ALLOW       Anywhere
-8000/tcp                   ALLOW       Anywhere
-45718/tcp (v6)             ALLOW       Anywhere (v6)
-22/tcp (v6)                ALLOW       Anywhere (v6)
-8000/tcp (v6)              ALLOW       Anywhere (v6)
-
-developer@ac-srv-141:~/Verba$ sudo ufw allow 11434/tcp
-Rule added
-Rule added (v6)
-developer@ac-srv-141:~/Verba$ sudo ufw reload
-Firewall reloaded
-developer@ac-srv-141:~/Verba$ docker compose down
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
-WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
-[+] Running 3/3
- ✔ Container verba-verba-1      Removed                                                                                                                                                                                                 0.9s
- ✔ Container verba-weaviate-1   Removed                                                                                                                                                                                                 1.4s
- ✔ Network verba_ollama-docker  Removed                                                                                                                                                                                                 0.3s
-developer@ac-srv-141:~/Verba$ docker compose up -d --build
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
-WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-Compose can now delegate builds to bake for better performance.
- To do so, set COMPOSE_BAKE=true.
-[+] Building 2.0s (10/10) FINISHED                                                                                                                                                                                            docker:default
- => [verba internal] load build definition from Dockerfile                                                                                                                                                                              0.0s
- => => transferring dockerfile: 175B                                                                                                                                                                                                    0.0s
- => [verba internal] load metadata for docker.io/library/python:3.11                                                                                                                                                                    1.2s
- => [verba internal] load .dockerignore                                                                                                                                                                                                 0.0s
- => => transferring context: 2B                                                                                                                                                                                                         0.0s
- => [verba 1/4] FROM docker.io/library/python:3.11@sha256:ce3b954c9285a7a145cba620bae03db836ab890b6b9e0d05a3ca522ea00dfbc9                                                                                                              0.0s
- => [verba internal] load build context                                                                                                                                                                                                 0.7s
- => => transferring context: 1.85MB                                                                                                                                                                                                     0.7s
- => CACHED [verba 2/4] WORKDIR /Verba                                                                                                                                                                                                   0.0s
- => CACHED [verba 3/4] COPY . /Verba                                                                                                                                                                                                    0.0s
- => CACHED [verba 4/4] RUN pip install '.'                                                                                                                                                                                              0.0s
- => [verba] exporting to image                                                                                                                                                                                                          0.0s
- => => exporting layers                                                                                                                                                                                                                 0.0s
- => => writing image sha256:3f5a2427b30449c7bea7aaf31daa47f61ea465bc6f45a1453b9ce617708f51f8                                                                                                                                            0.0s
- => => naming to docker.io/library/verba-verba                                                                                                                                                                                          0.0s
- => [verba] resolving provenance for metadata file                                                                                                                                                                                      0.0s
-[+] Running 4/4
- ✔ verba                        Built                                                                                                                                                                                                   0.0s
- ✔ Network verba_ollama-docker  Created                                                                                                                                                                                                 0.1s
- ✔ Container verba-weaviate-1   Healthy                                                                                                                                                                                                 5.9s
- ✔ Container verba-verba-1      Started                                                                                                                                                                                                 6.2s
-developer@ac-srv-141:~/Verba$ docker ps
-CONTAINER ID   IMAGE                               COMMAND                  CREATED              STATUS                        PORTS                                                                                      NAMES
-8ad922a0ece3   verba-verba                         "verba start --port …"   About a minute ago   Up About a minute (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp                                                verba-verba-1
-8592dcd3f909   semitechnologies/weaviate:1.25.10   "/bin/weaviate --hos…"   About a minute ago   Up About a minute (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp   verba-weaviate-1
-developer@ac-srv-141:~/Verba$ docker logs --follow verba-verba-1
-INFO:     Will watch for changes in these directories: ['/Verba']
-WARNING:  "workers" flag is ignored when reloading is enabled.
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [1] using WatchFiles
-/usr/local/lib/python3.11/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
-  warnings.warn(  # deprecated in 14.0 - 2024-11-09
-/usr/local/lib/python3.11/site-packages/uvicorn/protocols/websockets/websockets_impl.py:14: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
-  from websockets.server import WebSocketServerProtocol
-INFO:     Started server process [38]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:60214 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36614 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36624 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41816 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41818 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40168 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40172 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60152 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60158 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:43184 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:43200 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57232 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35998 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36000 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:42352 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:42358 - "HEAD / HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55150 - "GET / HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55151 - "GET /static/_next/static/media/3d9ea938b6afa941-s.p.woff2 HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55150 - "GET /static/_next/static/media/2b3f1035ed87a788-s.p.woff2 HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55156 - "GET /static/_next/static/media/a34f9d1faa5f3315-s.p.woff2 HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55154 - "GET /static/_next/static/css/bbb58f872eab5c8f.css HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55153 - "GET /static/_next/static/css/ae5cf92d392439f8.css HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55155 - "GET /static/_next/static/media/4049f3f580e14086-s.p.woff2 HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55153 - "GET /static/_next/static/chunks/webpack-e6d8fc8882b3cc5a.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55150 - "GET /static/_next/static/chunks/5349c568-e26f968c6773abca.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55156 - "GET /static/_next/static/chunks/fd9d1056-3c0a5e4377f054b9.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55151 - "GET /static/_next/static/chunks/b536a0f1-cb79989225eaf318.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55154 - "GET /static/_next/static/chunks/main-app-6d8fe3bc29305481.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55155 - "GET /static/_next/static/chunks/23-b149ce429217dd65.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55154 - "GET /static/_next/static/chunks/472688b4-2c611c3f7f6780f5.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55153 - "GET /static/_next/static/chunks/4f9d9cd8-7217d0ac0bfcc7ce.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55150 - "GET /static/_next/static/chunks/48507feb-c058e15125ba1e58.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55156 - "GET /static/_next/static/chunks/bc9c3264-007b030a3d8b973f.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55154 - "GET /static/_next/static/chunks/12038df7-bbbca262706a9194.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55155 - "GET /static/_next/static/chunks/ec3863c0-666dbee8e5822499.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55150 - "GET /static/_next/static/chunks/39aecf79-474a3d3c48835c08.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55156 - "GET /static/_next/static/chunks/07115393-8a796b5d068e3710.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55153 - "GET /static/_next/static/chunks/8e68d877-65c524a5e56473c0.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55154 - "GET /static/_next/static/chunks/39209d7c-1514aaef8caa025b.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55155 - "GET /static/_next/static/chunks/9081a741-52789bf6b11470c5.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55156 - "GET /static/_next/static/chunks/4f53ad1b-af82feddb1367bb5.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55150 - "GET /static/_next/static/chunks/949-4b7f5a091d97fe2c.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55153 - "GET /static/_next/static/chunks/8dc5345f-dfd13b91b6647830.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55155 - "GET /static/_next/static/chunks/app/page-235aaff141d9263e.js HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55150 - "GET /static/icon.ico HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 0 clients connected
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 0 clients connected
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55150 - "GET /static/verba.glb HTTP/1.1" 200 OK
-INFO:     10.253.218.90:55150 - "GET /static/ice_cap.png HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40682 - "HEAD / HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 0 clients connected
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
-/usr/local/lib/python3.11/site-packages/weaviate/warnings.py:133: DeprecationWarning: Dep005: You are using weaviate-client version 4.9.6. The latest version is 4.15.1.
-            Consider upgrading to the latest version. See https://weaviate.io/developers/weaviate/client-libraries/python for details.
-  warnings.warn(
-⚠ Connecting new Client
-ℹ Connecting to Weaviate Docker
-✔ Succesfully Connected to Weaviate
-ℹ Connection time: 0.65 seconds
-ℹ Using New RAG Configuration
-INFO:     10.253.218.90:55150 - "POST /api/connect HTTP/1.1" 200 OK
-/usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
-  warnings.warn("remove second argument of ws_handler", DeprecationWarning)
-INFO:     ('10.253.218.90', 55168) - "WebSocket /ws/generate_stream" [accepted]
-INFO:     connection open
-/usr/local/lib/python3.11/site-packages/websockets/exceptions.py:125: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
-  warnings.warn(  # deprecated in 13.1 - 2024-09-21
-INFO:     connection closed
-INFO:     ('10.253.218.90', 55170) - "WebSocket /ws/generate_stream" [accepted]
-INFO:     connection open
-INFO:     ('10.253.218.90', 55171) - "WebSocket /ws/import_files" [accepted]
-INFO:     connection open
-⚠ WebSocket connection closed by client.
-INFO:     127.0.0.1:40694 - "HEAD / HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-18 08:21:12.685236
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
+✔ Collected all Batches of video.mp4
+ℹ Removing video.mp4 from BatchManager
 ℹ Found existing Client
-INFO:     10.253.218.90:55150 - "POST /api/get_datacount HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-18 08:21:12.685236
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:55150 - "POST /api/get_datacount HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-18 08:21:12.685236
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:55150 - "POST /api/get_meta HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-18 08:21:12.685236
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:55150 - "POST /api/get_labels HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52102 - "HEAD / HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-18 08:21:12.685236
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:55150 - "POST /api/get_labels HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-18 08:21:12.685236
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:55150 - "POST /api/get_suggestions HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-18 08:21:12.685236
-INFO:     10.253.218.90:55150 - "GET /api/health HTTP/1.1" 200 OK
-✔ Received query: hi
-ℹ Found existing Client
-⚠ Query failed: Query call with protocol GRPC search failed with
-message <AioRpcError of RPC that terminated with:         status =
-StatusCode.UNKNOWN         details = "object search at index
-verba_embedding_nomic_embed_text: No properties provided, and no indexed
-properties found in class"         debug_error_string = "UNKNOWN:Error received
-from peer  {grpc_message:"object search at index
-verba_embedding_nomic_embed_text: No properties provided, and no indexed
-properties found in class", grpc_status:2}" >.
-INFO:     10.253.218.90:55150 - "POST /api/query HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52116 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60020 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60032 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56112 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
+ℹ Loading video.mp4 (mp4)
+ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 278.86
+ℹ FileStatus.CHUNKING | video.mp4 |  | 0
+INFO:     127.0.0.1:45652 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34500 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47166 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32992 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41950 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37464 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 49918 chunks |
+15.26
+ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
+ℹ Vectorizing 49918 chunks in 390 batches
+INFO:     127.0.0.1:51202 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50028 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57002 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42008 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42012 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60648 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
+vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , ,  | 317.52
+✘ No documents imported 0 of 1 succesful tasks
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
+for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
+batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 0
