@@ -1,200 +1,35 @@
-Query failed: Query call with protocol GRPC search failed with message <AioRpcError of RPC that terminated with:
-	status = StatusCode.UNKNOWN
-	details = "object search at index verba_embedding_nomic_embed_text: No properties provided, and no indexed properties found in class"
-	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:2, grpc_message:"object search at index verba_embedding_nomic_embed_text: No properties provided, and no indexed properties found in class"}"
->.
+developer@ac-srv-141:~$ docker ps
+CONTAINER ID   IMAGE                               COMMAND                  CREATED        STATUS                  PORTS                                                                                      NAMES
+736a4d1e222c   semitechnologies/weaviate:1.25.10   "/bin/weaviate --hos…"   16 hours ago   Up 16 hours (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp   verba-weaviate-1
+developer@ac-srv-141:~$ cd Verba
+developer@ac-srv-141:~/Verba$ docker run -it --rm -v "$(pwd)/data:data" --env-file ./.env verba-verba /bin.bash
+docker: Error response from daemon: invalid volume specification: '/home/developer/Verba/data:data': invalid mount config for type "bind": invalid mount path: 'data' mount path must be absolute
 
+Run 'docker run --help' for more information
+developer@ac-srv-141:~/Verba$ docker run -it --rm -v "$(pwd)/data:data" --env-file ./.env --network verba_default verba-verba /bin/bash
+docker: Error response from daemon: invalid volume specification: '/home/developer/Verba/data:data': invalid mount config for type "bind": invalid mount path: 'data' mount path must be absolute
 
-(venv) developer@ac-srv-141:~/Verba$ verba start --port 8000 --host 0.0.0.0
-INFO:     Will watch for changes in these directories: ['/home/developer/Verba']
-WARNING:  "workers" flag is ignored when reloading is enabled.
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [440466] using WatchFiles
-INFO:     Started server process [440520]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     10.253.218.90:52393 - "GET /static/icon.ico HTTP/1.1" 304 Not Modified
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 0 clients connected
-INFO:     10.253.218.90:52393 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 0 clients connected
-INFO:     10.253.218.90:52393 - "GET /api/health HTTP/1.1" 200 OK
-INFO:     10.253.218.90:52393 - "GET /static/verba.glb HTTP/1.1" 304 Not Modified
-INFO:     10.253.218.90:52393 - "GET /static/ice_cap.png HTTP/1.1" 304 Not Modified
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 0 clients connected
-INFO:     10.253.218.90:52394 - "GET /api/health HTTP/1.1" 200 OK
-⚠ Connecting new Client
-ℹ Connecting to Weaviate Docker
-✘ Couldn't connect to Weaviate, check your URL/API KEY: Connection to
-Weaviate failed. Details: Error: [Errno -3] Temporary failure in name
-resolution.  Is Weaviate running and reachable at http://weaviate:8080?
-✘ Failed to connect to Weaviate Couldn't connect to Weaviate, check
-your URL/API KEY: Connection to Weaviate failed. Details: Error: [Errno -3]
-Temporary failure in name resolution.  Is Weaviate running and reachable at
-http://weaviate:8080?
-INFO:     10.253.218.90:52394 - "POST /api/connect HTTP/1.1" 400 Bad Request
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 0 clients connected
-INFO:     10.253.218.90:52394 - "GET /api/health HTTP/1.1" 200 OK
-⚠ Connecting new Client
-ℹ Connecting to Weaviate Embedded
-{"action":"startup","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","default_vectorizer_module":"none","level":"info","msg":"the default vectorizer modules is set to \"none\", as a result all new schema classes without an explicit vectorizer setting, will use this vectorizer","time":"2025-06-17T15:47:38Z"}
-{"action":"startup","auto_schema_enabled":true,"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"auto schema enabled setting is set to \"true\"","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"No resource limits set, weaviate will use all available memory and CPU. To limit resources, set LIMIT_RESOURCES=true","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"module offload-s3 is enabled","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"Multiple vector spaces are present, GraphQL Explore and REST API list objects endpoint module include params has been disabled as a result.","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"open cluster service","servers":{"Embedded_at_8079":34039},"time":"2025-06-17T15:47:38Z"}
-{"address":"172.31.135.7:34040","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"starting cloud rpc server ...","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"starting raft sub-system ...","time":"2025-06-17T15:47:38Z"}
-{"address":"172.31.135.7:34039","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"tcp transport","tcpMaxPool":3,"tcpTimeout":10000000000,"time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"loading local db","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"local DB successfully loaded","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"schema manager loaded","n":0,"time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","metadata_only_voters":false,"msg":"construct a new raft node","name":"Embedded_at_8079","time":"2025-06-17T15:47:38Z"}
-{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","index":0,"level":"info","msg":"raft initial configuration","servers":"[[]]","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","last_snapshot_index":0,"last_store_applied_index_on_start":0,"level":"info","msg":"raft node constructed","raft_applied_index":0,"raft_last_index":0,"time":"2025-06-17T15:47:38Z"}
-{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","follower":{},"leader-address":"","leader-id":"","level":"info","msg":"raft entering follower state","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","hasState":false,"level":"info","msg":"raft init","time":"2025-06-17T15:47:38Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"raft no known peers, aborting election","time":"2025-06-17T15:47:40Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"attempting to join","remoteNodes":["172.31.135.7:34039"],"time":"2025-06-17T15:47:40Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"attempted to join and failed","remoteNode":"172.31.135.7:34039","status":8,"time":"2025-06-17T15:47:40Z"}
-{"action":"bootstrap","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","error":"could not join a cluster from [172.31.135.7:34039]","level":"warning","msg":"failed to join cluster","servers":["172.31.135.7:34039"],"time":"2025-06-17T15:47:40Z","voter":true}
-{"action":"bootstrap","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","candidates":[{"Suffrage":0,"ID":"Embedded_at_8079","Address":"172.31.135.7:34039"}],"level":"info","msg":"starting cluster bootstrapping","time":"2025-06-17T15:47:40Z"}
-{"action":"bootstrap","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"notified peers this node is ready to join as voter","servers":["172.31.135.7:34039"],"time":"2025-06-17T15:47:40Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","docker_image_tag":"localhost","level":"info","msg":"configured versions","server_version":"1.26.6","time":"2025-06-17T15:47:40Z"}
-{"action":"grpc_startup","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"grpc server listening at [::]:50050","time":"2025-06-17T15:47:40Z"}
-{"action":"restapi_management","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","docker_image_tag":"localhost","level":"info","msg":"Serving weaviate at http://127.0.0.1:8079","time":"2025-06-17T15:47:40Z"}
-{"action":"telemetry_push","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"telemetry started","payload":"\u0026{MachineID:b57eea24-c365-48fb-8b71-07d68461794a Type:INIT Version:1.26.6 NumObjects:0 OS:linux Arch:amd64 UsedModules:[]}","time":"2025-06-17T15:47:41Z"}
-{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","last-leader-addr":"","last-leader-id":"","level":"warning","msg":"raft heartbeat timeout reached, starting election","time":"2025-06-17T15:47:41Z"}
-{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"raft entering candidate state","node":{},"term":2,"time":"2025-06-17T15:47:41Z"}
-{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"raft pre-vote successful, starting election","refused":0,"tally":1,"term":2,"time":"2025-06-17T15:47:41Z","votesNeeded":1}
-{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"raft election won","tally":1,"term":2,"time":"2025-06-17T15:47:41Z"}
-{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","leader":{},"level":"info","msg":"raft entering leader state","time":"2025-06-17T15:47:41Z"}
-{"address":"172.31.135.7:34039","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"current Leader","time":"2025-06-17T15:47:41Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"starting migration from old schema","time":"2025-06-17T15:47:41Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"legacy schema is empty, nothing to migrate","time":"2025-06-17T15:47:41Z"}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"migration from the old schema has been successfully completed","time":"2025-06-17T15:47:41Z"}
-/home/developer/Verba/venv/lib/python3.10/site-packages/weaviate/warnings.py:133: DeprecationWarning: Dep005: You are using weaviate-client version 4.9.6. The latest version is 4.15.1.
-            Consider upgrading to the latest version. See https://weaviate.io/developers/weaviate/client-libraries/python for details.
-  warnings.warn(
-✔ Succesfully Connected to Weaviate
-ℹ Collection: VERBA_CONFIGURATION does not exist, creating new
-collection.
-/home/developer/Verba/venv/lib/python3.10/site-packages/weaviate/collections/classes/config.py:1914: PydanticDeprecatedSince211: Accessing the 'model_fields' attribute on the instance is deprecated. Instead, you should access this attribute from the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.
-  for cls_field in self.model_fields:
-{"action":"bootstrap","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"node reporting ready, exiting bootstrap process","time":"2025-06-17T15:47:42Z"}
-ℹ Connection time: 6.46 seconds
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"prop len tracker file /home/developer/.local/share/weaviate/verba_configuration/TT3iMXLV5WNI/proplengths does not exist, creating new tracker","time":"2025-06-17T15:47:42Z"}
-{"action":"hnsw_prefill_cache_async","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-06-17T15:47:42Z","wait_for_cache_prefill":false}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"Created shard verba_configuration_TT3iMXLV5WNI in 2.546146ms","time":"2025-06-17T15:47:42Z"}
-{"action":"hnsw_vector_cache_prefill","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","count":1000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-06-17T15:47:42Z","took":217328}
-ℹ Using New RAG Configuration
-INFO:     10.253.218.90:52394 - "POST /api/connect HTTP/1.1" 200 OK
-/home/developer/Verba/venv/lib/python3.10/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
-  warnings.warn("remove second argument of ws_handler", DeprecationWarning)
-INFO:     ('10.253.218.90', 52423) - "WebSocket /ws/generate_stream" [accepted]
-INFO:     connection open
-/home/developer/Verba/venv/lib/python3.10/site-packages/websockets/exceptions.py:125: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
-  warnings.warn(  # deprecated in 13.1 - 2024-09-21
-⚠ WebSocket connection closed by client.
-INFO:     connection closed
-INFO:     ('10.253.218.90', 52425) - "WebSocket /ws/generate_stream" [accepted]
-INFO:     connection open
-INFO:     ('10.253.218.90', 52427) - "WebSocket /ws/import_files" [accepted]
-INFO:     connection open
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
-2025-06-17 15:47:42.535335
-INFO:     10.253.218.90:52394 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-ℹ Collection: VERBA_Embedding_nomic_embed_text does not exist, creating
-new collection.
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"prop len tracker file /home/developer/.local/share/weaviate/verba_embedding_nomic_embed_text/b48h8P3LdKEY/proplengths does not exist, creating new tracker","time":"2025-06-17T15:47:45Z"}
-{"action":"hnsw_prefill_cache_async","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-06-17T15:47:45Z","wait_for_cache_prefill":false}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"Created shard verba_embedding_nomic_embed_text_b48h8P3LdKEY in 1.685834ms","time":"2025-06-17T15:47:45Z"}
-{"action":"hnsw_vector_cache_prefill","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","count":1000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-06-17T15:47:45Z","took":229695}
-INFO:     10.253.218.90:52394 - "POST /api/get_datacount HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
-2025-06-17 15:47:42.535335
-INFO:     10.253.218.90:52394 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:52394 - "POST /api/get_datacount HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
-2025-06-17 15:47:42.535335
-INFO:     10.253.218.90:52394 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:52394 - "POST /api/get_meta HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
-2025-06-17 15:47:42.535335
-INFO:     10.253.218.90:52394 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-ℹ Collection: VERBA_DOCUMENTS does not exist, creating new
-collection.
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"prop len tracker file /home/developer/.local/share/weaviate/verba_documents/zh5JuJXP40jO/proplengths does not exist, creating new tracker","time":"2025-06-17T15:47:47Z"}
-{"action":"hnsw_prefill_cache_async","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-06-17T15:47:47Z","wait_for_cache_prefill":false}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"Created shard verba_documents_zh5JuJXP40jO in 1.687012ms","time":"2025-06-17T15:47:47Z"}
-{"action":"hnsw_vector_cache_prefill","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","count":1000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-06-17T15:47:47Z","took":215149}
-INFO:     10.253.218.90:52394 - "POST /api/get_labels HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
-2025-06-17 15:47:42.535335
-INFO:     10.253.218.90:52394 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:52394 - "POST /api/get_labels HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
-2025-06-17 15:47:42.535335
-INFO:     10.253.218.90:52394 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-ℹ Collection: VERBA_SUGGESTIONS does not exist, creating new
-collection.
-INFO:     10.253.218.90:52394 - "POST /api/get_suggestions HTTP/1.1" 200 OK
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"prop len tracker file /home/developer/.local/share/weaviate/verba_suggestions/JTlgRRCgqfsi/proplengths does not exist, creating new tracker","time":"2025-06-17T15:47:51Z"}
-{"action":"hnsw_prefill_cache_async","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-06-17T15:47:51Z","wait_for_cache_prefill":false}
-{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"Created shard verba_suggestions_JTlgRRCgqfsi in 1.79862ms","time":"2025-06-17T15:47:51Z"}
-{"action":"hnsw_vector_cache_prefill","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","count":1000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-06-17T15:47:51Z","took":210669}
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
-2025-06-17 15:47:42.535335
-INFO:     10.253.218.90:52394 - "GET /api/health HTTP/1.1" 200 OK
-✔ Received query: hi
-ℹ Found existing Client
-{"action":"hybrid","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","error":"object search at index verba_embedding_nomic_embed_text: No properties provided, and no indexed properties found in class","level":"error","msg":"sparseSearch failed","time":"2025-06-17T15:47:52Z"}
-⚠ Query failed: Query call with protocol GRPC search failed with
-message <AioRpcError of RPC that terminated with:         status =
-StatusCode.UNKNOWN         details = "object search at index
-verba_embedding_nomic_embed_text: No properties provided, and no indexed
-properties found in class"         debug_error_string = "UNKNOWN:Error received
-from peer  {grpc_status:2, grpc_message:"object search at index
-verba_embedding_nomic_embed_text: No properties provided, and no indexed
-properties found in class"}" >.
+Run 'docker run --help' for more information
+developer@ac-srv-141:~/Verba$ cat .env
+# Weaviate configuration
+# WEAVIATE_URL_VERBA=http://weaviate:8080 # This is correct for Docker Compose
+WEAVIATE_URL_VERBA=http://weaviate:8080
+# WEAVIATE_API_KEY_VERBA= # Uncomment and set if you have an API key for Weaviate
+AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED="true"
+
+# Disable EmbeddedDB for Windows (and for Docker Compose on Linux this is not used)
+# PERSISTENCE_DATA_PATH="./verba-data"
+
+# Ollama configuration
+# Ollama is running directly on the host machine, so containers access it via host.docker.internal
+OLLAMA_URL=http://172.17.0.1:11434
+OLLAMA_MODEL=tinyllama
+OLLAMA_EMBED_MODEL=nomic-embed-text
+
+# Optional: OpenAI, Cohere, GitHub, Unstructured API keys if you plan to use them
+# OPENAI_API_KEY=
+# COHERE_API_KEY=
+# UNSTRUCTURED_API_KEY=
+# UNSTRUCTURED_API_URL=
+# GITHUB_TOKEN=
+developer@ac-srv-141:~/Verba$
