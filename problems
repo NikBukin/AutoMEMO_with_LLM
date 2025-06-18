@@ -1,11 +1,7 @@
-developer@ac-srv-141:~/Verba$ docker logs verba-verba-1
-developer@ac-srv-141:~/Verba$ docker logs --follow verba-verba-1
-INFO:     Will watch for changes in these directories: ['/Verba']
-WARNING:  "workers" flag is ignored when reloading is enabled.
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [1] using WatchFiles
-ℹ Couldn't connect to Ollama http://ollamahost:11434
-ℹ Couldn't connect to Ollama http://ollamahost:11434
-^Cdeveloper@ac-srv-141:~/Verba$
+developer@ac-srv-141:~/Verba$ sudo netstat -tulnp | grep 1434
+[sudo] password for developer:
+sudo: netstat: command not found
+developer@ac-srv-141:~/Verba$ ss -tulnp | grep 1434
+tcp   LISTEN 0      4096               *:11434            *:*
 
 
