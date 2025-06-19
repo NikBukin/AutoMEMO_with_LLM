@@ -3,24 +3,59 @@
 ℹ Found existing Client
 ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
 ℹ Loading video.mp4 (mp4)
+ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 283.63
+ℹ FileStatus.CHUNKING | video.mp4 |  | 0
+INFO:     127.0.0.1:47786 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38530 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39122 - "HEAD / HTTP/1.1" 200 OK
+/usr/local/lib/python3.11/site-packages/aiohttp/payload.py:236: ResourceWarning: Sending a large body directly with raw bytes might lock the event loop. You should probably pass an io.BytesIO object instead
+  warnings.warn(
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 49918 chunks |
+13.91
+ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
+ℹ Vectorizing 49918 chunks in 390 batches
+INFO:     127.0.0.1:52960 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
+vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , ,  | 316.88
+✘ No documents imported 0 of 1 succesful tasks
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
+for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
+batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 0
+INFO:     127.0.0.1:36784 - "HEAD / HTTP/1.1" 200 OK
+✔ Collected all Batches of video.mp4
+ℹ Removing video.mp4 from BatchManager
+ℹ Found existing Client
+ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
+ℹ Loading video.mp4 (mp4)
 ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 278.86
 ℹ FileStatus.CHUNKING | video.mp4 |  | 0
-INFO:     127.0.0.1:45652 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34500 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47166 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:32992 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41950 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37464 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50154 - "HEAD / HTTP/1.1" 200 OK
 ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 49918 chunks |
 15.26
 ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
 ℹ Vectorizing 49918 chunks in 390 batches
 INFO:     127.0.0.1:51202 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50028 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57002 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:42008 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:42012 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60648 - "HEAD / HTTP/1.1" 200 OK
 ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
 vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
 , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
@@ -46,3 +81,93 @@ batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
 , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
 , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
 , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 0
+INFO:     127.0.0.1:60480 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46268 - "HEAD / HTTP/1.1" 200 OK
+✔ Collected all Batches of video.mp4
+ℹ Removing video.mp4 from BatchManager
+ℹ Found existing Client
+ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
+ℹ Loading video.mp4 (mp4)
+ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 274.84
+ℹ FileStatus.CHUNKING | video.mp4 |  | 0
+INFO:     127.0.0.1:33386 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51050 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 26306 chunks |
+7.09
+ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
+INFO:     127.0.0.1:38656 - "HEAD / HTTP/1.1" 200 OK
+ℹ Vectorizing 26306 chunks in 206 batches
+INFO:     127.0.0.1:56278 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
+vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 309.72
+✘ No documents imported 0 of 1 succesful tasks
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
+for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
+batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , ,  | 0
+INFO:     127.0.0.1:38232 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38242 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32786 - "HEAD / HTTP/1.1" 200 OK
+✔ Collected all Batches of video.mp4
+ℹ Removing video.mp4 from BatchManager
+ℹ Found existing Client
+ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
+ℹ Loading video.mp4 (mp4)
+ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 277.27
+ℹ FileStatus.CHUNKING | video.mp4 |  | 0
+INFO:     127.0.0.1:38658 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40490 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45368 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 5538 chunks |
+6.89
+ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
+ℹ Vectorizing 5538 chunks in 44 batches
+INFO:     127.0.0.1:53804 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35976 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
+vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 308.89
+✘ No documents imported 0 of 1 succesful tasks
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
+for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
+batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+, , , , ,  | 0
+INFO:     127.0.0.1:40712 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38562 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38576 - "HEAD / HTTP/1.1" 200 OK
+✔ Collected all Batches of video.mp4
+ℹ Removing video.mp4 from BatchManager
+ℹ Found existing Client
+ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
+ℹ Loading video.mp4 (mp4)
+ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 277.78
+ℹ FileStatus.CHUNKING | video.mp4 |  | 0
+INFO:     127.0.0.1:60352 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45824 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 4160 chunks |
+13.16
+ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
+INFO:     127.0.0.1:41356 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49596 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40434 - "HEAD / HTTP/1.1" 200 OK
+ℹ Vectorizing 4160 chunks in 33 batches
+INFO:     127.0.0.1:57558 - "HEAD / HTTP/1.1" 200 OK
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
+vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
+, , , , , , , , , , , , , , , , , , , ,  | 315.54
+✘ No documents imported 0 of 1 succesful tasks
+ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
+for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
+batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 0
+INFO:     127.0.0.1:42812 - "HEAD / HTTP/1.1" 200 OK
+^Cdeveloper@ac-srv-141:~/Verba$
+
