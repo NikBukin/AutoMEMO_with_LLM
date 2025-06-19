@@ -1,173 +1,79 @@
-✔ Collected all Batches of video.mp4
-ℹ Removing video.mp4 from BatchManager
-ℹ Found existing Client
-ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
-ℹ Loading video.mp4 (mp4)
-ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 283.63
-ℹ FileStatus.CHUNKING | video.mp4 |  | 0
-INFO:     127.0.0.1:47786 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38530 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39122 - "HEAD / HTTP/1.1" 200 OK
-/usr/local/lib/python3.11/site-packages/aiohttp/payload.py:236: ResourceWarning: Sending a large body directly with raw bytes might lock the event loop. You should probably pass an io.BytesIO object instead
-  warnings.warn(
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 49918 chunks |
-13.91
-ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
-ℹ Vectorizing 49918 chunks in 390 batches
-INFO:     127.0.0.1:52960 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59768 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
-vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , ,  | 316.88
-✘ No documents imported 0 of 1 succesful tasks
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
-for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
-batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 0
-INFO:     127.0.0.1:36784 - "HEAD / HTTP/1.1" 200 OK
-✔ Collected all Batches of video.mp4
-ℹ Removing video.mp4 from BatchManager
-ℹ Found existing Client
-ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
-ℹ Loading video.mp4 (mp4)
-ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 278.86
-ℹ FileStatus.CHUNKING | video.mp4 |  | 0
-INFO:     127.0.0.1:50154 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 49918 chunks |
-15.26
-ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
-ℹ Vectorizing 49918 chunks in 390 batches
-INFO:     127.0.0.1:51202 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
-vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , ,  | 317.52
-✘ No documents imported 0 of 1 succesful tasks
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
-for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
-batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 0
-INFO:     127.0.0.1:60480 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46268 - "HEAD / HTTP/1.1" 200 OK
-✔ Collected all Batches of video.mp4
-ℹ Removing video.mp4 from BatchManager
-ℹ Found existing Client
-ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
-ℹ Loading video.mp4 (mp4)
-ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 274.84
-ℹ FileStatus.CHUNKING | video.mp4 |  | 0
-INFO:     127.0.0.1:33386 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51050 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 26306 chunks |
-7.09
-ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
-INFO:     127.0.0.1:38656 - "HEAD / HTTP/1.1" 200 OK
-ℹ Vectorizing 26306 chunks in 206 batches
-INFO:     127.0.0.1:56278 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
-vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 309.72
-✘ No documents imported 0 of 1 succesful tasks
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
-for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
-batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , ,  | 0
-INFO:     127.0.0.1:38232 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38242 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:32786 - "HEAD / HTTP/1.1" 200 OK
-✔ Collected all Batches of video.mp4
-ℹ Removing video.mp4 from BatchManager
-ℹ Found existing Client
-ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
-ℹ Loading video.mp4 (mp4)
-ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 277.27
-ℹ FileStatus.CHUNKING | video.mp4 |  | 0
-INFO:     127.0.0.1:38658 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40490 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45368 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 5538 chunks |
-6.89
-ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
-ℹ Vectorizing 5538 chunks in 44 batches
-INFO:     127.0.0.1:53804 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35976 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
-vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 308.89
-✘ No documents imported 0 of 1 succesful tasks
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
-for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
-batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
-, , , , ,  | 0
-INFO:     127.0.0.1:40712 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38562 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38576 - "HEAD / HTTP/1.1" 200 OK
-✔ Collected all Batches of video.mp4
-ℹ Removing video.mp4 from BatchManager
-ℹ Found existing Client
-ℹ FileStatus.STARTING | video.mp4 | Starting Import | 0
-ℹ Loading video.mp4 (mp4)
-ℹ FileStatus.LOADING | video.mp4 | Loaded video.mp4 | 277.78
-ℹ FileStatus.CHUNKING | video.mp4 |  | 0
-INFO:     127.0.0.1:60352 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45824 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.CHUNKING | video.mp4 | Split video.mp4 into 4160 chunks |
-13.16
-ℹ FileStatus.EMBEDDING | video.mp4 |  | 0
-INFO:     127.0.0.1:41356 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49596 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40434 - "HEAD / HTTP/1.1" 200 OK
-ℹ Vectorizing 4160 chunks in 33 batches
-INFO:     127.0.0.1:57558 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Batch
-vectorization failed: Vectorization failed for some batches: , , , , , , , , , ,
-, , , , , , , , , , , , , , , , , , , ,  | 315.54
-✘ No documents imported 0 of 1 succesful tasks
-ℹ FileStatus.ERROR | video.mp4 | Import for video.mp4 failed: Import
-for video.mp4 failed: Batch vectorization failed: Vectorization failed for some
-batches: , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  | 0
-INFO:     127.0.0.1:42812 - "HEAD / HTTP/1.1" 200 OK
-^Cdeveloper@ac-srv-141:~/Verba$
+developer@ac-srv-141:~/Verba$ npm install
+npm ERR! code ENOENT
+npm ERR! syscall open
+npm ERR! path /home/developer/Verba/package.json
+npm ERR! errno -2
+npm ERR! enoent ENOENT: no such file or directory, open '/home/developer/Verba/package.json'
+npm ERR! enoent This is related to npm not being able to find a file.
+npm ERR! enoent
 
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/developer/.npm/_logs/2025-06-19T09_31_31_102Z-debug-0.log
+developer@ac-srv-141:~/Verba$ npm run build
+npm ERR! code ENOENT
+npm ERR! syscall open
+npm ERR! path /home/developer/Verba/package.json
+npm ERR! errno -2
+npm ERR! enoent ENOENT: no such file or directory, open '/home/developer/Verba/package.json'
+npm ERR! enoent This is related to npm not being able to find a file.
+npm ERR! enoent
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/developer/.npm/_logs/2025-06-19T09_31_57_592Z-debug-0.log
+developer@ac-srv-141:~/Verba$ docker compose down --rmi all --volumes --remove-orphans
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+[+] Running 6/6
+ ✔ Container verba-verba-1                  Removed                                                                                                                                                                                     0.9s
+ ✔ Container verba-weaviate-1               Removed                                                                                                                                                                                     0.9s
+ ✔ Image semitechnologies/weaviate:1.25.10  Removed                                                                                                                                                                                     0.1s
+ ✔ Image verba-verba:latest                 Removed                                                                                                                                                                                     0.0s
+ ✔ Volume verba_weaviate_data               Removed                                                                                                                                                                                     0.0s
+ ✔ Network verba_ollama-docker              Removed                                                                                                                                                                                     0.3s
+developer@ac-srv-141:~/Verba$ docker compose up -d --build
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+[+] Running 8/8
+ ✔ weaviate Pulled                                                                                                                                                                                                                      5.8s
+   ✔ c6a83fedfae6 Pull complete                                                                                                                                                                                                         0.7s
+   ✔ 82e6ea9755f4 Pull complete                                                                                                                                                                                                         1.0s
+   ✔ 12e1ed392dc9 Pull complete                                                                                                                                                                                                         1.8s
+   ✔ 34c2de8dffdd Pull complete                                                                                                                                                                                                         1.9s
+   ✔ 3157a4b2ec21 Pull complete                                                                                                                                                                                                         2.5s
+   ✔ 431fdf588b94 Pull complete                                                                                                                                                                                                         3.6s
+   ✔ 86c12cf1a6e6 Pull complete                                                                                                                                                                                                         3.6s
+Compose can now delegate builds to bake for better performance.
+ To do so, set COMPOSE_BAKE=true.
+[+] Building 654.4s (10/10) FINISHED                                                                                                                                                                                          docker:default
+ => [verba internal] load build definition from Dockerfile                                                                                                                                                                              0.0s
+ => => transferring dockerfile: 175B                                                                                                                                                                                                    0.0s
+ => [verba internal] load metadata for docker.io/library/python:3.11                                                                                                                                                                    0.9s
+ => [verba internal] load .dockerignore                                                                                                                                                                                                 0.0s
+ => => transferring context: 2B                                                                                                                                                                                                         0.0s
+ => [verba 1/4] FROM docker.io/library/python:3.11@sha256:ce3b954c9285a7a145cba620bae03db836ab890b6b9e0d05a3ca522ea00dfbc9                                                                                                              0.0s
+ => [verba internal] load build context                                                                                                                                                                                                 0.7s
+ => => transferring context: 1.85MB                                                                                                                                                                                                     0.6s
+ => CACHED [verba 2/4] WORKDIR /Verba                                                                                                                                                                                                   0.0s
+ => [verba 3/4] COPY . /Verba                                                                                                                                                                                                           6.4s
+ => [verba 4/4] RUN pip install '.'                                                                                                                                                                                                   641.2s
+ => [verba] exporting to image                                                                                                                                                                                                          5.2s
+ => => exporting layers                                                                                                                                                                                                                 5.2s
+ => => writing image sha256:1263eeadc3285791e86921bd871962fbd490f8dd93a6e189d87785d070640492                                                                                                                                            0.0s
+ => => naming to docker.io/library/verba-verba                                                                                                                                                                                          0.0s
+ => [verba] resolving provenance for metadata file                                                                                                                                                                                      0.0s
+[+] Running 5/5
+ ✔ verba                         Built                                                                                                                                                                                                  0.0s
+ ✔ Network verba_ollama-docker   Created                                                                                                                                                                                                0.1s
+ ✔ Volume "verba_weaviate_data"  Created                                                                                                                                                                                                0.0s
+ ✔ Container verba-weaviate-1    Healthy                                                                                                                                                                                                6.0s
+ ✔ Container verba-verba-1       Started 
