@@ -1,10 +1,46 @@
-developer@ac-srv-141:~/Verba$ curl -o- https://raw.githubsercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100     2  100     2    0     0      2      0  0:00:01 --:--:--  0:00:01     2
-developer@ac-srv-141:~/Verba$ source ~/.nvm/nvm.sh
--bash: /home/developer/.nvm/nvm.sh: No such file or directory
-developer@ac-srv-141:~/Verba$ cd ..
-developer@ac-srv-141:~$ source ~/.nvm/nvm.sh
--bash: /home/developer/.nvm/nvm.sh: No such file or directory
-developer@ac-srv-141:~$
+developer@ac-srv-141:~/Verba$ cd frontend
+developer@ac-srv-141:~/Verba/frontend$ npm install
+
+added 1 package, and audited 743 packages in 3s
+
+243 packages are looking for funding
+  run `npm fund` for details
+
+14 vulnerabilities (2 low, 9 moderate, 2 high, 1 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+developer@ac-srv-141:~/Verba/frontend$ npm run build
+
+> verba@2.1.0 build
+> next build && cp -r out/* ../goldenverba/server/frontend/out/ && rm -r out
+
+ ⚠ Specified "redirects" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ⚠ Specified "redirects" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+  ▲ Next.js 14.2.25
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./app/page.tsx
+Error: Failed to read source code from /home/developer/Verba/frontend/app/page.tsx
+
+Caused by:
+    stream did not contain valid UTF-8
+
+Import trace for requested module:
+./app/page.tsx
+
+
+> Build failed because of webpack errors
+
