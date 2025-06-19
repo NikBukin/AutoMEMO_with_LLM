@@ -1,9 +1,6 @@
-developer@ac-srv-141:~/Verba/frontend$ iconv -f utf-8 -t utf-8 page.tsx - temp.tsx && mv temp.tsx page.tsx
-iconv: cannot open input file `page.tsx': No such file or directory
-
-^C
-developer@ac-srv-141:~/Verba/frontend$ cd app
-developer@ac-srv-141:~/Verba/frontend/app$ iconv -f utf-8 -t utf-8 page.tsx - temp.tsx && mv temp.tsx page.tsx
+developer@ac-srv-141:~/Verba/frontend/app$ iconv -f ISO-8859 -t utf-8 page.tsx - temp.tsx && mv temp.tsx page.tsx
+iconv: failed to start conversion processing
+developer@ac-srv-141:~/Verba/frontend/app$ iconv -f windows-1251 -t utf-8 page.tsx - temp.tsx && mv temp.tsx page.tsx
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -284,7 +281,23 @@ export default function Home() {
             className={`footer footer-center p-4 mt-8 bg-bg-verba text-text-alt-verba transition-all duration-1500 delay-1000`}
           >
             <aside>
-              <p>Build with iconv: illegal input sequence at position 8769
+              <p>Build with ¦ and Weaviate © 2024</p>
+            </aside>
+          </div>
+        </div>
+      )}
+
+      <img
+        referrerPolicy="no-referrer-when-downgrade"
+        src="https://static.scarf.sh/a.png?x-pxid=ec666e70-aee5-4e87-bc62-0935afae63ac"
+      />
+    </main>
+  );
+}
+
+
+;
+^C
 developer@ac-srv-141:~/Verba/frontend/app$ cd ..
 developer@ac-srv-141:~/Verba/frontend$ npm run build
 
@@ -309,9 +322,535 @@ Import trace for requested module:
 
 
 > Build failed because of webpack errors
-developer@ac-srv-141:~/Verba/frontend$ cd app
-developer@ac-srv-141:~/Verba/frontend/app$ file page.tsx
-page.tsx: Java source, ISO-8859 text
-developer@ac-srv-141:~/Verba/frontend/app$ iconv -f ISO-8859 -t utf-8 page.tsx - temp.tsx && mv temp.tsx page.tsx
-iconv: failed to start conversion processing
-developer@ac-srv-141:~/Verba/frontend/app$
+developer@ac-srv-141:~/Verba/frontend$ rm -rf .next
+developer@ac-srv-141:~/Verba/frontend$ npm run build
+
+> verba@2.1.0 build
+> next build && cp -r out/* ../goldenverba/server/frontend/out/ && rm -r out
+
+ ⚠ Specified "redirects" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+ ⚠ Specified "redirects" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+  ▲ Next.js 14.2.25
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./app/page.tsx
+Error: Failed to read source code from /home/developer/Verba/frontend/app/page.tsx
+
+Caused by:
+    stream did not contain valid UTF-8
+
+Import trace for requested module:
+./app/page.tsx
+
+
+> Build failed because of webpack errors
+developer@ac-srv-141:~/Verba/frontend$ file **/*.ts*
+app/api.ts:     ASCII text
+app/layout.tsx: HTML document, ASCII text
+app/page.tsx:   Java source, ISO-8859 text
+app/types.ts:   ASCII text
+app/util.ts:    Java source, ASCII text
+developer@ac-srv-141:~/Verba/frontend$ file **/**/*.ts*
+node_modules/acorn-jsx/index.d.ts:                                         ASCII text
+node_modules/ajv-keywords/ajv-keywords.d.ts:                               ASCII text
+node_modules/ansi-regex/index.d.ts:                                        Java source, ASCII text
+node_modules/ansi-styles/index.d.ts:                                       ASCII text
+node_modules/any-promise/implementation.d.ts:                              ASCII text
+node_modules/any-promise/index.d.ts:                                       ASCII text, with very long lines (391)
+node_modules/any-promise/register.d.ts:                                    Java source, ASCII text
+node_modules/anymatch/index.d.ts:                                          ASCII text
+node_modules/arg/index.d.ts:                                               ASCII text
+node_modules/array-union/index.d.ts:                                       Java source, Unicode text, UTF-8 text
+node_modules/astring/astring.d.ts:                                         Unicode text, UTF-8 text
+node_modules/axe-core/axe.d.ts:                                            ASCII text
+node_modules/bail/index.d.ts:                                              ASCII text
+node_modules/base64-js/index.d.ts:                                         ASCII text
+node_modules/binary-extensions/binary-extensions.json.d.ts:                ASCII text
+node_modules/binary-extensions/index.d.ts:                                 Java source, Unicode text, UTF-8 text
+node_modules/browserslist/error.d.ts:                                      ASCII text
+node_modules/browserslist/index.d.ts:                                      Unicode text, UTF-8 text
+node_modules/buffer/index.d.ts:                                            ASCII text
+node_modules/callsites/index.d.ts:                                         ASCII text
+node_modules/ccount/index.d.ts:                                            ASCII text
+node_modules/chalk/index.d.ts:                                             ASCII text
+node_modules/character-entities-html4/index.d.ts:                          ASCII text
+node_modules/character-entities/index.d.ts:                                ASCII text
+node_modules/comma-separated-tokens/index.d.ts:                            ASCII text
+node_modules/cross-fetch/index.d.ts:                                       ASCII text
+node_modules/csstype/index.d.ts:                                           ASCII text, with very long lines (469)
+node_modules/date-fns/add.d.ts:                                            Java source, ASCII text
+node_modules/date-fns/addBusinessDays.d.ts:                                ASCII text
+node_modules/date-fns/addDays.d.ts:                                        ASCII text
+node_modules/date-fns/addHours.d.ts:                                       ASCII text
+node_modules/date-fns/addISOWeekYears.d.ts:                                ASCII text
+node_modules/date-fns/addMilliseconds.d.ts:                                ASCII text
+node_modules/date-fns/addMinutes.d.ts:                                     ASCII text
+node_modules/date-fns/addMonths.d.ts:                                      ASCII text
+node_modules/date-fns/addQuarters.d.ts:                                    ASCII text
+node_modules/date-fns/addSeconds.d.ts:                                     ASCII text
+node_modules/date-fns/addWeeks.d.ts:                                       ASCII text
+node_modules/date-fns/addYears.d.ts:                                       ASCII text
+node_modules/date-fns/areIntervalsOverlapping.d.ts:                        Java source, ASCII text
+node_modules/date-fns/clamp.d.ts:                                          Java source, ASCII text
+node_modules/date-fns/closestIndexTo.d.ts:                                 ASCII text
+node_modules/date-fns/closestTo.d.ts:                                      ASCII text
+node_modules/date-fns/compareAsc.d.ts:                                     ASCII text
+node_modules/date-fns/compareDesc.d.ts:                                    ASCII text
+node_modules/date-fns/constants.d.ts:                                      ASCII text
+node_modules/date-fns/constructFrom.d.ts:                                  ASCII text
+node_modules/date-fns/constructNow.d.ts:                                   ASCII text
+node_modules/date-fns/daysToWeeks.d.ts:                                    ASCII text
+node_modules/date-fns/differenceInBusinessDays.d.ts:                       ASCII text
+node_modules/date-fns/differenceInCalendarDays.d.ts:                       ASCII text
+node_modules/date-fns/differenceInCalendarISOWeekYears.d.ts:               ASCII text
+node_modules/date-fns/differenceInCalendarISOWeeks.d.ts:                   ASCII text
+node_modules/date-fns/differenceInCalendarMonths.d.ts:                     ASCII text
+node_modules/date-fns/differenceInCalendarQuarters.d.ts:                   ASCII text
+node_modules/date-fns/differenceInCalendarWeeks.d.ts:                      Java source, ASCII text
+node_modules/date-fns/differenceInCalendarYears.d.ts:                      ASCII text
+node_modules/date-fns/differenceInDays.d.ts:                               ASCII text
+node_modules/date-fns/differenceInHours.d.ts:                              Java source, ASCII text
+node_modules/date-fns/differenceInISOWeekYears.d.ts:                       ASCII text
+node_modules/date-fns/differenceInMilliseconds.d.ts:                       ASCII text
+node_modules/date-fns/differenceInMinutes.d.ts:                            Java source, ASCII text
+node_modules/date-fns/differenceInMonths.d.ts:                             ASCII text
+node_modules/date-fns/differenceInQuarters.d.ts:                           Java source, ASCII text
+node_modules/date-fns/differenceInSeconds.d.ts:                            Java source, ASCII text
+node_modules/date-fns/differenceInWeeks.d.ts:                              Java source, ASCII text
+node_modules/date-fns/differenceInYears.d.ts:                              ASCII text
+node_modules/date-fns/eachDayOfInterval.d.ts:                              Java source, ASCII text
+node_modules/date-fns/eachHourOfInterval.d.ts:                             Java source, ASCII text
+node_modules/date-fns/eachMinuteOfInterval.d.ts:                           Java source, ASCII text
+node_modules/date-fns/eachMonthOfInterval.d.ts:                            Java source, ASCII text
+node_modules/date-fns/eachQuarterOfInterval.d.ts:                          Java source, ASCII text
+node_modules/date-fns/eachWeekOfInterval.d.ts:                             ASCII text
+node_modules/date-fns/eachWeekendOfInterval.d.ts:                          Java source, ASCII text
+node_modules/date-fns/eachWeekendOfMonth.d.ts:                             ASCII text
+node_modules/date-fns/eachWeekendOfYear.d.ts:                              ASCII text
+node_modules/date-fns/eachYearOfInterval.d.ts:                             Java source, ASCII text
+node_modules/date-fns/endOfDay.d.ts:                                       ASCII text
+node_modules/date-fns/endOfDecade.d.ts:                                    ASCII text
+node_modules/date-fns/endOfHour.d.ts:                                      ASCII text
+node_modules/date-fns/endOfISOWeek.d.ts:                                   ASCII text
+node_modules/date-fns/endOfISOWeekYear.d.ts:                               ASCII text
+node_modules/date-fns/endOfMinute.d.ts:                                    ASCII text
+node_modules/date-fns/endOfMonth.d.ts:                                     ASCII text
+node_modules/date-fns/endOfQuarter.d.ts:                                   ASCII text
+node_modules/date-fns/endOfSecond.d.ts:                                    ASCII text
+node_modules/date-fns/endOfToday.d.ts:                                     ASCII text
+node_modules/date-fns/endOfTomorrow.d.ts:                                  ASCII text
+node_modules/date-fns/endOfWeek.d.ts:                                      Java source, ASCII text
+node_modules/date-fns/endOfYear.d.ts:                                      ASCII text
+node_modules/date-fns/endOfYesterday.d.ts:                                 ASCII text
+node_modules/date-fns/format.d.ts:                                         Java source, Unicode text, UTF-8 text
+node_modules/date-fns/formatDistance.d.ts:                                 Java source, ASCII text
+node_modules/date-fns/formatDistanceStrict.d.ts:                           Java source, ASCII text
+node_modules/date-fns/formatDistanceToNow.d.ts:                            Java source, ASCII text
+node_modules/date-fns/formatDistanceToNowStrict.d.ts:                      Java source, ASCII text
+node_modules/date-fns/formatDuration.d.ts:                                 Java source, ASCII text
+node_modules/date-fns/formatISO.d.ts:                                      Java source, ASCII text
+node_modules/date-fns/formatISO9075.d.ts:                                  Java source, ASCII text
+node_modules/date-fns/formatISODuration.d.ts:                              Java source, ASCII text
+node_modules/date-fns/formatRFC3339.d.ts:                                  ASCII text
+node_modules/date-fns/formatRFC7231.d.ts:                                  ASCII text
+node_modules/date-fns/formatRelative.d.ts:                                 Java source, ASCII text
+node_modules/date-fns/fp.d.ts:                                             ASCII text
+node_modules/date-fns/fromUnixTime.d.ts:                                   ASCII text
+node_modules/date-fns/getDate.d.ts:                                        ASCII text
+node_modules/date-fns/getDay.d.ts:                                         ASCII text
+node_modules/date-fns/getDayOfYear.d.ts:                                   ASCII text
+node_modules/date-fns/getDaysInMonth.d.ts:                                 ASCII text
+node_modules/date-fns/getDaysInYear.d.ts:                                  ASCII text
+node_modules/date-fns/getDecade.d.ts:                                      ASCII text
+node_modules/date-fns/getDefaultOptions.d.ts:                              Java source, ASCII text
+node_modules/date-fns/getHours.d.ts:                                       ASCII text
+node_modules/date-fns/getISODay.d.ts:                                      ASCII text
+node_modules/date-fns/getISOWeek.d.ts:                                     ASCII text
+node_modules/date-fns/getISOWeekYear.d.ts:                                 ASCII text
+node_modules/date-fns/getISOWeeksInYear.d.ts:                              ASCII text
+node_modules/date-fns/getMilliseconds.d.ts:                                ASCII text
+node_modules/date-fns/getMinutes.d.ts:                                     ASCII text
+node_modules/date-fns/getMonth.d.ts:                                       ASCII text
+node_modules/date-fns/getOverlappingDaysInIntervals.d.ts:                  Java source, ASCII text
+node_modules/date-fns/getQuarter.d.ts:                                     ASCII text
+node_modules/date-fns/getSeconds.d.ts:                                     ASCII text
+node_modules/date-fns/getTime.d.ts:                                        ASCII text
+node_modules/date-fns/getUnixTime.d.ts:                                    ASCII text
+node_modules/date-fns/getWeek.d.ts:                                        ASCII text
+node_modules/date-fns/getWeekOfMonth.d.ts:                                 Java source, ASCII text
+node_modules/date-fns/getWeekYear.d.ts:                                    ASCII text
+node_modules/date-fns/getWeeksInMonth.d.ts:                                Java source, ASCII text
+node_modules/date-fns/getYear.d.ts:                                        ASCII text
+node_modules/date-fns/hoursToMilliseconds.d.ts:                            ASCII text
+node_modules/date-fns/hoursToMinutes.d.ts:                                 ASCII text
+node_modules/date-fns/hoursToSeconds.d.ts:                                 ASCII text
+node_modules/date-fns/index.d.ts:                                          ASCII text
+node_modules/date-fns/interval.d.ts:                                       Java source, ASCII text
+node_modules/date-fns/intervalToDuration.d.ts:                             Java source, ASCII text
+node_modules/date-fns/intlFormat.d.ts:                                     Unicode text, UTF-8 text
+node_modules/date-fns/intlFormatDistance.d.ts:                             ASCII text
+node_modules/date-fns/isAfter.d.ts:                                        ASCII text
+node_modules/date-fns/isBefore.d.ts:                                       ASCII text
+node_modules/date-fns/isDate.d.ts:                                         ASCII text
+node_modules/date-fns/isEqual.d.ts:                                        ASCII text
+node_modules/date-fns/isExists.d.ts:                                       ASCII text
+node_modules/date-fns/isFirstDayOfMonth.d.ts:                              ASCII text
+node_modules/date-fns/isFriday.d.ts:                                       ASCII text
+node_modules/date-fns/isFuture.d.ts:                                       ASCII text
+node_modules/date-fns/isLastDayOfMonth.d.ts:                               ASCII text
+node_modules/date-fns/isLeapYear.d.ts:                                     ASCII text
+node_modules/date-fns/isMatch.d.ts:                                        Unicode text, UTF-8 text
+node_modules/date-fns/isMonday.d.ts:                                       ASCII text
+node_modules/date-fns/isPast.d.ts:                                         ASCII text
+node_modules/date-fns/isSameDay.d.ts:                                      ASCII text
+node_modules/date-fns/isSameHour.d.ts:                                     ASCII text
+node_modules/date-fns/isSameISOWeek.d.ts:                                  ASCII text
+node_modules/date-fns/isSameISOWeekYear.d.ts:                              ASCII text
+node_modules/date-fns/isSameMinute.d.ts:                                   ASCII text
+node_modules/date-fns/isSameMonth.d.ts:                                    ASCII text
+node_modules/date-fns/isSameQuarter.d.ts:                                  ASCII text
+node_modules/date-fns/isSameSecond.d.ts:                                   ASCII text
+node_modules/date-fns/isSameWeek.d.ts:                                     Java source, ASCII text
+node_modules/date-fns/isSameYear.d.ts:                                     ASCII text
+node_modules/date-fns/isSaturday.d.ts:                                     ASCII text
+node_modules/date-fns/isSunday.d.ts:                                       ASCII text
+node_modules/date-fns/isThisHour.d.ts:                                     ASCII text
+node_modules/date-fns/isThisISOWeek.d.ts:                                  ASCII text
+node_modules/date-fns/isThisMinute.d.ts:                                   ASCII text
+node_modules/date-fns/isThisMonth.d.ts:                                    ASCII text
+node_modules/date-fns/isThisQuarter.d.ts:                                  ASCII text
+node_modules/date-fns/isThisSecond.d.ts:                                   ASCII text
+node_modules/date-fns/isThisWeek.d.ts:                                     Java source, ASCII text
+node_modules/date-fns/isThisYear.d.ts:                                     ASCII text
+node_modules/date-fns/isThursday.d.ts:                                     ASCII text
+node_modules/date-fns/isToday.d.ts:                                        ASCII text
+node_modules/date-fns/isTomorrow.d.ts:                                     ASCII text
+node_modules/date-fns/isTuesday.d.ts:                                      ASCII text
+node_modules/date-fns/isValid.d.ts:                                        ASCII text
+node_modules/date-fns/isWednesday.d.ts:                                    ASCII text
+node_modules/date-fns/isWeekend.d.ts:                                      ASCII text
+node_modules/date-fns/isWithinInterval.d.ts:                               Java source, ASCII text
+node_modules/date-fns/isYesterday.d.ts:                                    ASCII text
+node_modules/date-fns/lastDayOfDecade.d.ts:                                ASCII text
+node_modules/date-fns/lastDayOfISOWeek.d.ts:                               ASCII text
+node_modules/date-fns/lastDayOfISOWeekYear.d.ts:                           ASCII text
+node_modules/date-fns/lastDayOfMonth.d.ts:                                 ASCII text
+node_modules/date-fns/lastDayOfQuarter.d.ts:                               ASCII text
+node_modules/date-fns/lastDayOfWeek.d.ts:                                  Java source, ASCII text
+node_modules/date-fns/lastDayOfYear.d.ts:                                  ASCII text
+node_modules/date-fns/lightFormat.d.ts:                                    Java source, Unicode text, UTF-8 text
+node_modules/date-fns/locale.d.ts:                                         ASCII text
+node_modules/date-fns/max.d.ts:                                            ASCII text
+node_modules/date-fns/milliseconds.d.ts:                                   Java source, ASCII text
+node_modules/date-fns/millisecondsToHours.d.ts:                            ASCII text
+node_modules/date-fns/millisecondsToMinutes.d.ts:                          ASCII text
+node_modules/date-fns/millisecondsToSeconds.d.ts:                          ASCII text
+node_modules/date-fns/min.d.ts:                                            ASCII text
+node_modules/date-fns/minutesToHours.d.ts:                                 ASCII text
+node_modules/date-fns/minutesToMilliseconds.d.ts:                          ASCII text
+node_modules/date-fns/minutesToSeconds.d.ts:                               ASCII text
+node_modules/date-fns/monthsToQuarters.d.ts:                               ASCII text
+node_modules/date-fns/monthsToYears.d.ts:                                  ASCII text
+node_modules/date-fns/nextDay.d.ts:                                        Java source, ASCII text
+node_modules/date-fns/nextFriday.d.ts:                                     ASCII text
+node_modules/date-fns/nextMonday.d.ts:                                     ASCII text
+node_modules/date-fns/nextSaturday.d.ts:                                   ASCII text
+node_modules/date-fns/nextSunday.d.ts:                                     ASCII text
+node_modules/date-fns/nextThursday.d.ts:                                   ASCII text
+node_modules/date-fns/nextTuesday.d.ts:                                    ASCII text
+node_modules/date-fns/nextWednesday.d.ts:                                  ASCII text
+node_modules/date-fns/parse.d.ts:                                          Java source, Unicode text, UTF-8 text
+node_modules/date-fns/parseISO.d.ts:                                       ASCII text
+node_modules/date-fns/parseJSON.d.ts:                                      ASCII text
+node_modules/date-fns/previousDay.d.ts:                                    Java source, ASCII text
+node_modules/date-fns/previousFriday.d.ts:                                 ASCII text
+node_modules/date-fns/previousMonday.d.ts:                                 ASCII text
+node_modules/date-fns/previousSaturday.d.ts:                               ASCII text
+node_modules/date-fns/previousSunday.d.ts:                                 ASCII text
+node_modules/date-fns/previousThursday.d.ts:                               ASCII text
+node_modules/date-fns/previousTuesday.d.ts:                                ASCII text
+node_modules/date-fns/previousWednesday.d.ts:                              ASCII text
+node_modules/date-fns/quartersToMonths.d.ts:                               ASCII text
+node_modules/date-fns/quartersToYears.d.ts:                                ASCII text
+node_modules/date-fns/roundToNearestHours.d.ts:                            ASCII text
+node_modules/date-fns/roundToNearestMinutes.d.ts:                          ASCII text
+node_modules/date-fns/secondsToHours.d.ts:                                 ASCII text
+node_modules/date-fns/secondsToMilliseconds.d.ts:                          ASCII text
+node_modules/date-fns/secondsToMinutes.d.ts:                               ASCII text
+node_modules/date-fns/set.d.ts:                                            Java source, ASCII text
+node_modules/date-fns/setDate.d.ts:                                        ASCII text
+node_modules/date-fns/setDay.d.ts:                                         Java source, ASCII text
+node_modules/date-fns/setDayOfYear.d.ts:                                   ASCII text
+node_modules/date-fns/setDefaultOptions.d.ts:                              Java source, ASCII text
+node_modules/date-fns/setHours.d.ts:                                       ASCII text
+node_modules/date-fns/setISODay.d.ts:                                      ASCII text
+node_modules/date-fns/setISOWeek.d.ts:                                     ASCII text
+node_modules/date-fns/setISOWeekYear.d.ts:                                 ASCII text
+node_modules/date-fns/setMilliseconds.d.ts:                                ASCII text
+node_modules/date-fns/setMinutes.d.ts:                                     ASCII text
+node_modules/date-fns/setMonth.d.ts:                                       ASCII text
+node_modules/date-fns/setQuarter.d.ts:                                     ASCII text
+node_modules/date-fns/setSeconds.d.ts:                                     ASCII text
+node_modules/date-fns/setWeek.d.ts:                                        ASCII text
+node_modules/date-fns/setWeekYear.d.ts:                                    ASCII text
+node_modules/date-fns/setYear.d.ts:                                        ASCII text
+node_modules/date-fns/startOfDay.d.ts:                                     ASCII text
+node_modules/date-fns/startOfDecade.d.ts:                                  ASCII text
+node_modules/date-fns/startOfHour.d.ts:                                    ASCII text
+node_modules/date-fns/startOfISOWeek.d.ts:                                 ASCII text
+node_modules/date-fns/startOfISOWeekYear.d.ts:                             ASCII text
+node_modules/date-fns/startOfMinute.d.ts:                                  ASCII text
+node_modules/date-fns/startOfMonth.d.ts:                                   ASCII text
+node_modules/date-fns/startOfQuarter.d.ts:                                 ASCII text
+node_modules/date-fns/startOfSecond.d.ts:                                  ASCII text
+node_modules/date-fns/startOfToday.d.ts:                                   ASCII text
+node_modules/date-fns/startOfTomorrow.d.ts:                                ASCII text
+node_modules/date-fns/startOfWeek.d.ts:                                    Java source, ASCII text
+node_modules/date-fns/startOfWeekYear.d.ts:                                ASCII text
+node_modules/date-fns/startOfYear.d.ts:                                    ASCII text
+node_modules/date-fns/startOfYesterday.d.ts:                               ASCII text
+node_modules/date-fns/sub.d.ts:                                            Java source, ASCII text
+node_modules/date-fns/subBusinessDays.d.ts:                                ASCII text
+node_modules/date-fns/subDays.d.ts:                                        ASCII text
+node_modules/date-fns/subHours.d.ts:                                       ASCII text
+node_modules/date-fns/subISOWeekYears.d.ts:                                ASCII text
+node_modules/date-fns/subMilliseconds.d.ts:                                ASCII text
+node_modules/date-fns/subMinutes.d.ts:                                     ASCII text
+node_modules/date-fns/subMonths.d.ts:                                      ASCII text
+node_modules/date-fns/subQuarters.d.ts:                                    ASCII text
+node_modules/date-fns/subSeconds.d.ts:                                     ASCII text
+node_modules/date-fns/subWeeks.d.ts:                                       ASCII text
+node_modules/date-fns/subYears.d.ts:                                       ASCII text
+node_modules/date-fns/toDate.d.ts:                                         ASCII text
+node_modules/date-fns/transpose.d.ts:                                      Java source, ASCII text
+node_modules/date-fns/types.d.ts:                                          Java source, ASCII text
+node_modules/date-fns/weeksToDays.d.ts:                                    ASCII text
+node_modules/date-fns/yearsToDays.d.ts:                                    ASCII text
+node_modules/date-fns/yearsToMonths.d.ts:                                  ASCII text
+node_modules/date-fns/yearsToQuarters.d.ts:                                ASCII text
+node_modules/decode-named-character-reference/index.d.ts:                  Unicode text, UTF-8 text
+node_modules/decode-named-character-reference/index.dom.d.ts:              ASCII text
+node_modules/dequal/index.d.ts:                                            ASCII text, with no line terminators
+node_modules/emoji-regex/RGI_Emoji.d.ts:                                   ASCII text
+node_modules/emoji-regex/index.d.ts:                                       ASCII text
+node_modules/emoji-regex/text.d.ts:                                        ASCII text
+node_modules/enhanced-resolve/types.d.ts:                                  Java source, Unicode text, UTF-8 text
+node_modules/escalade/index.d.ts:                                          ASCII text
+node_modules/escape-string-regexp/index.d.ts:                              Java source, Unicode text, UTF-8 text
+node_modules/eslint-import-resolver-typescript/shim.d.ts:                  ASCII text
+node_modules/estree-util-attach-comments/index.d.ts:                       ASCII text
+node_modules/estree-util-build-jsx/index.d.ts:                             ASCII text
+node_modules/estree-util-is-identifier-name/index.d.ts:                    ASCII text
+node_modules/estree-util-to-js/index.d.ts:                                 ASCII text
+node_modules/estree-util-visit/index.d.ts:                                 ASCII text
+node_modules/fast-deep-equal/index.d.ts:                                   ASCII text
+node_modules/fast-deep-equal/react.d.ts:                                   ASCII text
+node_modules/fast-json-stable-stringify/index.d.ts:                        ASCII text
+node_modules/fastq/index.d.ts:                                             ASCII text
+node_modules/find-up/index.d.ts:                                           Java source, Unicode text, UTF-8 text
+node_modules/flatted/types.d.ts:                                           ASCII text
+node_modules/fraction.js/fraction.d.ts:                                    ASCII text, with CRLF line terminators
+node_modules/globals/index.d.ts:                                           Java source, ASCII text
+node_modules/globby/index.d.ts:                                            Java source, ASCII text
+node_modules/has-flag/index.d.ts:                                          Java source, ASCII text
+node_modules/hast-util-to-estree/index.d.ts:                               ASCII text
+node_modules/hast-util-whitespace/index.d.ts:                              ASCII text
+node_modules/hastscript/index.d.ts:                                        ASCII text
+node_modules/hastscript/svg.d.ts:                                          ASCII text
+node_modules/ieee754/index.d.ts:                                           ASCII text
+node_modules/ignore/index.d.ts:                                            ASCII text
+node_modules/import-fresh/index.d.ts:                                      Java source, ASCII text
+node_modules/is-binary-path/index.d.ts:                                    Java source, ASCII text
+node_modules/is-buffer/index.d.ts:                                         ASCII text
+node_modules/is-fullwidth-code-point/index.d.ts:                           Java source, Unicode text, UTF-8 text
+node_modules/is-path-inside/index.d.ts:                                    Java source, ASCII text
+node_modules/is-plain-obj/index.d.ts:                                      C++ source, ASCII text
+node_modules/kleur/colors.d.ts:                                            ASCII text
+node_modules/kleur/index.d.ts:                                             ASCII text
+node_modules/lie/lie.d.ts:                                                 ASCII text, with very long lines (341)
+node_modules/locate-path/index.d.ts:                                       ASCII text
+node_modules/longest-streak/index.d.ts:                                    ASCII text
+node_modules/mdast-util-definitions/index.d.ts:                            ASCII text
+node_modules/mdast-util-from-markdown/index.d.ts:                          Unicode text, UTF-8 text
+node_modules/mdast-util-mdx-expression/complex-types.d.ts:                 ASCII text
+node_modules/mdast-util-mdx-expression/index.d.ts:                         ASCII text
+node_modules/mdast-util-mdx-jsx/index.d.ts:                                ASCII text
+node_modules/mdast-util-mdx/index.d.ts:                                    ASCII text
+node_modules/mdast-util-mdxjs-esm/complex-types.d.ts:                      ASCII text
+node_modules/mdast-util-mdxjs-esm/index.d.ts:                              ASCII text
+node_modules/mdast-util-phrasing/index.d.ts:                               ASCII text
+node_modules/mdast-util-to-hast/complex-types.d.ts:                        ASCII text
+node_modules/mdast-util-to-hast/index.d.ts:                                ASCII text
+node_modules/mdast-util-to-markdown/index.d.ts:                            Unicode text, UTF-8 text
+node_modules/mdast-util-to-string/index.d.ts:                              ASCII text
+node_modules/meshoptimizer/index.module.d.ts:                              ASCII text
+node_modules/meshoptimizer/meshopt_decoder.module.d.ts:                    ASCII text
+node_modules/meshoptimizer/meshopt_encoder.module.d.ts:                    ASCII text
+node_modules/meshoptimizer/meshopt_simplifier.module.d.ts:                 ASCII text
+node_modules/micromark-core-commonmark/index.d.ts:                         ASCII text
+node_modules/micromark-extension-mdx-expression/index.d.ts:                ASCII text
+node_modules/micromark-extension-mdx-jsx/index.d.ts:                       ASCII text
+node_modules/micromark-extension-mdx-md/index.d.ts:                        ASCII text
+node_modules/micromark-extension-mdxjs-esm/index.d.ts:                     ASCII text
+node_modules/micromark-extension-mdxjs/index.d.ts:                         ASCII text
+node_modules/micromark-factory-destination/index.d.ts:                     ASCII text
+node_modules/micromark-factory-label/index.d.ts:                           Unicode text, UTF-8 text
+node_modules/micromark-factory-mdx-expression/index.d.ts:                  ASCII text
+node_modules/micromark-factory-space/index.d.ts:                           Unicode text, UTF-8 text
+node_modules/micromark-factory-title/index.d.ts:                           ASCII text
+node_modules/micromark-factory-whitespace/index.d.ts:                      ASCII text
+node_modules/micromark-util-character/index.d.ts:                          ASCII text
+node_modules/micromark-util-chunked/index.d.ts:                            ASCII text
+node_modules/micromark-util-classify-character/index.d.ts:                 Unicode text, UTF-8 text
+node_modules/micromark-util-combine-extensions/index.d.ts:                 ASCII text
+node_modules/micromark-util-decode-numeric-character-reference/index.d.ts: ASCII text
+node_modules/micromark-util-decode-string/index.d.ts:                      Unicode text, UTF-8 text
+node_modules/micromark-util-encode/index.d.ts:                             ASCII text
+node_modules/micromark-util-events-to-acorn/index.d.ts:                    ASCII text
+node_modules/micromark-util-html-tag-name/index.d.ts:                      Unicode text, UTF-8 text
+node_modules/micromark-util-normalize-identifier/index.d.ts:               Unicode text, UTF-8 text
+node_modules/micromark-util-resolve-all/index.d.ts:                        ASCII text
+node_modules/micromark-util-sanitize-uri/index.d.ts:                       ASCII text
+node_modules/micromark-util-subtokenize/index.d.ts:                        ASCII text
+node_modules/micromark-util-symbol/codes.d.ts:                             ASCII text
+node_modules/micromark-util-symbol/constants.d.ts:                         ASCII text
+node_modules/micromark-util-symbol/types.d.ts:                             ASCII text
+node_modules/micromark-util-symbol/values.d.ts:                            Unicode text, UTF-8 text
+node_modules/micromark-util-types/index.d.ts:                              HTML document, Unicode text, UTF-8 text
+node_modules/micromark/index.d.ts:                                         ASCII text
+node_modules/micromark/stream.d.ts:                                        ASCII text
+node_modules/mri/index.d.ts:                                               ASCII text
+node_modules/nanoid/index.d.ts:                                            Unicode text, UTF-8 text
+node_modules/next/amp.d.ts:                                                ASCII text
+node_modules/next/app.d.ts:                                                ASCII text
+node_modules/next/babel.d.ts:                                              ASCII text
+node_modules/next/cache.d.ts:                                              ASCII text
+node_modules/next/client.d.ts:                                             ASCII text
+node_modules/next/config.d.ts:                                             ASCII text
+node_modules/next/constants.d.ts:                                          ASCII text
+node_modules/next/document.d.ts:                                           ASCII text
+node_modules/next/dynamic.d.ts:                                            ASCII text
+node_modules/next/error.d.ts:                                              ASCII text
+node_modules/next/head.d.ts:                                               ASCII text
+node_modules/next/headers.d.ts:                                            ASCII text
+node_modules/next/image.d.ts:                                              ASCII text
+node_modules/next/index.d.ts:                                              ASCII text
+node_modules/next/jest.d.ts:                                               ASCII text
+node_modules/next/link.d.ts:                                               ASCII text
+node_modules/next/navigation.d.ts:                                         ASCII text
+node_modules/next/og.d.ts:                                                 ASCII text
+node_modules/next/router.d.ts:                                             ASCII text
+node_modules/next/script.d.ts:                                             ASCII text
+node_modules/next/server.d.ts:                                             ASCII text
+node_modules/next/web-vitals.d.ts:                                         ASCII text
+node_modules/p-limit/index.d.ts:                                           ASCII text
+node_modules/p-locate/index.d.ts:                                          Java source, ASCII text
+node_modules/path-exists/index.d.ts:                                       ASCII text
+node_modules/path-key/index.d.ts:                                          ASCII text
+node_modules/path-type/index.d.ts:                                         ASCII text
+node_modules/picocolors/picocolors.d.ts:                                   ASCII text
+node_modules/picocolors/types.ts:                                          ASCII text
+node_modules/pirates/index.d.ts:                                           ASCII text
+node_modules/postcss-nested/index.d.ts:                                    ASCII text
+node_modules/postcss-selector-parser/postcss-selector-parser.d.ts:         C++ source, ASCII text
+node_modules/potpack/index.d.ts:                                           ASCII text
+node_modules/prettier/doc.d.ts:                                            ASCII text
+node_modules/prettier/index.d.ts:                                          Java source, ASCII text
+node_modules/prettier/standalone.d.ts:                                     Java source, ASCII text
+node_modules/property-information/index.d.ts:                              ASCII text
+node_modules/queue-microtask/index.d.ts:                                   ASCII text
+node_modules/queue/index.d.ts:                                             Java source, ASCII text
+node_modules/react-icons/index.d.ts:                                       ASCII text
+node_modules/react-markdown/index.d.ts:                                    ASCII text
+node_modules/react-spinners/BarLoader.d.ts:                                Java source, ASCII text
+node_modules/react-spinners/BeatLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/BounceLoader.d.ts:                             Java source, ASCII text
+node_modules/react-spinners/CircleLoader.d.ts:                             Java source, ASCII text
+node_modules/react-spinners/ClimbingBoxLoader.d.ts:                        Java source, ASCII text
+node_modules/react-spinners/ClipLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/ClockLoader.d.ts:                              Java source, ASCII text
+node_modules/react-spinners/DotLoader.d.ts:                                Java source, ASCII text
+node_modules/react-spinners/FadeLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/GridLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/HashLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/MoonLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/PacmanLoader.d.ts:                             Java source, ASCII text
+node_modules/react-spinners/PropagateLoader.d.ts:                          Java source, ASCII text
+node_modules/react-spinners/PuffLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/PulseLoader.d.ts:                              Java source, ASCII text
+node_modules/react-spinners/RingLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/RiseLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/RotateLoader.d.ts:                             Java source, ASCII text
+node_modules/react-spinners/ScaleLoader.d.ts:                              Java source, ASCII text
+node_modules/react-spinners/SkewLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/SquareLoader.d.ts:                             Java source, ASCII text
+node_modules/react-spinners/SyncLoader.d.ts:                               Java source, ASCII text
+node_modules/react-spinners/index.d.ts:                                    ASCII text
+node_modules/readdirp/index.d.ts:                                          Java source, ASCII text
+node_modules/remark-mdx/index.d.ts:                                        ASCII text
+node_modules/remark-parse/index.d.ts:                                      Unicode text, UTF-8 text
+node_modules/remark-rehype/index.d.ts:                                     ASCII text
+node_modules/sade/index.d.ts:                                              Java source, ASCII text
+node_modules/safe-buffer/index.d.ts:                                       ASCII text
+node_modules/shebang-regex/index.d.ts:                                     Java source, ASCII text
+node_modules/slash/index.d.ts:                                             Java source, Unicode text, UTF-8 text
+node_modules/source-map-js/source-map.d.ts:                                ASCII text
+node_modules/source-map/source-map.d.ts:                                   ASCII text
+node_modules/space-separated-tokens/index.d.ts:                            ASCII text
+node_modules/string-width-cjs/index.d.ts:                                  Unicode text, UTF-8 text
+node_modules/string-width/index.d.ts:                                      Java source, Unicode text, UTF-8 text
+node_modules/stringify-entities/index.d.ts:                                ASCII text
+node_modules/strip-ansi-cjs/index.d.ts:                                    Java source, ASCII text
+node_modules/strip-ansi/index.d.ts:                                        Java source, ASCII text
+node_modules/strip-json-comments/index.d.ts:                               ASCII text
+node_modules/style-to-object/index.d.ts:                                   ASCII text
+node_modules/styled-jsx/css.d.ts:                                          ASCII text
+node_modules/styled-jsx/global.d.ts:                                       ASCII text
+node_modules/styled-jsx/index.d.ts:                                        ASCII text
+node_modules/styled-jsx/macro.d.ts:                                        ASCII text
+node_modules/styled-jsx/style.d.ts:                                        ASCII text
+node_modules/suspend-react/index.d.ts:                                     ASCII text
+node_modules/tailwindcss/colors.d.ts:                                      ASCII text
+node_modules/tailwindcss/defaultConfig.d.ts:                               ASCII text
+node_modules/tailwindcss/defaultTheme.d.ts:                                ASCII text
+node_modules/tailwindcss/loadConfig.d.ts:                                  ASCII text
+node_modules/tailwindcss/plugin.d.ts:                                      ASCII text
+node_modules/tailwindcss/resolveConfig.d.ts:                               ASCII text
+node_modules/tapable/tapable.d.ts:                                         ASCII text
+node_modules/three-stdlib/index.d.ts:                                      ASCII text
+node_modules/trim-lines/index.d.ts:                                        ASCII text
+node_modules/trough/index.d.ts:                                            ASCII text
+node_modules/tslib/tslib.d.ts:                                             ASCII text, with CRLF line terminators
+node_modules/type-fest/base.d.ts:                                          ASCII text
+node_modules/type-fest/index.d.ts:                                         ASCII text
+node_modules/typewriter-effect/index.d.ts:                                 ASCII text
+node_modules/unified/index.d.ts:                                           Unicode text, UTF-8 text
+node_modules/unist-util-generated/index.d.ts:                              ASCII text
+node_modules/unist-util-is/index.d.ts:                                     ASCII text
+node_modules/unist-util-position-from-estree/index.d.ts:                   ASCII text
+node_modules/unist-util-position/index.d.ts:                               ASCII text
+node_modules/unist-util-remove-position/index.d.ts:                        ASCII text
+node_modules/unist-util-stringify-position/index.d.ts:                     ASCII text
+node_modules/unist-util-visit-parents/complex-types.d.ts:                  ASCII text
+node_modules/unist-util-visit-parents/index.d.ts:                          ASCII text
+node_modules/unist-util-visit/complex-types.d.ts:                          ASCII text
+node_modules/unist-util-visit/index.d.ts:                                  ASCII text
+node_modules/update-browserslist-db/index.d.ts:                            ASCII text
+node_modules/uvu/index.d.ts:                                               ASCII text
+node_modules/vfile-message/index.d.ts:                                     ASCII text
+node_modules/vfile/index.d.ts:                                             Unicode text, UTF-8 text
+node_modules/webgl-constants/rollup.config.ts:                             Java source, ASCII text
+node_modules/webpack/module.d.ts:                                          ASCII text
+node_modules/webpack/types.d.ts:                                           Java source, ASCII text
+node_modules/wrap-ansi/index.d.ts:                                         Algol 68 source, ASCII text
+node_modules/yocto-queue/index.d.ts:                                       Unicode text, UTF-8 text, with very long lines (315)
+node_modules/zustand/context.d.ts:                                         Java source, ASCII text
+node_modules/zustand/index.d.ts:                                           ASCII text
+node_modules/zustand/middleware.d.ts:                                      ASCII text
+node_modules/zustand/react.d.ts:                                           Java source, ASCII text
+node_modules/zustand/shallow.d.ts:                                         ASCII text
+node_modules/zustand/vanilla.d.ts:                                         ASCII text
+node_modules/zwitch/index.d.ts:                                            Unicode text, UTF-8 text
+developer@ac-srv-141:~/Verba/frontend$
