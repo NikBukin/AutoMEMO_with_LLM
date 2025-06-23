@@ -1,79 +1,76 @@
-^Cdeveloper@ac-srv-141:~/Verba$ docker inspect verba-verba-1 | less
-            },
-            "Image": "verba-verba",
-            "Volumes": null,
-            "WorkingDir": "/Verba",
-            "Entrypoint": null,
-            "OnBuild": null,
-            "Labels": {
-                "com.docker.compose.config-hash": "a237a1555d82379ad705b6f5be243ddb4f18fadfdbb481fd4ed8dffcee4b0dd3",
-                "com.docker.compose.container-number": "1",
-                "com.docker.compose.depends_on": "weaviate:service_healthy:false",
-                "com.docker.compose.image": "sha256:55d36aea772b3a4c5a3de7849c2a2190159d1208fcdd5f9c922f1af646073bc4",
-                "com.docker.compose.oneoff": "False",
-                "com.docker.compose.project": "verba",
-                "com.docker.compose.project.config_files": "/home/developer/Verba/docker-compose.yml",
-                "com.docker.compose.project.working_dir": "/home/developer/Verba",
-                "com.docker.compose.service": "verba",
-                "com.docker.compose.version": "2.36.2"
-            }
-        },
-        "NetworkSettings": {
-            "Bridge": "",
-            "SandboxID": "0e9a941cbbb94a3693a28b0f0059c9e367b8e633d57a693e52359223f60d53b2",
-            "SandboxKey": "/var/run/docker/netns/0e9a941cbbb9",
-            "Ports": {
-                "8000/tcp": [
+ {
+        "Id": "35b73240737104f944024363fb854b872e58f95ab371bb40d20086868a62dbbc",
+        "Created": "2025-06-23T15:12:35.69284333Z",
+        "Path": "verba",
+        "Args": [
+            "start",
+            "--port",
+            "8000",
+            "--host",
+            "0.0.0.0"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 416129,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2025-06-23T15:12:41.581454404Z",
+            "FinishedAt": "0001-01-01T00:00:00Z",
+            "Health": {
+                "Status": "unhealthy",
+                "FailingStreak": 31,
+                "Log": [
                     {
-                        "HostIp": "0.0.0.0",
-                        "HostPort": "8000"
+                        "Start": "2025-06-23T15:15:04.594612508Z",
+                        "End": "2025-06-23T15:15:04.683062921Z",
+                        "ExitCode": 1,
+                        "Output": "failed: Connection refused.\nfailed: Connection refused.\n"
                     },
                     {
-                        "HostIp": "::",
-                        "HostPort": "8000"
+                        "Start": "2025-06-23T15:15:09.684321669Z",
+                        "End": "2025-06-23T15:15:09.791238633Z",
+                        "ExitCode": 1,
+                        "Output": "failed: Connection refused.\nfailed: Connection refused.\n"
+                    },
+                    {
+                        "Start": "2025-06-23T15:15:14.792532879Z",
+                        "End": "2025-06-23T15:15:14.893100377Z",
+                        "ExitCode": 1,
+                        "Output": "failed: Connection refused.\nfailed: Connection refused.\n"
+                    },
+                    {
+                        "Start": "2025-06-23T15:15:19.894678138Z",
+                        "End": "2025-06-23T15:15:20.006545866Z",
+                        "ExitCode": 1,
+                        "Output": "failed: Connection refused.\nfailed: Connection refused.\n"
+                    },
+                    {
+                        "Start": "2025-06-23T15:15:25.007456091Z",
+                        "End": "2025-06-23T15:15:25.099431888Z",
+                        "ExitCode": 1,
+                        "Output": "failed: Connection refused.\nfailed: Connection refused.\n"
                     }
                 ]
-            },
-            "HairpinMode": false,
-            "LinkLocalIPv6Address": "",
-            "LinkLocalIPv6PrefixLen": 0,
-            "SecondaryIPAddresses": null,
-            "SecondaryIPv6Addresses": null,
-            "EndpointID": "",
-            "Gateway": "",
-            "GlobalIPv6Address": "",
-            "GlobalIPv6PrefixLen": 0,
-            "IPAddress": "",
-            "IPPrefixLen": 0,
-            "IPv6Gateway": "",
-            "MacAddress": "",
-            "Networks": {
-                "verba_ollama-docker": {
-                    "IPAMConfig": null,
-                    "Links": null,
-                    "Aliases": [
-                        "verba-verba-1",
-                        "verba"
-                    ],
-                    "MacAddress": "36:e9:8e:00:48:53",
-                    "DriverOpts": null,
-                    "GwPriority": 0,
-                    "NetworkID": "00ce3accc83c833d93e306468caaa86e2f03fd0202b8a9215a8c8af4a7dca01c",
-                    "EndpointID": "c1f1c3a62cbe56bac116e8b1f598c02d2fec64a1fe6a46a47dea5fb9788824e5",
-                    "Gateway": "172.18.0.1",
-                    "IPAddress": "172.18.0.3",
-                    "IPPrefixLen": 16,
-                    "IPv6Gateway": "",
-                    "GlobalIPv6Address": "",
-                    "GlobalIPv6PrefixLen": 0,
-                    "DNSNames": [
-                        "verba-verba-1",
-                        "verba",
-                        "35b732407371"
-                    ]
-                }
             }
-        }
-    }
-
-
+        },
+        "Image": "sha256:55d36aea772b3a4c5a3de7849c2a2190159d1208fcdd5f9c922f1af646073bc4",
+        "ResolvConfPath": "/var/lib/docker/containers/35b73240737104f944024363fb854b872e58f95ab371bb40d20086868a62dbbc/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/35b73240737104f944024363fb854b872e58f95ab371bb40d20086868a62dbbc/hostname",
+        "HostsPath": "/var/lib/docker/containers/35b73240737104f944024363fb854b872e58f95ab371bb40d20086868a62dbbc/hosts",
+        "LogPath": "/var/lib/docker/containers/35b73240737104f944024363fb854b872e58f95ab371bb40d20086868a62dbbc/35b73240737104f944024363fb854b872e58f95ab371bb40d20086868a62dbbc-json.log",
+        "Name": "/verba-verba-1",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/home/developer/Verba/data:/data:rw"
