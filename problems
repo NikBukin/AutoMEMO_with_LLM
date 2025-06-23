@@ -1,13 +1,11 @@
 developer@ac-srv-141:~/Verba$ docker ps
-CONTAINER ID   IMAGE                               COMMAND                  CREATED             STATUS                       PORTS                                                                                      NAMES
-72c8d2a52ae6   verba-verba                         "verba start --port …"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp                                                verba-verba-1
-be086214206e   semitechnologies/weaviate:1.25.10   "/bin/weaviate --hos…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp   verba-weaviate-1
-developer@ac-srv-141:~/Verba$ docker exec -it verba-verba-1 sh
-# ls /app/public/weaviate.png
-ls: cannot access '/app/public/weaviate.png': No such file or directory
-# find / -name "weaviate.png" 2>/dev/null
-/usr/local/lib/python3.11/site-packages/goldenverba/server/frontend/out/weaviate.png
-/Verba/build/lib/goldenverba/server/frontend/out/weaviate.png
-/Verba/goldenverba/server/frontend/out/weaviate.png
-/Verba/frontend/public/weaviate.png
+CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS                      PORTS                                                                                      NAMES
+beb28b2b9d46   verba-verba                         "verba start --port …"   38 seconds ago   Up 31 seconds (unhealthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp                                                verba-verba-1
+25e43c2a9788   semitechnologies/weaviate:1.25.10   "/bin/weaviate --hos…"   38 seconds ago   Up 37 seconds (healthy)     0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp   verba-weaviate-1
+developer@ac-srv-141:~/Verba$ docker logs verba-verba-1
+developer@ac-srv-141:~/Verba$ docker logs -f verba-verba-1
+^Cdeveloper@ac-srv-141:~/Verba$ docker inspect verba-verba-1 | grep Health
+            "Health": {
+            "Healthcheck": {
+developer@ac-srv-141:~/Verba$
 
