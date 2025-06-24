@@ -1,64 +1,5 @@
-developer@ac-srv-141:~/Verba$ ip a
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host
-       valid_lft forever preferred_lft forever
-2: ens160: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-    link/ether 00:50:56:86:88:b0 brd ff:ff:ff:ff:ff:ff
-    altname enp3s0
-    inet 172.31.135.7/27 brd 172.31.135.31 scope global ens160
-       valid_lft forever preferred_lft forever
-    inet6 fe80::250:56ff:fe86:88b0/64 scope link
-       valid_lft forever preferred_lft forever
-3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default
-    link/ether 86:22:c5:80:05:48 brd ff:ff:ff:ff:ff:ff
-    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
-       valid_lft forever preferred_lft forever
-    inet6 fe80::8422:c5ff:fe80:548/64 scope link
-       valid_lft forever preferred_lft forever
-250: br-fd262076041d: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
-    link/ether 8e:cd:47:d5:2f:69 brd ff:ff:ff:ff:ff:ff
-    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-fd262076041d
-       valid_lft forever preferred_lft forever
-    inet6 fe80::8ccd:47ff:fed5:2f69/64 scope link
-       valid_lft forever preferred_lft forever
-251: vethde05820@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-fd262076041d state UP group default
-    link/ether 02:99:5c:34:16:34 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet6 fe80::99:5cff:fe34:1634/64 scope link
-       valid_lft forever preferred_lft forever
-252: vethc72cf9f@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-fd262076041d state UP group default
-    link/ether a2:fd:96:50:6a:46 brd ff:ff:ff:ff:ff:ff link-netnsid 1
-    inet6 fe80::a0fd:96ff:fe50:6a46/64 scope link
-       valid_lft forever preferred_lft forever
-developer@ac-srv-141:~/Verba$ hostname -I | awk '{print $1}'
-172.31.135.7
-developer@ac-srv-141:~/Verba$ sudo system stop ollama
-[sudo] password for developer:
-sudo: system: command not found
-developer@ac-srv-141:~/Verba$ sudo systemctl stop ollama
-developer@ac-srv-141:~/Verba$ curl http://localhost:11434
-curl: (7) Failed to connect to localhost port 11434 after 0 ms: Connection refused
-developer@ac-srv-141:~/Verba$ nano docker-compose.yml
 developer@ac-srv-141:~/Verba$ docker compose down --rmi all --volumes --remove-orphans
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
-WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-validating /home/developer/Verba/docker-compose.yml: services.weaviate Additional property ollama is not allowed
-developer@ac-srv-141:~/Verba$ docker compose up -d --build
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
-WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
-WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
-WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
-validating /home/developer/Verba/docker-compose.yml: services.weaviate Additional property ollama is not allowed
+yaml: line 3: did not find expected key
 developer@ac-srv-141:~/Verba$ cat docker-compose.yml
 ---
 
@@ -128,22 +69,22 @@ services:
 
   # Uncomment to use Ollama within the same docker compose
 
-    ollama:
-        image: ollama/ollama:latest
-        ports:
-          - 11434:11434
-        volumes:
-          - .:/code
-          - ./ollama/ollama:/root/.ollama
-        container_name: ollama
-        pull_policy: always
-        tty: true
-        restart: always
-        environment:
-          - OLLAMA_KEEP_ALIVE=24h
-          - OLLAMA_HOST=0.0.0.0
-        networks:
-          - ollama-docker
+   ollama:
+       image: ollama/ollama:latest
+       ports:
+         - 11434:11434
+       volumes:
+         - .:/code
+         - ./ollama/ollama:/root/.ollama
+       container_name: ollama
+       pull_policy: always
+       tty: true
+       restart: always
+       environment:
+         - OLLAMA_KEEP_ALIVE=24h
+         - OLLAMA_HOST=0.0.0.0
+       networks:
+         - ollama-docker
 
 volumes:
   weaviate_data: {}
@@ -155,4 +96,4 @@ networks:
     external: false
 
 ...
-
+developer@ac-srv-141:~/Verba$
