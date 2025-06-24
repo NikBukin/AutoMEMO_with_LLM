@@ -1,10 +1,5 @@
-developer@ac-srv-141:~/Verba$ docker compose down --rmi all --volumes --remove-orphans
-yaml: line 3: did not find expected key
-developer@ac-srv-141:~/Verba$ cat docker-compose.yml
----
-
-services:
-  verba:
+services: # Этот ключ 'services' должен начинаться с левого края
+  verba: # Это имя сервиса, отступ 2 пробела
     build:
       context: ./
       dockerfile: Dockerfile
@@ -14,17 +9,18 @@ services:
       - WEAVIATE_URL_VERBA=http://weaviate:8080
       - OPENAI_API_KEY=$OPENAI_API_KEY
       - COHERE_API_KEY=$COHERE_API_KEY
-      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_URL=http://ollama:11434 # Обновили, чтобы ссылаться на сервис 'ollama'
       - OLLAMA_MODEL=$OLLAMA_MODEL
       - OLLAMA_EMBED_MODEL=$OLLAMA_EMBED_MODEL
       - UNSTRUCTURED_API_KEY=$UNSTRUCTURED_API_KEY
       - UNSTRUCTURED_API_URL=$UNSTRUCTURED_API_URL
       - GITHUB_TOKEN=$GITHUB_TOKEN
-
     volumes:
       - ./data:/data/
     depends_on:
       weaviate:
+        condition: service_healthy
+      ollama: # Добавили зависимость от сервиса ollama
         condition: service_healthy
     healthcheck:
       test: wget --no-verbose --tries=3 --spider http://localhost:8000 || exit 1
@@ -34,8 +30,10 @@ services:
       start_period: 10s
     networks:
       - ollama-docker
+    # УБЕДИТЕСЬ, что здесь НЕТ строки extra_hosts для ollamahost. Она больше не нужна.
 
-  weaviate:
+
+  weaviate: # Это имя сервиса, отступ 2 пробела
     command:
       - --host
       - 0.0.0.0
@@ -67,33 +65,34 @@ services:
     networks:
       - ollama-docker
 
-  # Uncomment to use Ollama within the same docker compose
+  ollama: # <--- ЭТА СЕКЦИЯ ДОЛЖНА НАЧИНАТЬСЯ С ОТСТУПА В 2 ПРОБЕЛА (как verba и weaviate)
+    image: ollama/ollama:latest
+    ports:
+      - 11434:11434 # Изменено, чтобы Ollama была доступна по стандартному порту
+    volumes:
+      - ollama_data:/root/.ollama # Создали новый том для сохранения моделей Ollama
+      # - .:/code # Эту строку можно закомментировать/удалить, если она не нужна
+      # - ./ollama/ollama:/root/.ollama # Если вы использовали этот путь, проверьте, что он ведет к данным моделей
+    container_name: ollama # Устанавливаем имя контейнера для удобства
+    pull_policy: always
+    tty: true
+    restart: always
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+    healthcheck: # Добавлен Healthcheck для Ollama
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - ollama-docker
 
-   ollama:
-       image: ollama/ollama:latest
-       ports:
-         - 11434:11434
-       volumes:
-         - .:/code
-         - ./ollama/ollama:/root/.ollama
-       container_name: ollama
-       pull_policy: always
-       tty: true
-       restart: always
-       environment:
-         - OLLAMA_KEEP_ALIVE=24h
-         - OLLAMA_HOST=0.0.0.0
-       networks:
-         - ollama-docker
-
-volumes:
+volumes: # Этот ключ 'volumes' должен начинаться с левого края
   weaviate_data: {}
-  ollama_data: {}
+  ollama_data: {} # Добавлен новый том для Ollama
 
-
-networks:
+networks: # Этот ключ 'networks' должен начинаться с левого края
   ollama-docker:
     external: false
-
-...
-developer@ac-srv-141:~/Verba$
