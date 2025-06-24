@@ -1,15 +1,17 @@
 info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
-   Linting and checking validity of types  ...Failed to compile.
+   Linting and checking validity of types  ..Failed to compile.
 
-./app/components/Chat/ChatInterface.tsx:230:9
-Type error: Cannot find name 'setPreviewText'.
+./app/components/Chat/ChatInterface.tsx:259:5
+Type error: Cannot find name 'setSocket'.
 
-  228 |         setCurrentThinkText("");
-  229 |         setCurrentMainText("");
-> 230 |         setPreviewText(""); // Общий previewText больше не используется напрямую для отображения
-      |         ^
-  231 |         setCollapseThinkBlock(true); // Сворачиваем блок размышлений после завершения
-  232 |       }
-  233 |     };
+  257 |     };
+  258 |
+> 259 |     setSocket(localSocket);
+      |     ^
+  260 |
+  261 |     return () => {
+  262 |       if (localSocket.readyState !== WebSocket.CLOSED) {
 Next.js build worker exited with code: 1 and signal: null
+developer@ac-srv-141:~/Verba/frontend$
+
 
