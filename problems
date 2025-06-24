@@ -1,17 +1,22 @@
 info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
-   Linting and checking validity of types  ..Failed to compile.
+   Linting and checking validity of types  .Failed to compile.
 
-./app/components/Chat/ChatInterface.tsx:259:5
-Type error: Cannot find name 'setSocket'.
+./app/components/Chat/ChatInterface.tsx:272:17
+Type error: Argument of type '(prev: Message[]) => (Message | { type: "retrieval"; content: DocumentScore[]; context: string; })[]' is not assignable to parameter of type 'SetStateAction<Message[]>'.
+  Type '(prev: Message[]) => (Message | { type: "retrieval"; content: DocumentScore[]; context: string; })[]' is not assignable to type '(prevState: Message[]) => Message[]'.
+    Type '(Message | { type: "retrieval"; content: DocumentScore[]; context: string; })[]' is not assignable to type 'Message[]'.
+      Type 'Message | { type: "retrieval"; content: DocumentScore[]; context: string; }' is not assignable to type 'Message'.
+        Type '{ type: "retrieval"; content: DocumentScore[]; context: string; }' is not assignable to type 'Message'.
+          Types of property 'content' are incompatible.
+            Type 'DocumentScore[]' is not assignable to type 'string | Document[]'.
+              Type 'DocumentScore[]' is not assignable to type 'Document[]'.
+                Type 'DocumentScore' is missing the following properties from type 'Document': URL, alinkColor, all, anchors, and 250 more.
 
-  257 |     };
-  258 |
-> 259 |     setSocket(localSocket);
-      |     ^
-  260 |
-  261 |     return () => {
-  262 |       if (localSocket.readyState !== WebSocket.CLOSED) {
+  270 |
+  271 |   const handleSuccessResponse = (data: QueryPayload, sendInput: string) => {
+> 272 |     setMessages((prev) => [
+      |                 ^
+  273 |       ...prev,
+  274 |       { type: "retrieval", content: data.documents, context: data.context },
+  275 |     ]);
 Next.js build worker exited with code: 1 and signal: null
-developer@ac-srv-141:~/Verba/frontend$
-
-
