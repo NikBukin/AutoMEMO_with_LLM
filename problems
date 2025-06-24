@@ -1,152 +1,104 @@
-⚠ WebSocket connection closed by client.
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-24 07:28:11.377413
-INFO:     10.253.218.90:58331 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:58331 - "POST /api/get_datacount HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-24 07:28:11.377413
-INFO:     10.253.218.90:58331 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:58331 - "POST /api/get_datacount HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-24 07:28:11.377413
-INFO:     10.253.218.90:58331 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:58331 - "POST /api/get_meta HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50190 - "HEAD / HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-24 07:28:11.377413
-INFO:     10.253.218.90:58331 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:58331 - "POST /api/get_labels HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-24 07:28:11.377413
-INFO:     10.253.218.90:58331 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:58331 - "POST /api/get_labels HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39704 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39714 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41650 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41660 - "HEAD / HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-24 07:28:11.377413
-INFO:     10.253.218.90:58358 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:58358 - "POST /api/get_datacount HTTP/1.1" 200 OK
-ℹ Cleaning Clients Cache
-ℹ Cleaned up 0 clients
-ℹ 1 clients connected
-ℹ Client
-0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-2025-06-24 07:28:11.377413
-INFO:     10.253.218.90:58358 - "GET /api/health HTTP/1.1" 200 OK
-ℹ Found existing Client
-INFO:     10.253.218.90:58358 - "POST /api/get_labels HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35422 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35428 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40814 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40820 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60080 - "HEAD / HTTP/1.1" 200 OK
-✔ Collected all Batches of transcript.txt
-ℹ Removing transcript.txt from BatchManager
-ℹ Found existing Client
-ℹ FileStatus.STARTING | transcript.txt | Starting Import | 0
-ℹ Loading transcript.txt (txt)
-ℹ FileStatus.LOADING | transcript.txt | Loaded transcript.txt |
-0.63
-ℹ FileStatus.CHUNKING | transcript.txt |  | 0
-ℹ FileStatus.CHUNKING | transcript.txt | Split transcript.txt into 20
-chunks | 0.01
-ℹ FileStatus.EMBEDDING | transcript.txt |  | 0
-ℹ Vectorizing 20 chunks in 1 batches
-INFO:     127.0.0.1:60082 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50218 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50228 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47016 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47026 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35798 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35814 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39804 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39808 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36574 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36586 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49942 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49952 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50970 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50982 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39804 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39820 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45334 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37186 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37190 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48732 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48738 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56958 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56960 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59858 - "HEAD / HTTP/1.1" 200 OK
-ℹ FileStatus.ERROR | transcript.txt | Import for transcript.txt failed:
-Batch vectorization failed: Vectorization failed for some batches: Cannot
-connect to host ollamahost:11434 ssl:default [Connection timed out] | 129.34
-✘ No documents imported 0 of 1 succesful tasks
-ℹ FileStatus.ERROR | transcript.txt | Import for transcript.txt failed:
-Import for transcript.txt failed: Batch vectorization failed: Vectorization
-failed for some batches: Cannot connect to host ollamahost:11434 ssl:default
-[Connection timed out] | 0
-INFO:     127.0.0.1:59872 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46208 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46224 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38584 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38592 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40752 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40762 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57226 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57230 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60298 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60304 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41408 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41418 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35094 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35104 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39206 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39216 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35352 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35356 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40168 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40172 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44846 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44852 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57786 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57794 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44906 - "HEAD / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44912 - "HEAD / HTTP/1.1" 200 OK
-^[^Cdeveloper@ac-srv-141:~/Verba$ ollama list
-NAME                       ID              SIZE      MODIFIED
-deepseek-r1:latest         6995872bfe4c    5.2 GB    5 days ago
-nomic-embed-text:latest    0a109f422b47    274 MB    6 days ago
-tinyllama:latest           2644915ede35    637 MB    6 days ago
+^Cdeveloper@ac-srv-141:~/Verba$ docker ps -a
+CONTAINER ID   IMAGE                               COMMAND                  CREATED        STATUS                  PORTS                                                                                      NAMES
+b18622b9fc53   verba-verba                         "verba start --port …"   16 hours ago   Up 16 hours (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp                                                verba-verba-1
+0cf242cad7d9   semitechnologies/weaviate:1.25.10   "/bin/weaviate --hos…"   16 hours ago   Up 16 hours (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:3000->8080/tcp, [::]:3000->8080/tcp   verba-weaviate-1
 developer@ac-srv-141:~/Verba$
+developer@ac-srv-141:~/Verba$ curl http://localhost:11434
+Ollama is runningdeveloper@ac-srv-141:~/Verba$ cat docker-compose.yml
+---
+
+services:
+  verba:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    environment:
+      - WEAVIATE_URL_VERBA=http://weaviate:8080
+      - OPENAI_API_KEY=$OPENAI_API_KEY
+      - COHERE_API_KEY=$COHERE_API_KEY
+      - OLLAMA_URL=http://ollamahost:11434
+      - OLLAMA_MODEL=$OLLAMA_MODEL
+      - OLLAMA_EMBED_MODEL=$OLLAMA_EMBED_MODEL
+      - UNSTRUCTURED_API_KEY=$UNSTRUCTURED_API_KEY
+      - UNSTRUCTURED_API_URL=$UNSTRUCTURED_API_URL
+      - GITHUB_TOKEN=$GITHUB_TOKEN
+
+    volumes:
+      - ./data:/data/
+    depends_on:
+      weaviate:
+        condition: service_healthy
+    healthcheck:
+      test: wget --no-verbose --tries=3 --spider http://localhost:8000 || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      - ollama-docker
+    extra_hosts:
+      - "ollamahost:172.19.0.1"
+
+  weaviate:
+    command:
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8080'
+      - --scheme
+      - http
+    image: semitechnologies/weaviate:1.25.10
+    ports:
+      - 8080:8080
+      - 3000:8080
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    restart: on-failure:0
+    healthcheck:
+      test: wget --no-verbose --tries=3 --spider http://localhost:8080/v1/.well-known/ready || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    environment:
+      OPENAI_APIKEY: $OPENAI_API_KEY
+      COHERE_APIKEY: $COHERE_API_KEY
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      ENABLE_MODULES: 'e'
+      CLUSTER_HOSTNAME: 'node1'
+    networks:
+      - ollama-docker
+
+  # Uncomment to use Ollama within the same docker compose
+
+  # ollama:
+  #     image: ollama/ollama:latest
+  #     ports:
+  #       - 7869:11434
+  #     volumes:
+  #       - .:/code
+  #       - ./ollama/ollama:/root/.ollama
+  #     container_name: ollama
+  #     pull_policy: always
+  #     tty: true
+  #     restart: always
+  #     environment:
+  #       - OLLAMA_KEEP_ALIVE=24h
+  #       - OLLAMA_HOST=0.0.0.0
+  #     networks:
+  #       - ollama-docker
+
+volumes:
+  weaviate_data: {}
+
+
+networks:
+  ollama-docker:
+    external: false
+
+...
+
