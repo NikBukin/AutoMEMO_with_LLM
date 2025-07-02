@@ -1,43 +1,16 @@
-import { MemoPayload, MemoResponse } from "./types";
-import { detectHost } from "./util"; // Убедитесь, что этот импорт присутствует
-
-export const sendMemoRequest = async (
-  payload: MemoPayload
-): Promise<MemoResponse> => { // <--- ИЗМЕНЕНО: УДАЛЕНО "| null"
-  try {
-    const host = await detectHost();
-    const response = await fetch(`${host}/api/generate_memo`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      console.error(`Error ${response.status}: ${response.statusText}`);
-      const errorData = await response.json();
-      console.error("Error details:", errorData);
-      // Возвращаем MemoResponse с сообщением об ошибке
-      return { memo_text: `Error: ${errorData.memo_text || "Failed to generate memo."}` };
-    }
-
-    const data: MemoResponse = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error sending memo request", error);
-    let errorMessage = "Network or unexpected error.";
-
-    // Это исправление из предыдущего шага для безопасного доступа к 'error.message'
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    } else if (typeof error === 'string') {
-      errorMessage = error;
-    } else if (error && typeof error === 'object' && 'message' in error) {
-      errorMessage = (error as { message: string }).message;
-    }
-
-    // Возвращаем MemoResponse с сообщением об ошибке
-    return { memo_text: `Error: ${errorMessage}` };
-  }
-};
+developer@ac-srv-141:~/Verba$ docker logs -f verba-verba-1
+ℹ No Ollama Model detected
+ℹ No Ollama Model detected
+Traceback (most recent call last):
+  File "/usr/local/bin/verba", line 5, in <module>
+    from goldenverba.server.cli import cli
+  File "/usr/local/lib/python3.11/site-packages/goldenverba/server/cli.py", line 6, in <module>
+    from goldenverba import verba_manager
+  File "/usr/local/lib/python3.11/site-packages/goldenverba/verba_manager.py", line 25, in <module>
+    from goldenverba.components.managers import (
+  File "/usr/local/lib/python3.11/site-packages/goldenverba/components/managers.py", line 162, in <module>
+    class WeaviateManager:
+  File "/usr/local/lib/python3.11/site-packages/goldenverba/components/managers.py", line 958, in WeaviateManager
+    rag_config: RAGConfig = None
+                ^^^^^^^^^
+NameError: name 'RAGConfig' is not defined
