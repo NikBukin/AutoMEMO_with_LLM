@@ -1,192 +1,213 @@
-Я понимаю ваше неудобство. Каждый раз вручную запускать модели Ollama внутри Docker-контейнера — это неэффективно. Проблема в том, что Docker-контейнер Verba не знает, какие модели вы хотите использовать в Ollama, и сам Ollama не держит модели "запущенными" постоянно после перезагрузки; он загружает их по требованию.
-
-Чтобы Docker-контейнер Verba "видел" нужные модели Ollama при старте без ручного вмешательства, есть несколько подходов, но ни один из них не является "запуском" моделей внутри контейнера Verba, так как Ollama работает как отдельный сервис. Вместо этого, мы будем имитировать "запуск" или предварительную загрузку моделей.
-
-Вот несколько способов, как это можно автоматизировать:
-
-Вариант 1: Предварительная загрузка моделей Ollama при запуске контейнера Verba (Рекомендуемый)
-Этот метод использует команду ollama pull для загрузки моделей при старте контейнера Verba, используя depends_on в docker-compose.yml, чтобы убедиться, что сервис Ollama уже запущен.
-
-Убедитесь, что Ollama настроен как отдельный сервис в docker-compose.yml и его порт доступен для Verba.
-Из ваших docker-compose.yml видно, что ollama-docker сеть используется, и Verba настроена на OLLAMA_URL=http://host.docker.internal:11434. Это хорошо, но host.docker.internal работает только на некоторых системах Docker (Docker Desktop). Если вы используете Linux, вам, возможно, придется заменить его на IP-адрес хоста или на имя сервиса ollama в compose, если вы запустили Ollama как сервис в том же docker-compose.yml.
-
-Предположим, у вас есть сервис Ollama в том же docker-compose.yml (это лучший подход):
-
-YAML
-
-# docker-compose.yml
-services:
-  verba:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8000:8000
-    environment:
-      # ... другие переменные окружения
-      - OLLAMA_URL=http://ollama:11434 # Измените на имя сервиса Ollama, если он в том же compose
-      - OLLAMA_MODEL=$OLLAMA_MODEL # Модель генерации
-      - OLLAMA_EMBED_MODEL=$OLLAMA_EMBED_MODEL # Модель для эмбеддингов
-    depends_on:
-      weaviate:
-        condition: service_healthy
-      ollama: # <--- Добавьте зависимость от Ollama
-        condition: service_healthy
-    # ... остальная часть настройки Verba
-    networks:
-      - ollama-docker
-
-  ollama: # <--- Сервис Ollama, если его нет
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama # Для сохранения моделей
-    command: tail -f /dev/null # Держит контейнер запущенным
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    networks:
-      - ollama-docker
-
-  weaviate:
-    # ... настройки Weaviate
-
-volumes:
-  weaviate_data:
-  ollama_data: # <--- Добавьте том для Ollama
-networks:
-  ollama-docker:
-Измените Dockerfile Verba для предварительной загрузки моделей:
-В Dockerfile Verba, после установки зависимостей, вы можете добавить команду, которая будет выполнять ollama pull для указанных моделей.
-
-Dockerfile
-
-# Dockerfile (для сервиса Verba)
-# ... (существующий код Dockerfile)
-
-# Устанавливаем зависимости Python
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Добавляем скрипт для ожидания и загрузки моделей Ollama
-COPY scripts/wait_for_ollama_and_pull_models.sh /usr/local/bin/wait_for_ollama_and_pull_models.sh
-RUN chmod +x /usr/local/bin/wait_for_ollama_and_pull_models.sh
-
-# ... (копирование остального кода)
-
-# Измените CMD на скрипт, который сначала загружает модели, а затем запускает Verba
-CMD ["/usr/local/bin/wait_for_ollama_and_pull_models.sh"]
-Создайте скрипт scripts/wait_for_ollama_and_pull_models.sh:
-Этот скрипт будет ждать, пока сервис Ollama станет доступным, а затем выполнит команды ollama pull для моделей, указанных в переменных окружения.
-
-Создайте папку scripts в корне вашего проекта Verba (там же, где Dockerfile и docker-compose.yml), и в ней создайте файл wait_for_ollama_and_pull_models.sh со следующим содержимым:
-
-Bash
-
-#!/bin/bash
-set -e
-
-# URL сервиса Ollama, как указано в docker-compose.yml
-OLLAMA_URL_HOST=${OLLAMA_URL:-http://ollama:11434} # Используем значение по умолчанию, если не задано
-
-echo "Waiting for Ollama at $OLLAMA_URL_HOST to be ready..."
-# Простая проверка доступности Ollama
-until curl --output /dev/null --silent --head --fail "$OLLAMA_URL_HOST"; do
-  echo "Ollama is unavailable - sleeping"
-  sleep 5
-done
-echo "Ollama is ready!"
-
-# Предварительная загрузка моделей Ollama, если они указаны
-if [ -n "$OLLAMA_MODEL" ]; then
-  echo "Pulling OLLAMA_MODEL: $OLLAMA_MODEL"
-  ollama -v pull "$OLLAMA_MODEL" || true # `|| true` чтобы не падать, если модель уже есть
-fi
-
-if [ -n "$OLLAMA_EMBED_MODEL" ]; then
-  echo "Pulling OLLAMA_EMBED_MODEL: $OLLAMA_EMBED_MODEL"
-  ollama -v pull "$OLLAMA_EMBED_MODEL" || true
-fi
-
-echo "Starting Verba application..."
-# Запускаем основное приложение Verba
-exec verba
-Важно: Убедитесь, что переменные OLLAMA_MODEL и OLLAMA_EMBED_MODEL заданы в вашем .env файле или в docker-compose.yml для сервиса verba.
-
-Пример .env файла:
-
-OLLAMA_MODEL=llama2
-OLLAMA_EMBED_MODEL=nomic-embed-text
-Как это работает:
-
-При старте docker-compose up, контейнер ollama запустится первым (если он есть в compose).
-
-Контейнер verba будет ждать, пока ollama станет "здоровым" (service_healthy в depends_on).
-
-Как только ollama готов, скрипт wait_for_ollama_and_pull_models.sh внутри контейнера verba начнет выполнение.
-
-Этот скрипт самостоятельно ждет доступности Ollama (через curl).
-
-Затем он выполняет ollama pull для каждой указанной модели. Поскольку ollama/ollama образ уже содержит клиент ollama, эта команда будет работать. Модели будут загружены в том ollama_data.
-
-После загрузки моделей скрипт запускает ваше приложение verba.
-
-Таким образом, при каждом запуске docker compose up -d --build (или без --build, если образы уже созданы), Docker автоматически скачает нужные модели в Ollama, если их там еще нет, прежде чем Verba начнет с ними работать.
-
-Вариант 2: Запуск Ollama с предварительно загруженными моделями (менее гибкий)
-Этот подход заключается в создании собственного Docker-образа Ollama, который уже содержит нужные модели.
-
-Создайте свой Dockerfile.ollama:
-
-Dockerfile
-
-# Dockerfile.ollama
-FROM ollama/ollama:latest
-
-# Модели, которые вы хотите включить
-ENV OLLAMA_MODELS="llama2 nomic-embed-text"
-
-RUN for model_name in $OLLAMA_MODELS; do \
-    /usr/bin/ollama pull "$model_name" || echo "Warning: Failed to pull $model_name. It might already exist or there was a network issue." ; \
-done
-
-CMD ["/usr/bin/ollama", "serve"]
-Обновите docker-compose.yml для использования вашего кастомного образа Ollama:
-
-YAML
-
-# docker-compose.yml
-services:
-  # ...
-  ollama:
-    build:
-      context: .
-      dockerfile: Dockerfile.ollama # <--- Используйте ваш кастомный Dockerfile
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama # Для сохранения моделей, чтобы не перекачивать каждый раз
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    networks:
-      - ollama-docker
-  # ...
-volumes:
-  ollama_data:
-  # ...
-Плюсы и минусы Варианта 2:
-
-Плюсы: Модели гарантированно присутствуют внутри образа Ollama. Не требуется дополнительный скрипт в Verba.
-
-Минусы: Создание образа может занимать много времени и места. Если вы решите использовать другие модели, вам придется пересобирать образ ollama. Менее гибко для динамического изменения моделей.
-
-Рекомендация:
-
-Вариант 1 (предварительная загрузка при запуске Verba с ollama pull) является более предпочтительным из-за его гибкости и простоты управления моделями через переменные окружения, не требуя пересборки образа Ollama при каждой смене модели.
-
-Выберите тот вариант, который лучше подходит для вашего рабочего процесса, и обновите соответствующие файлы. После этого выполните docker compose up -d --build (чтобы убедиться, что все изменения Dockerfile и скриптов будут применены).
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 0 clients connected
+INFO:     10.253.218.90:56817 - "GET /api/health HTTP/1.1" 200 OK
+{"action":"startup","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","default_vectorizer_module":"none","level":"info","msg":"the default vectorizer modules is set to \"none\", as a result all new schema classes without an explicit vectorizer setting, will use this vectorizer","time":"2025-07-02T13:51:43Z"}
+{"action":"startup","auto_schema_enabled":true,"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"auto schema enabled setting is set to \"true\"","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"No resource limits set, weaviate will use all available memory and CPU. To limit resources, set LIMIT_RESOURCES=true","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"module offload-s3 is enabled","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"Multiple vector spaces are present, GraphQL Explore and REST API list objects endpoint module include params has been disabled as a result.","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"open cluster service","servers":{"Embedded_at_8079":39991},"time":"2025-07-02T13:51:43Z"}
+{"address":"172.18.0.4:39992","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"starting cloud rpc server ...","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"starting raft sub-system ...","time":"2025-07-02T13:51:43Z"}
+{"address":"172.18.0.4:39991","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"tcp transport","tcpMaxPool":3,"tcpTimeout":10000000000,"time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"loading local db","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"local DB successfully loaded","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"schema manager loaded","n":0,"time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","metadata_only_voters":false,"msg":"construct a new raft node","name":"Embedded_at_8079","time":"2025-07-02T13:51:43Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","index":1,"level":"info","msg":"raft initial configuration","servers":"[[{Suffrage:Voter ID:Embedded_at_8079 Address:172.18.0.4:49303}]]","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","last_snapshot_index":0,"last_store_applied_index_on_start":3,"level":"info","msg":"raft node constructed","raft_applied_index":0,"raft_last_index":3,"time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","hasState":true,"level":"info","msg":"raft init","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"attempting to join","remoteNodes":["172.18.0.4:39991"],"time":"2025-07-02T13:51:43Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","follower":{},"leader-address":"","leader-id":"","level":"info","msg":"raft entering follower state","time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"attempted to join and failed","remoteNode":"172.18.0.4:39991","status":8,"time":"2025-07-02T13:51:43Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"attempting to join","remoteNodes":["172.18.0.4:39991"],"time":"2025-07-02T13:51:44Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"attempted to join and failed","remoteNode":"172.18.0.4:39991","status":8,"time":"2025-07-02T13:51:44Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","last-leader-addr":"","last-leader-id":"","level":"warning","msg":"raft heartbeat timeout reached, starting election","time":"2025-07-02T13:51:44Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"raft entering candidate state","node":{},"term":3,"time":"2025-07-02T13:51:44Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"raft pre-vote successful, starting election","refused":0,"tally":1,"term":3,"time":"2025-07-02T13:51:44Z","votesNeeded":1}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"raft election won","tally":1,"term":3,"time":"2025-07-02T13:51:44Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","leader":{},"level":"info","msg":"raft entering leader state","time":"2025-07-02T13:51:44Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"reload local db: update schema ...","time":"2025-07-02T13:51:44Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","index":"VERBA_CONFIGURATION","level":"info","msg":"reload local index","time":"2025-07-02T13:51:44Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","docker_image_tag":"localhost","level":"info","msg":"configured versions","server_version":"1.26.6","time":"2025-07-02T13:51:45Z"}
+{"action":"grpc_startup","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"grpc server listening at [::]:50050","time":"2025-07-02T13:51:45Z"}
+{"address":"172.18.0.4:39991","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"current Leader","time":"2025-07-02T13:51:45Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"attempting to join","remoteNodes":["172.18.0.4:39991"],"time":"2025-07-02T13:51:45Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","command":0,"level":"info","msg":"raft updating configuration","server-addr":"172.18.0.4:39991","server-id":"Embedded_at_8079","servers":"[[{Suffrage:Voter ID:Embedded_at_8079 Address:172.18.0.4:39991}]]","time":"2025-07-02T13:51:45Z"}
+{"action":"restapi_management","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","docker_image_tag":"localhost","level":"info","msg":"Serving weaviate at http://127.0.0.1:8079","time":"2025-07-02T13:51:45Z"}
+⚠ Connecting new Client
+ℹ Connecting to Weaviate Embedded
+INFO:     127.0.0.1:42412 - "HEAD / HTTP/1.1" 200 OK
+{"action":"hnsw_prefill_cache_async","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-07-02T13:51:46Z","wait_for_cache_prefill":false}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"Completed loading shard verba_configuration_gq2gtq0MM7vw in 3.155448ms","time":"2025-07-02T13:51:46Z"}
+{"action":"hnsw_vector_cache_prefill","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","count":3000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-07-02T13:51:46Z","took":260117}
+/usr/local/lib/python3.11/site-packages/weaviate/warnings.py:133: DeprecationWarning: Dep005: You are using weaviate-client version 4.9.6. The latest version is 4.15.4.
+            Consider upgrading to the latest version. See https://weaviate.io/developers/weaviate/client-libraries/python for details.
+  warnings.warn(
+✔ Succesfully Connected to Weaviate
+ℹ Connection time: 3.63 seconds
+INFO:     10.253.218.90:56817 - "POST /api/get_meta HTTP/1.1" 200 OK
+/usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+  warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+INFO:     ('10.253.218.90', 56833) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+/usr/local/lib/python3.11/site-packages/websockets/exceptions.py:125: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
+  warnings.warn(  # deprecated in 13.1 - 2024-09-21
+INFO:     connection closed
+INFO:     ('10.253.218.90', 56834) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+INFO:     connection closed
+⚠ WebSocket connection closed by client.
+⚠ WebSocket connection closed by client.
+INFO:     127.0.0.1:50502 - "HEAD / HTTP/1.1" 200 OK
+{"action":"telemetry_push","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"telemetry started","payload":"\u0026{MachineID:90779fa2-3a12-4090-9825-6a5398d33a1e Type:INIT Version:1.26.6 NumObjects:0 OS:linux Arch:amd64 UsedModules:[]}","time":"2025-07-02T13:51:51Z"}
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 1 clients connected
+ℹ Client
+438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
+2025-07-02 13:51:47.138408
+INFO:     10.253.218.90:56840 - "GET /api/health HTTP/1.1" 200 OK
+/usr/local/lib/python3.11/site-packages/weaviate/collections/classes/config.py:1914: PydanticDeprecatedSince211: Accessing the 'model_fields' attribute on the instance is deprecated. Instead, you should access this attribute from the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.
+  for cls_field in self.model_fields:
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"prop len tracker file /root/.local/share/weaviate/verba_documents/7rCT8RXRTjSV/proplengths does not exist, creating new tracker","time":"2025-07-02T13:51:52Z"}
+{"action":"hnsw_prefill_cache_async","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-07-02T13:51:52Z","wait_for_cache_prefill":false}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"Created shard verba_documents_7rCT8RXRTjSV in 2.127436ms","time":"2025-07-02T13:51:52Z"}
+{"action":"hnsw_vector_cache_prefill","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","count":1000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-07-02T13:51:52Z","took":215570}
+ℹ Found existing Client
+ℹ Collection: VERBA_DOCUMENTS does not exist, creating new
+collection.
+✔ Succesfully retrieved document: 0 documents
+INFO:     10.253.218.90:56840 - "POST /api/get_all_documents HTTP/1.1" 200 OK
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 1 clients connected
+ℹ Client
+438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
+2025-07-02 13:51:47.138408
+INFO:     10.253.218.90:56840 - "GET /api/health HTTP/1.1" 200 OK
+ℹ Found existing Client
+✔ Succesfully retrieved document: 0 documents
+INFO:     10.253.218.90:56840 - "POST /api/get_all_documents HTTP/1.1" 200 OK
+INFO:     ('10.253.218.90', 56842) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     ('10.253.218.90', 56843) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+INFO:     connection closed
+⚠ WebSocket connection closed by client.
+⚠ WebSocket connection closed by client.
+INFO:     127.0.0.1:50508 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41576 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41590 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54498 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54500 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41600 - "HEAD / HTTP/1.1" 200 OK
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 1 clients connected
+ℹ Client
+438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
+2025-07-02 13:51:47.138408
+INFO:     10.253.218.90:56853 - "GET /api/health HTTP/1.1" 200 OK
+ℹ Found existing Client
+✔ Succesfully retrieved document: 0 documents
+INFO:     10.253.218.90:56853 - "POST /api/get_all_documents HTTP/1.1" 200 OK
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 1 clients connected
+ℹ Client
+438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
+2025-07-02 13:51:47.138408
+INFO:     10.253.218.90:56853 - "GET /api/health HTTP/1.1" 200 OK
+ℹ Found existing Client
+✔ Succesfully retrieved document: 0 documents
+INFO:     10.253.218.90:56853 - "POST /api/get_all_documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41608 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33866 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33868 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56574 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56588 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46372 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46374 - "HEAD / HTTP/1.1" 200 OK
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 1 clients connected
+ℹ Client
+438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
+2025-07-02 13:51:47.138408
+INFO:     10.253.218.90:56860 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     10.253.218.90:56860 - "POST /api/query HTTP/1.1" 422 Unprocessable Entity
+INFO:     connection closed
+INFO:     connection closed
+⚠ WebSocket connection closed by client.
+⚠ Import WebSocket connection closed by client.
+INFO:     127.0.0.1:40256 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40262 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35446 - "HEAD / HTTP/1.1" 200 OK
+INFO:     10.253.218.90:56863 - "GET / HTTP/1.1" 200 OK
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 1 clients connected
+ℹ Client
+438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
+2025-07-02 13:51:47.138408
+INFO:     10.253.218.90:56863 - "GET /api/health HTTP/1.1" 200 OK
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 1 clients connected
+ℹ Client
+438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
+2025-07-02 13:51:47.138408
+INFO:     10.253.218.90:56863 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     ('10.253.218.90', 56872) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+INFO:     ('10.253.218.90', 56874) - "WebSocket /ws/import_files" [accepted]
+INFO:     connection open
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 1 clients connected
+ℹ Client
+438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
+2025-07-02 13:51:47.138408
+INFO:     10.253.218.90:56863 - "GET /api/health HTTP/1.1" 200 OK
+ℹ Found existing Client
+INFO:     10.253.218.90:56863 - "POST /api/get_meta HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35448 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35422 - "HEAD / HTTP/1.1" 200 OK
+INFO:     ('10.253.218.90', 56877) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     ('10.253.218.90', 56878) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     ('10.253.218.90', 56879) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     ('10.253.218.90', 56880) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+INFO:     connection closed
+⚠ WebSocket connection closed by client.
+⚠ WebSocket connection closed by client.
+⚠ WebSocket connection closed by client.
+⚠ WebSocket connection closed by client.
+INFO:     127.0.0.1:35436 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53670 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53674 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40848 - "HEAD / HTTP/1.1" 200 OK
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 1 clients connected
+ℹ Client
+438cd3f3eaf69365a75a3a712b4fb5857ea5791c371a70998ee92611af077a2b connected at
+2025-07-02 13:51:47.138408
+INFO:     10.253.218.90:56864 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     10.253.218.90:56864 - "POST /api/query HTTP/1.1" 422 Unprocessable Entity
+INFO:     connection closed
+INFO:     connection closed
+⚠ WebSocket connection closed by client.
+⚠ Import WebSocket connection closed by client.
+INFO:     127.0.0.1:54638 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54654 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40552 - "HEAD / HTTP/1.1" 200 OK
