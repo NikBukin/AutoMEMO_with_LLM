@@ -1,2 +1,139 @@
-from goldenverba.server.types import FileConfig, FileStatus, RAGConfig # <--- ДОБАВЬТЕ RAGConfig сюда
-
+developer@ac-srv-141:~/Verba$ docker logs -f verba-verba-1
+INFO:     Will watch for changes in these directories: ['/Verba']
+WARNING:  "workers" flag is ignored when reloading is enabled.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [1] using WatchFiles
+ℹ No Ollama Model detected
+ℹ No Ollama Model detected
+/usr/local/lib/python3.11/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
+  warnings.warn(  # deprecated in 14.0 - 2024-11-09
+/usr/local/lib/python3.11/site-packages/uvicorn/protocols/websockets/websockets_impl.py:14: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+  from websockets.server import WebSocketServerProtocol
+INFO:     Started server process [38]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ℹ No Ollama Model detected
+ℹ No Ollama Model detected
+INFO:     127.0.0.1:50994 - "HEAD / HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55511 - "GET / HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55511 - "GET /static/_next/static/media/4049f3f580e14086-s.p.woff2 HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55510 - "GET /static/_next/static/media/5d258b355fefebcb-s.p.woff2 HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55515 - "GET /static/_next/static/css/ebc5fec5e1449706.css HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55516 - "GET /static/_next/static/css/fd8d77da4d075ee8.css HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55517 - "GET /static/_next/static/media/636a5ac981f94f8b-s.p.woff2 HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55518 - "GET /static/_next/static/media/e4af272ccee01ff0-s.p.woff2 HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55518 - "GET /static/_next/static/chunks/webpack-f81a484e456a776b.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55517 - "GET /static/_next/static/chunks/main-app-cc902ed44a3272df.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55510 - "GET /static/_next/static/chunks/117-2e3ee50cbb6fc8da.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55516 - "GET /static/_next/static/chunks/b536a0f1-d8ed58bb9dee20ad.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55518 - "GET /static/_next/static/chunks/472688b4-f8d4a7fb6705064c.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55511 - "GET /static/_next/static/chunks/5349c568-90f6380d48bf2c73.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55515 - "GET /static/_next/static/chunks/fd9d1056-aa9b9ca480dc9276.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55511 - "GET /static/_next/static/chunks/bc9c3264-ebee20cfb15b0079.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55517 - "GET /static/_next/static/chunks/4f9d9cd8-0af0a6a5e34c4b59.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55518 - "GET /static/_next/static/chunks/48507feb-9b20c2ef8aa55665.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55515 - "GET /static/_next/static/chunks/ec3863c0-59f6ccfb71ee6dc8.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55511 - "GET /static/_next/static/chunks/12038df7-a10f1b9476e02872.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55510 - "GET /static/_next/static/chunks/07115393-160e96bd79d1e493.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55517 - "GET /static/_next/static/chunks/8e68d877-cf348debf228bdbe.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55518 - "GET /static/_next/static/chunks/39aecf79-2d831b66f40a6478.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55515 - "GET /static/_next/static/chunks/39209d7c-f601708f0876481f.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55517 - "GET /static/_next/static/chunks/9081a741-a763567bf0958685.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55515 - "GET /static/_next/static/chunks/514-cff62b6f7919676e.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55510 - "GET /static/_next/static/chunks/4f53ad1b-f1821b28dab6f189.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55518 - "GET /static/_next/static/chunks/app/page-c6400fa55b57e577.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55511 - "GET /static/_next/static/chunks/8dc5345f-59beaec077e947c5.js HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55516 - "GET /static/AC_icon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50998 - "HEAD / HTTP/1.1" 200 OK
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 0 clients connected
+INFO:     10.253.218.90:55516 - "GET /api/health HTTP/1.1" 200 OK
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 0 clients connected
+INFO:     10.253.218.90:55516 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     10.253.218.90:55516 - "GET /static/weaviate.png HTTP/1.1" 200 OK
+/usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+  warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+INFO:     ('10.253.218.90', 55524) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+/usr/local/lib/python3.11/site-packages/websockets/exceptions.py:125: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
+  warnings.warn(  # deprecated in 13.1 - 2024-09-21
+INFO:     connection closed
+INFO:     ('10.253.218.90', 55527) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+INFO:     ('10.253.218.90', 55528) - "WebSocket /ws/import_files" [accepted]
+INFO:     connection open
+⚠ WebSocket connection closed by client.
+ℹ Cleaning Clients Cache
+ℹ Cleaned up 0 clients
+ℹ 0 clients connected
+INFO:     10.253.218.90:55516 - "GET /api/health HTTP/1.1" 200 OK
+{"action":"startup","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","default_vectorizer_module":"none","level":"info","msg":"the default vectorizer modules is set to \"none\", as a result all new schema classes without an explicit vectorizer setting, will use this vectorizer","time":"2025-07-02T10:42:37Z"}
+{"action":"startup","auto_schema_enabled":true,"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"auto schema enabled setting is set to \"true\"","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"No resource limits set, weaviate will use all available memory and CPU. To limit resources, set LIMIT_RESOURCES=true","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"module offload-s3 is enabled","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"Multiple vector spaces are present, GraphQL Explore and REST API list objects endpoint module include params has been disabled as a result.","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"open cluster service","servers":{"Embedded_at_8079":50701},"time":"2025-07-02T10:42:37Z"}
+{"address":"172.18.0.4:50702","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"starting cloud rpc server ...","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"starting raft sub-system ...","time":"2025-07-02T10:42:37Z"}
+{"address":"172.18.0.4:50701","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"tcp transport","tcpMaxPool":3,"tcpTimeout":10000000000,"time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"loading local db","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"local DB successfully loaded","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"schema manager loaded","n":0,"time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","metadata_only_voters":false,"msg":"construct a new raft node","name":"Embedded_at_8079","time":"2025-07-02T10:42:37Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","index":0,"level":"info","msg":"raft initial configuration","servers":"[[]]","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","last_snapshot_index":0,"last_store_applied_index_on_start":0,"level":"info","msg":"raft node constructed","raft_applied_index":0,"raft_last_index":0,"time":"2025-07-02T10:42:37Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","follower":{},"leader-address":"","leader-id":"","level":"info","msg":"raft entering follower state","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","hasState":false,"level":"info","msg":"raft init","time":"2025-07-02T10:42:37Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"attempting to join","remoteNodes":["172.18.0.4:50701"],"time":"2025-07-02T10:42:39Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"attempted to join and failed","remoteNode":"172.18.0.4:50701","status":8,"time":"2025-07-02T10:42:39Z"}
+{"action":"bootstrap","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","error":"could not join a cluster from [172.18.0.4:50701]","level":"warning","msg":"failed to join cluster","servers":["172.18.0.4:50701"],"time":"2025-07-02T10:42:39Z","voter":true}
+{"action":"bootstrap","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","candidates":[{"Suffrage":0,"ID":"Embedded_at_8079","Address":"172.18.0.4:50701"}],"level":"info","msg":"starting cluster bootstrapping","time":"2025-07-02T10:42:39Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","last-leader-addr":"","last-leader-id":"","level":"warning","msg":"raft heartbeat timeout reached, starting election","time":"2025-07-02T10:42:39Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"raft entering candidate state","node":{},"term":2,"time":"2025-07-02T10:42:39Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"raft pre-vote successful, starting election","refused":0,"tally":1,"term":2,"time":"2025-07-02T10:42:39Z","votesNeeded":1}
+{"action":"bootstrap","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"notified peers this node is ready to join as voter","servers":["172.18.0.4:50701"],"time":"2025-07-02T10:42:39Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"raft election won","tally":1,"term":2,"time":"2025-07-02T10:42:39Z"}
+{"action":"raft","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","leader":{},"level":"info","msg":"raft entering leader state","time":"2025-07-02T10:42:39Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","docker_image_tag":"localhost","level":"info","msg":"configured versions","server_version":"1.26.6","time":"2025-07-02T10:42:39Z"}
+{"action":"grpc_startup","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"grpc server listening at [::]:50050","time":"2025-07-02T10:42:39Z"}
+{"address":"172.18.0.4:50701","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"current Leader","time":"2025-07-02T10:42:39Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"starting migration from old schema","time":"2025-07-02T10:42:39Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"legacy schema is empty, nothing to migrate","time":"2025-07-02T10:42:39Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"migration from the old schema has been successfully completed","time":"2025-07-02T10:42:39Z"}
+{"action":"restapi_management","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","docker_image_tag":"localhost","level":"info","msg":"Serving weaviate at http://127.0.0.1:8079","time":"2025-07-02T10:42:39Z"}
+⚠ Connecting new Client
+ℹ Connecting to Weaviate Embedded
+INFO:     127.0.0.1:56878 - "HEAD / HTTP/1.1" 200 OK
+/usr/local/lib/python3.11/site-packages/weaviate/warnings.py:133: DeprecationWarning: Dep005: You are using weaviate-client version 4.9.6. The latest version is 4.15.4.
+            Consider upgrading to the latest version. See https://weaviate.io/developers/weaviate/client-libraries/python for details.
+  warnings.warn(
+/usr/local/lib/python3.11/site-packages/weaviate/collections/classes/config.py:1914: PydanticDeprecatedSince211: Accessing the 'model_fields' attribute on the instance is deprecated. Instead, you should access this attribute from the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.
+  for cls_field in self.model_fields:
+{"action":"bootstrap","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"node reporting ready, exiting bootstrap process","time":"2025-07-02T10:42:40Z"}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"warning","msg":"prop len tracker file /root/.local/share/weaviate/verba_configuration/1c6psBEEJfVX/proplengths does not exist, creating new tracker","time":"2025-07-02T10:42:40Z"}
+{"action":"hnsw_prefill_cache_async","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-07-02T10:42:40Z","wait_for_cache_prefill":false}
+{"build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"Created shard verba_configuration_1c6psBEEJfVX in 2.280205ms","time":"2025-07-02T10:42:40Z"}
+{"action":"hnsw_vector_cache_prefill","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","count":1000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-07-02T10:42:40Z","took":237105}
+✔ Succesfully Connected to Weaviate
+ℹ Collection: VERBA_CONFIGURATION does not exist, creating new
+collection.
+ℹ Connection time: 5.39 seconds
+INFO:     10.253.218.90:55516 - "POST /api/get_meta HTTP/1.1" 200 OK
+{"action":"telemetry_push","build_git_commit":"'\"$GITHASH\"'","build_go_version":"go1.22.0","build_image_tag":"localhost","build_wv_version":"1.26.6","level":"info","msg":"telemetry started","payload":"\u0026{MachineID:7717d887-820a-4b51-8af7-67dd51d2d1aa Type:INIT Version:1.26.6 NumObjects:0 OS:linux Arch:amd64 UsedModules:[]}","time":"2025-07-02T10:42:40Z"}
+INFO:     127.0.0.1:56888 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52242 - "HEAD / HTTP/1.1" 200 OK
+/usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+  warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+INFO:     ('10.253.218.90', 55539) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+/usr/local/lib/python3.11/site-packages/websockets/exceptions.py:125: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
+  warnings.warn(  # deprecated in 13.1 - 2024-09-21
+INFO:     connection closed
+INFO:     ('10.253.218.90', 55540) - "WebSocket /ws/generate_stream" [accepted]
+INFO:     connection open
+⚠ WebSocket connection closed by client.
+INFO:     127.0.0.1:52250 - "HEAD / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57444 - "HEAD / HTTP/1.1" 200 OK
