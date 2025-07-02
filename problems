@@ -1,144 +1,194 @@
-Спасибо за предоставленные файлы! Теперь у меня есть практически вся необходимая информация для подробного анализа и предложения по реализации функционала "МЕМО" для создания резюме по документу.
+Понял. Итак, вместо того, чтобы МЕМО суммировало весь документ или текст, мы хотим, чтобы оно использовало вводимый пользователем "шаблон" (или инструкцию, промпт) для составления МЕМО. То есть, пользователь вводит некий промпт, и этот промпт передается в генератор вместе с контекстом документа для получения ответа, соответствующего промпту.
 
-Подтверждение, что MEMOInterface.tsx аналогичен ChatInterface.tsx, очень помогает. Это означает, что мы можем использовать ChatInterface.tsx как основу для модификаций.
+Это очень похоже на то, как работает обычный чат с RAG, но с акцентом на форматирование или содержание ответа, задаваемого шаблоном.
 
-Мы можем приступать к плану по адаптации "МЕМО" под суммирование документов.
+Давайте скорректируем план адаптации "МЕМО" с учетом этой новой логики.
 
-Адаптация "МЕМО" для создания резюме по документу
-Поскольку "МЕМО" пока полностью дублирует функционал "Chat", наша задача — изменить его так, чтобы вместо диалога он принимал документ (или его часть) и возвращал короткое резюме. Это потребует изменений как во фронтенде, так и в бэкенде.
+Адаптация "МЕМО" для составления ответа по шаблону (промпту)
+Основное изменение здесь в том, что "шаблон" пользователя станет частью промпта, передаваемого в LLM. Документ будет служить контекстом, как и в RAG-чате.
 
 1. Изменения во Фронтенде (Next.js)
-Мы будем ориентироваться на ChatInterface.tsx для создания MEMOInterface.tsx с модификациями.
-
 Файл: src/app/components/MEMO/MEMOInterface.tsx (аналогично ChatInterface.tsx)
 
 Логика:
 
-Ввод: Вместо поля для ввода чат-сообщений (как userInput в ChatInterface), MEMOInterface должен будет предоставлять механизм для выбора документа или ввода его ID/контента для суммирования. Это может быть:
+Поле ввода:
 
-Поле для ввода UUID документа, если документы уже загружены в Weaviate.
+Сохраняем поле ввода текста для пользователя (аналогично userInput в ChatInterface), но его назначение меняется: это будет поле для ввода шаблона/инструкции для МЕМО.
 
-Возможность загрузить новый документ (что потребует переиспользования или адаптации логики из IngestionView).
+Возможно, также потребуется поле для выбора/идентификации документа(ов), по которым будет составляться МЕМО. Если МЕМО должно быть "по всему документу", то нужно будет либо получать его ID, либо его контент. Пока давайте предположим, что документ выбирается или подразумевается.
 
-Просто textarea для вставки текста, который нужно суммировать.
+Отправка запроса: Вместо sendUserQuery (который, вероятно, использует WebSocket для стриминга), для МЕМО, которое выдает один итоговый ответ, мы будем использовать обычный HTTP POST запрос.
 
-Отправка запроса: Вместо sendUserQuery (который отправляет пользовательский запрос в чат), потребуется новая функция (например, sendSummarizeRequest), которая будет вызывать новый API-метод на бэкенде.
+Новая функция (например, sendMemoRequest), которая будет отправлять memo_prompt (содержимое поля ввода пользователя) и document_context (контекст выбранного документа) на новый API-метод бэкенда.
 
-Отображение результата: Вместо списка messages (как в ChatInterface), MEMOInterface будет отображать одно полученное резюме. UI должен быть более простым, возможно, textarea или div для вывода.
+Отображение результата: Вместо списка сообщений чата, MEMOInterface будет отображать один итоговый текст МЕМО. Это может быть просто textarea (только для чтения) или div.
 
-Удаление ненужного: Уберите элементы, специфичные для чата:
+Удаление/Адаптация ненужного:
 
-Кнопки "Отправить" и "Обновить" (если не нужны).
+Логику WebSocket-соединения для стриминга сообщений, если суммирование будет происходить через обычный HTTP POST/GET запрос, можно убрать или адаптировать, если стриминг не нужен для МЕМО. Для "готового" резюме обычно достаточно HTTP.
 
-Логику currentSuggestions, selectedDocument, selectedChunkScore, если они не относятся к суммированию.
+Элементы UI, специфичные для чата (например, бесконечная прокрутка истории сообщений), следует убрать.
 
-Логику WebSocket-соединения для стриминга сообщений, если суммирование будет происходить через обычный HTTP POST/GET запрос.
-
-Отображение истории сообщений, так как будет только одно резюме.
-
-RAGConfig (опционально): Возможно, конфигурация RAG (Generator, Embedder, Retriever) все еще будет актуальна для суммирования (например, выбор модели Generator). Если да, то ChatConfig можно адаптировать или создать MemoConfig.
+Если ChatConfig (для RAG-компонентов) актуален для МЕМО, его можно оставить или адаптировать.
 
 2. Изменения в Бэкенде (FastAPI)
 Файл: goldenverba/server/api.py
 
-Новый API-эндпоинт: Вам нужно будет добавить новый POST-эндпоинт, который будет принимать запрос на суммирование.
+Новый API-эндпоинт: Добавьте новый POST-эндпоинт, который будет принимать шаблон МЕМО и, опционально, контекст документа.
 
 Python
 
 # goldenverba/server/api.py
 
-from goldenverba.server.types import SummarizePayload, SummarizeResponse # <--- ДОБАВЬТЕ ЭТОТ ИМПОРТ
+from goldenverba.server.types import MemoPayload, MemoResponse # <--- ДОБАВЬТЕ ЭТОТ ИМПОРТ
 
-@app.post("/api/summarize") # <--- НОВЫЙ ЭНДПОИНТ
-async def summarize_document(payload: SummarizePayload):
+@app.post("/api/generate_memo") # <--- НОВЫЙ ЭНДПОИНТ
+async def generate_memo(payload: MemoPayload):
     try:
         client = await client_manager.connect(payload.credentials)
-        # Вызов менеджера для выполнения суммирования
-        summary_text = await manager.weaviate_manager.generate_summary(
+
+        # Здесь вам нужно получить контекст документа(ов)
+        # Например, если payload содержит document_uuid:
+        document_content = ""
+        if payload.document_uuid:
+            # Предполагаем, что у вас есть метод для получения контента по UUID
+            document_data = await manager.weaviate_manager.retrieve_document_content(client, payload.document_uuid)
+            document_content = document_data.get("content", "") # Убедитесь, что это соответствует вашей структуре
+        elif payload.text_content: # Если пользователь вводит текст напрямую
+            document_content = payload.text_content
+        else:
+            return JSONResponse(
+                content={"memo_text": "Error: Document context or UUID is required."},
+                status_code=400
+            )
+
+        # Вызов менеджера для создания МЕМО
+        memo_result = await manager.weaviate_manager.create_memo_with_template(
             client,
-            payload.document_uuid, # или payload.text_content
-            payload.rag_config # если нужна конфигурация LLM
+            payload.memo_template, # Шаблон от пользователя
+            document_content,      # Контекст документа
+            payload.rag_config     # Конфигурация LLM
         )
         return JSONResponse(
             content={
-                "summary": summary_text,
+                "memo_text": memo_result,
             }
         )
     except Exception as e:
-        msg.fail(f"Error during summarization: {e}")
+        msg.fail(f"Error during memo generation: {e}")
         return JSONResponse(
             content={
-                "summary": "Error: Could not generate summary.",
+                "memo_text": f"Error: Could not generate memo. Details: {str(e)}",
             },
             status_code=500
         )
 Файл: goldenverba/server/managers.py
 
-Новая функция в менеджере: В VerbaManager или WeaviateManager (в managers.py) потребуется новая асинхронная функция, которая будет выполнять логику суммирования.
+Новая функция в менеджере: В VerbaManager или WeaviateManager (в managers.py) потребуется новая асинхронная функция, которая будет выполнять логику генерации МЕМО.
 
 Python
 
 # goldenverba/server/managers.py
 
-# ... внутри класса WeaviateManager (или нового класса SummarizationManager)
+# ... внутри класса WeaviateManager (или нового специализированного менеджера)
 
-async def generate_summary(self, client: WeaviateAsyncClient, document_uuid: str = None, text_content: str = None, rag_config: RAGConfig = None) -> str:
-    # Здесь будет логика для получения контента документа (по UUID)
-    # или использования text_content напрямую
-    if document_uuid:
-        # Получаем документ из Weaviate
-        # Пример: document = await client.collection.get(document_uuid)
-        # document_content = document.properties["content"] # или другое поле
-        # Нужно будет реализовать получение контента документа по UUID
-        document_content = "Текст документа из Weaviate по UUID " + document_uuid
-    elif text_content:
-        document_content = text_content
-    else:
-        raise ValueError("Either document_uuid or text_content must be provided.")
+async def create_memo_with_template(
+    self,
+    client: WeaviateAsyncClient,
+    memo_template: str,
+    document_content: str,
+    rag_config: RAGConfig = None
+) -> str:
+    generator_name = rag_config.generator if rag_config else "default_generator_name" # Получите актуальное имя генератора
+    generator_instance = self.generators[generator_name] # Доступ к экземпляру генератора
 
-    # Выбираем генератор из rag_config (аналогично тому, как это делается для чата)
-    generator_name = rag_config.generator if rag_config else "default_generator_name" # получите актуальное имя генератора
-    generator_instance = self.generators[generator_name] # доступ к экземпляру генератора
+    # Формируем полный промпт для LLM, объединяя шаблон и контекст
+    # Здесь вы можете экспериментировать с промптом
+    full_prompt = (
+        f"Based on the following document, generate a memo according to this template/instruction:\n\n"
+        f"Template/Instruction: {memo_template}\n\n"
+        f"Document Content: {document_content}\n\n"
+        f"Generated Memo:"
+    )
 
-    # Подготавливаем промпт для суммирования
-    prompt = f"Summarize the following document concisely:\n\n{document_content}\n\nSummary:"
+    # Вызываем генератор. Предполагаем, что generate_stream может быть адаптирован
+    # для одноразовой генерации, если это не стрим
+    memo_response = ""
+    # Здесь важно, чтобы generate_stream возвращал весь текст, если не нужен стриминг,
+    # или использовать другой метод генератора, который возвращает полный текст.
+    # Если generate_stream только стримит, придется собрать ответ.
+    async for token_dict in generator_instance.generate_stream(queries=[full_prompt], context=[], conversation={}):
+         memo_response += token_dict.get("content", "")
 
-    # Используем генератор для создания резюме (без стриминга, если не нужно)
-    # Возможно, вам понадобится метод generate_text или адаптировать generate_stream
-    # для одноразовой генерации
-    summary_response = ""
-    # Пример использования генератора:
-    async for token_dict in generator_instance.generate_stream(queries=[prompt], context=[], conversation={}):
-         summary_response += token_dict.get("content", "")
+    return memo_response.strip()
 
-    return summary_response.strip()
+# Также вам может понадобиться функция для получения контента документа по UUID, если её нет:
+async def retrieve_document_content(self, client: WeaviateAsyncClient, document_uuid: str) -> dict:
+    try:
+        # Ваш код для извлечения полного содержимого документа из Weaviate по UUID
+        # Пример:
+        # document = client.query.get(YOUR_COLLECTION_NAME).with_where(
+        #    {"path": ["id"], "operator": "Equal", "valueString": document_uuid}
+        # ).do()
+        # return document["data"]["Get"][YOUR_COLLECTION_NAME][0]
+        # Или используйте новый API-клиент Weaviate:
+        collection = client.collections.get("Verba") # Замените на имя вашей коллекции
+        doc_obj = await collection.query.fetch_object_by_id(document_uuid, include_vector=False, return_properties=['text_content', 'title']) # Укажите нужные поля
+
+        if doc_obj and doc_obj.properties:
+            return {"content": doc_obj.properties.get("text_content", ""), "title": doc_obj.properties.get("title", "")}
+        return {"content": "", "title": ""}
+    except Exception as e:
+        msg.fail(f"Error retrieving document content: {e}")
+        raise
 3. Новые Типы Данных
-Файл: src/app/types.ts (Критически важен!)
+Файл: src/app/types.ts
 
-Файл: goldenverba/server/types.py (подразумевается, что он соответствует types.ts)
-
-Вам нужно будет определить новые типы для запроса и ответа на суммирование.
+Файл: goldenverba/server/types.py (нужно создать или добавить в существующий)
 
 TypeScript
 
 // src/app/types.ts
 
-// Тип для запроса на суммирование
-export type SummarizePayload = {
-  document_uuid?: string; // ИЛИ
-  text_content?: string; // Один из этих двух должен быть
+// ... (существующие типы)
+
+// Тип для запроса на генерацию МЕМО
+export type MemoPayload = {
+  memo_template: string; // Шаблон/инструкция от пользователя
+  document_uuid?: string; // ID документа для контекста (опционально)
+  text_content?: string; // Или сам текст документа (опционально)
   credentials: Credentials;
   rag_config?: RAGConfig; // Если нужна конфигурация LLM
 };
 
-// Тип для ответа суммирования
-export type SummarizeResponse = {
-  summary: string;
+// Тип для ответа МЕМО
+export type MemoResponse = {
+  memo_text: string;
 };
-И аналогичные Pydantic-модели в goldenverba/server/types.py.
+И соответствующие Pydantic-модели в goldenverba/server/types.py:
 
+Python
+
+# goldenverba/server/types.py
+
+# ... (существующие импорты Pydantic)
+from pydantic import BaseModel
+from typing import Optional
+
+# ... (существующие модели)
+
+class MemoPayload(BaseModel):
+    memo_template: str
+    document_uuid: Optional[str] = None
+    text_content: Optional[str] = None
+    credentials: Credentials # Убедитесь, что Credentials уже импортирован или определен
+    rag_config: Optional[RAGConfig] = None # Убедитесь, что RAGConfig уже импортирован или определен
+
+class MemoResponse(BaseModel):
+    memo_text: str
 4. Обновление api.ts (фронтенд)
-В src/app/api.ts добавьте функцию для вызова нового эндпоинта суммирования:
+В src/app/api.ts добавьте функцию для вызова нового эндпоинта генерации МЕМО:
 
 TypeScript
 
@@ -146,14 +196,14 @@ TypeScript
 
 // ... (существующие импорты и функции)
 
-import { SummarizePayload, SummarizeResponse, Credentials, RAGConfig } from "./types"; // Обновите импорт
+import { MemoPayload, MemoResponse } from "./types"; // Обновите импорт
 
-export const sendSummarizeRequest = async (
-  payload: SummarizePayload
-): Promise<SummarizeResponse | null> => {
+export const sendMemoRequest = async (
+  payload: MemoPayload
+): Promise<MemoResponse | null> => {
   try {
     const host = await detectHost();
-    const response = await fetch(`${host}/api/summarize`, {
+    const response = await fetch(`${host}/api/generate_memo`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -165,33 +215,26 @@ export const sendSummarizeRequest = async (
       console.error(`Error ${response.status}: ${response.statusText}`);
       const errorData = await response.json();
       console.error("Error details:", errorData);
-      return { summary: `Error: ${errorData.summary || "Failed to summarize."}` };
+      return { memo_text: `Error: ${errorData.memo_text || "Failed to generate memo."}` };
     }
 
-    const data: SummarizeResponse = await response.json();
+    const data: MemoResponse = await response.json();
     return data;
   } catch (error) {
-    console.error("Error sending summarize request", error);
-    return { summary: `Error: ${error.message || "Network or unexpected error."}` };
+    console.error("Error sending memo request", error);
+    return { memo_text: `Error: ${error.message || "Network or unexpected error."}` };
   }
 };
-Шаги для реализации:
-Создайте или модифицируйте src/app/components/MEMO/MEMOInterface.tsx:
+Общие шаги после изменений:
+Сохраните все измененные файлы.
 
-Возьмите за основу ChatInterface.tsx.
+Убедитесь, что в goldenverba/server/types.py есть все необходимые импорты и определения моделей, такие как Credentials и RAGConfig, если они используются в MemoPayload.
 
-Измените UI для выбора документа/ввода текста и отображения резюме.
+Пересоберите Docker-образы и перезапустите Docker Compose:
 
-Используйте новую функцию sendSummarizeRequest из api.ts.
+Bash
 
-Обновите src/app/types.ts: Добавьте типы SummarizePayload и SummarizeResponse.
+docker compose up -d --build
+Это гарантирует, что все изменения во фронтенде (JS, TS) и бэкенде (Python) будут включены в работающие контейнеры.
 
-Обновите goldenverba/server/types.py: Создайте соответствующие Pydantic-модели для SummarizePayload и SummarizeResponse.
-
-Измените goldenverba/server/managers.py: Добавьте функцию generate_summary в WeaviateManager (или соответствующий класс) для логики суммирования. Возможно, потребуется адаптация методов генератора для получения единого ответа, а не потока.
-
-Измените goldenverba/server/api.py: Добавьте новый POST-эндпоинт /api/summarize.
-
-Обновите page (1).tsx: Если MEMOInterface.tsx должен отображаться при выборе страницы "MEMO", убедитесь, что page (1).tsx правильно отображает ваш новый компонент, аналогично тому, как он отображает ChatView.
-
-После внесения всех изменений, вам нужно будет пересобрать Docker-образы и перезапустить docker-compose для применения изменений на обоих концах.
+Этот подход позволит вам генерировать МЕМО, используя пользовательский шаблон и контекст из ваших документов, что соответствует вашему новому требованию.
