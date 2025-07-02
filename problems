@@ -1,14 +1,21 @@
-info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
-   Linting and checking validity of types  .Failed to compile.
+export const sendMemoRequest = async (
+  payload: MemoPayload
+): Promise<MemoResponse | null> => {
+  try {
+    // ... ваш существующий код try-блока
+  } catch (error) {
+    console.error("Error sending memo request", error);
+    let errorMessage = "Network or unexpected error."; // Сообщение по умолчанию
 
-./app/api.ts:685:35
-Type error: 'error' is of type 'unknown'.
+    // Проверяем, является ли ошибка экземпляром класса Error и имеет ли свойство 'message'
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'string') { // Если ошибка просто строка
+      errorMessage = error;
+    } else if (error && typeof error === 'object' && 'message' in error) { // Если это объект с message
+      errorMessage = (error as { message: string }).message;
+    }
 
-  683 |   } catch (error) {
-  684 |     console.error("Error sending memo request", error);
-> 685 |     return { memo_text: `Error: ${error.message || "Network or unexpected error."}` };
-      |                                   ^
-  686 |   }
-  687 | };
-Next.js build worker exited with code: 1 and signal: null
-developer@ac-srv-141:~/Verba/frontend$
+    return { memo_text: `Error: ${errorMessage}` };
+  }
+};
