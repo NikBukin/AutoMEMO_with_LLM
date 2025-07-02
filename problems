@@ -1,16 +1,2 @@
-developer@ac-srv-141:~/Verba$ docker logs -f verba-verba-1
-ℹ No Ollama Model detected
-ℹ No Ollama Model detected
-Traceback (most recent call last):
-  File "/usr/local/bin/verba", line 5, in <module>
-    from goldenverba.server.cli import cli
-  File "/usr/local/lib/python3.11/site-packages/goldenverba/server/cli.py", line 6, in <module>
-    from goldenverba import verba_manager
-  File "/usr/local/lib/python3.11/site-packages/goldenverba/verba_manager.py", line 25, in <module>
-    from goldenverba.components.managers import (
-  File "/usr/local/lib/python3.11/site-packages/goldenverba/components/managers.py", line 162, in <module>
-    class WeaviateManager:
-  File "/usr/local/lib/python3.11/site-packages/goldenverba/components/managers.py", line 958, in WeaviateManager
-    rag_config: RAGConfig = None
-                ^^^^^^^^^
-NameError: name 'RAGConfig' is not defined
+from goldenverba.server.types import FileConfig, FileStatus, RAGConfig # <--- ДОБАВЬТЕ RAGConfig сюда
+
