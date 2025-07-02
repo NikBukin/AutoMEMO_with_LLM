@@ -1,15 +1,43 @@
-info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
-   Linting and checking validity of types  ..Failed to compile.
+import { MemoPayload, MemoResponse } from "./types";
+import { detectHost } from "./util"; // Убедитесь, что этот импорт присутствует
 
-./app/api.ts:663:4
-Type error: Function lacks ending return statement and return type does not include 'undefined'.
+export const sendMemoRequest = async (
+  payload: MemoPayload
+): Promise<MemoResponse> => { // <--- ИЗМЕНЕНО: УДАЛЕНО "| null"
+  try {
+    const host = await detectHost();
+    const response = await fetch(`${host}/api/generate_memo`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-  661 | export const sendMemoRequest = async (
-  662 |   payload: MemoPayload
-> 663 | ): Promise<MemoResponse | null> => {
-      |    ^
-  664 |   try {
-  665 |     // ... ваш существующий код try-блока
-  666 |   } catch (error) {
-Next.js build worker exited with code: 1 and signal: null
-developer@ac-srv-141:~/Verba/frontend$
+    if (!response.ok) {
+      console.error(`Error ${response.status}: ${response.statusText}`);
+      const errorData = await response.json();
+      console.error("Error details:", errorData);
+      // Возвращаем MemoResponse с сообщением об ошибке
+      return { memo_text: `Error: ${errorData.memo_text || "Failed to generate memo."}` };
+    }
+
+    const data: MemoResponse = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error sending memo request", error);
+    let errorMessage = "Network or unexpected error.";
+
+    // Это исправление из предыдущего шага для безопасного доступа к 'error.message'
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'string') {
+      errorMessage = error;
+    } else if (error && typeof error === 'object' && 'message' in error) {
+      errorMessage = (error as { message: string }).message;
+    }
+
+    // Возвращаем MemoResponse с сообщением об ошибке
+    return { memo_text: `Error: ${errorMessage}` };
+  }
+};
