@@ -1,16 +1,12 @@
-info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
-   Linting and checking validity of types  ..Failed to compile.
+export type DataCountPayload = {
+  datacount: number;
+};
 
-./app/components/MEMO/MEMOInterface.tsx:68:5
-Type error: Argument of type '{ total: number; documents: number; chunks: number; }' is not assignable to parameter of type 'DataCountPayload | (() => DataCountPayload)'.
-  Object literal may only specify known properties, and 'total' does not exist in type 'DataCountPayload | (() => DataCountPayload)'.
 
-  66 |   const [isStreaming, setIsStreaming] = useState<boolean>(false);
-  67 |   const [dataCount, setDataCount] = useState<DataCountPayload>({
-> 68 |     total: 0,
-     |     ^
-  69 |     documents: 0,
-  70 |     chunks: 0,
-  71 |   });
-Next.js build worker exited with code: 1 and signal: null
 
+
+const [dataCount, setDataCount] = useState<DataCountPayload>({
+    total: 0,
+    documents: 0,
+    chunks: 0,
+  });
