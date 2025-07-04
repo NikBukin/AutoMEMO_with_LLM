@@ -1,15 +1,32 @@
-info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
-   Linting and checking validity of types  ..Failed to compile.
+  return (
+    // ...
+    <div className={`chat-bubble w-full ${messageBgClass}`}>
+      <ReactMarkdown
+        components={{
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || "");
+            return !inline && match ? (
+              <SyntaxHighlighter
+                {...props}
+                style={selectedTheme.theme === "dark" ? oneDark : oneLight}
+                language={match[1]}
+                PreTag="div"
+              >
+                {String(children).replace(/\n$/, "")}
+              </SyntaxHighlighter>
+            ) : (
+              <code {...props} className={className}>
+                {children}
+              </code>
+            );
+          },
+        }}
+      >
+        {typeof message.content === 'string' ? message.content : ''} {/* ИЗМЕНЕНО: Добавлена проверка типа */}
+      </ReactMarkdown>
+    </div>
+    // ...
+  );
+};
 
-./app/components/MEMO/MEMOMessage.tsx:61:9
-Type error: Type 'string | DocumentScore[]' is not assignable to type 'string'.
-  Type 'DocumentScore[]' is not assignable to type 'string'.
-
-  59 |         }}
-  60 |       >
-> 61 |         {message.content} {/* <-- Добавьте это! */}
-     |         ^
-  62 |       </ReactMarkdown>
-  63 |     </div>
-  64 |     // ...
-Next.js build worker exited with code: 1 and signal: null
+export default MEMOMessage;
