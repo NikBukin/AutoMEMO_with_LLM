@@ -1,126 +1,114 @@
-Отличная новость, что вам удалось решить предыдущую проблему!
+1. Фронтенд (React/TypeScript)
+page.tsx
+Этот файл отвечает за маршрутизацию и отображение различных страниц. Чтобы страница МЕМО была доступна, её нужно правильно интегрировать:
 
-Теперь, что касается внедрения модели fluently-lm/FluentlyLM-Prinum в Verba через Ollama. Поскольку этой модели нет в официальной библиотеке Ollama, вам потребуется загрузить файл модели GGUF с Hugging Face и создать для нее Modelfile.
+Добавьте условный рендеринг для MEMOView: Убедитесь, что существует блок, который отображает MEMOView при соответствующем значении currentPage. Например:
 
-Вот пошаговая инструкция:
+TypeScript
 
-Шаг 1: Скачайте файл GGUF модели
-Перейдите на страницу модели на Hugging Face: https://huggingface.co/fluently-lm/FluentlyLM-Prinum
+<div
+    className={`${
+        currentPage === "MEMO" && production !== "Demo" ? "" : "hidden"
+    }`}
+>
+    <MEMOView
+        RAGConfig={RAGConfig}
+        setRAGConfig={setRAGConfig}
+        credentials={credentials}
+        addStatusMessage={addStatusMessage}
+        selectedTheme={selectedTheme}
+        documentFilter={documentFilter}
+        setDocumentFilter={setDocumentFilter}
+    />
+</div>
+Импортируйте MEMOView: Добавьте следующую строку в начале файла:
 
-Перейдите во вкладку "Files and versions".
+TypeScript
 
-В списке файлов найдите один с расширением .gguf (например, fluently-lm-prinum-q4_k_m.gguf). Выберите подходящую для вас квантованную версию (например, Q4_K_M.gguf для баланса между размером и производительностью).
+import MEMOView from "./components/Chat/MEMOView"; // Уточните путь, если он отличается
+Обеспечьте навигацию: Должен быть элемент навигации (например, кнопка в Navbar) или логика, которая устанавливает currentPage в "MEMO" при необходимости.
 
-Нажмите на стрелку загрузки рядом с выбранным файлом, чтобы скачать его.
+MEMOView.tsx
+Этот файл, судя по всему, уже корректно служит контейнером для MEMOInterface и DocumentExplorer. Дополнительных изменений, исходя из представленных фрагментов, не требуется.
 
-Шаг 2: Подготовьте директорию для моделей Ollama
-Рядом с вашим файлом docker-compose.yml создайте новую директорию, например, ollama_models.
+MEMOInterface.tsx
+Этот компонент является основным интерфейсом для генерации МЕМО. Убедитесь, что функция, отвечающая за отправку запроса на генерацию МЕМО, корректно формирует MemoPayload и вызывает sendMemoRequest из api.ts.
 
-Bash
+types.ts
+В этом файле необходимо определить типы данных для фронтенда, используемые при отправке и получении МЕМО.
 
-mkdir ollama_models
-Переместите скачанный файл .gguf в эту новую директорию ollama_models.
+Добавьте типы MemoPayload и MemoResponse:
 
-Шаг 3: Обновите docker-compose.yml для монтирования директории моделей
-Чтобы Ollama могла получить доступ к вашим моделям, нужно смонтировать новую директорию ollama_models в контейнер Ollama.
+TypeScript
 
-Откройте ваш файл docker-compose.yml.
+export type MemoPayload = {
+  memo_template: string;
+  document_uuid?: string | null;
+  text_content?: string | null;
+  credentials: Credentials;
+  rag_config?: RAGConfig | null;
+};
 
-Найдите секцию сервиса ollama.
+export type MemoResponse = {
+  memo_text: string;
+};
+api.ts
+Функция sendMemoRequest уже присутствует и, вероятно, корректно отправляет POST-запрос на бэкенд. Убедитесь, что она импортирует MemoPayload и MemoResponse из types.ts.
 
-В секции volumes добавьте или измените строку так, чтобы она монтировала вашу новую директорию ollama_models в /root/.ollama/models внутри контейнера:
+2. Бэкенд (Python)
+types.py
+Это самая критическая проблема! Ваш файл types.py пуст, что означает отсутствие необходимых Pydantic моделей для валидации данных на бэкенде.
 
-YAML
+Восстановите или добавьте Pydantic модели: Необходимо определить следующие классы BaseModel в types.py:
 
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - 11434:11434
-    volumes:
-      - ollama_data:/root/.ollama
-      - ./ollama_models:/root/.ollama/models # <--- ДОБАВЬТЕ ЭТУ СТРОКУ
-    container_name: ollama
-    pull_policy: always
-    tty: true
-    restart: always
-    environment:
-      - OLLAMA_KEEP_ALIVE=24h
-      - OLLAMA_HOST=0.0.0.0
-    healthcheck:
-      test: ["CMD", "ollama", "list"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    networks:
-      - ollama-docker
-Шаг 4: Создайте Modelfile для FluentlyLM-Prinum
-Modelfile сообщает Ollama, как загружать и взаимодействовать с вашей моделью.
+Python
 
-Внутри созданной вами директории ollama_models (той, куда вы поместили файл .gguf) создайте новый текстовый файл с именем, например, Modelfile-prinum.
+from typing import Literal, Optional
+from pydantic import BaseModel
 
-Откройте Modelfile-prinum и добавьте следующее содержимое. Важно: замените fluently-lm-prinum-q4_k_m.gguf на точное имя файла .gguf, который вы скачали.
+class Credentials(BaseModel):
+    deployment: Literal["Weaviate", "Docker", "Local", "Custom"]
+    url: str
+    key: str
 
-Dockerfile
+class RAGComponentClass(BaseModel):
+    name: str
+    selected_component: str
+    config: dict
 
-FROM ./fluently-lm-prinum-q4_k_m.gguf # Убедитесь, что это имя вашего .gguf файла
-PARAMETER stop "<|eot_id|>"
-PARAMETER stop "<|start_header_id|>"
-PARAMETER stop "<|end_header_id|>"
-TEMPLATE """{{ if .System }}<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+class RAGConfig(BaseModel):
+    reader: RAGComponentClass
+    chunker: RAGComponentClass
+    embedder: RAGComponentClass
+    retriever: RAGComponentClass
+    generator: RAGComponentClass
 
-{{ .System }}<|eot_id|>{% endif %}<|begin_of_text|><|start_header_id|>user<|end_header_id|>
+class MemoPayload(BaseModel):
+    memo_template: str
+    document_uuid: Optional[str] = None
+    text_content: Optional[str] = None
+    credentials: Credentials
+    rag_config: Optional[RAGConfig] = None
 
-{{ .Prompt }}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+class MemoResponse(BaseModel):
+    memo_text: str
+api.py
+Этот файл содержит FastAPI эндпоинты.
 
-"""
-FROM ./ваш_файл.gguf: Указывает путь к файлу модели относительно Modelfile.
+Убедитесь в импорте MemoPayload и MemoResponse: После исправления types.py, убедитесь, что эти классы правильно импортируются в api.py:
 
-PARAMETER stop: Эти параметры указывают Ollama, какие токены использовать для остановки генерации, что важно для корректного форматирования диалога.
+Python
 
-TEMPLATE: Это шаблон промпта, который Ollama будет использовать для взаимодействия с моделью. Он основан на "chat template" модели и адаптирован для Ollama.
+from goldenverba.server.types import MemoPayload, MemoResponse, Credentials, RAGConfig # Добавьте сюда все необходимые импорты
+Проверьте логику эндпоинта /api/generate_memo: Убедитесь, что эндпоинт корректно извлекает контекст документа или текстовое содержимое из MemoPayload и передает его в create_memo_with_template из менеджера Weaviate.
 
-Шаг 5: Перезапустите сервис Ollama и создайте модель в нем
-Чтобы изменения в docker-compose.yml вступили в силу, а Ollama могла использовать Modelfile:
+managers.py
+Этот файл содержит логику взаимодействия с Weaviate и компонентами RAG.
 
-Полностью перезапустите только сервис Ollama:
+Проверьте методы retrieve_document_content и create_memo_with_template:
 
-Bash
+Убедитесь, что weaviate_manager содержит метод retrieve_document_content, который может извлекать содержимое документа по его UUID.
 
-docker compose up -d --build ollama
-Это перезапустит Ollama и применит новое монтирование тома.
+Убедитесь, что weaviate_manager содержит метод create_memo_with_template, который принимает клиент Weaviate, шаблон МЕМО, контекст документа и конфигурацию RAG, и возвращает сгенерированный текст МЕМО. Этот метод должен использовать компонент Generator из rag_config для фактической генерации текста.
 
-Создайте модель в Ollama, используя ваш Modelfile:
-
-Bash
-
-docker exec ollama ollama create fluently-lm-prinum -f /root/.ollama/models/Modelfile-prinum
-fluently-lm-prinum - это имя, под которым модель будет зарегистрирована в Ollama. Вы можете выбрать любое имя.
-
-f /root/.ollama/models/Modelfile-prinum указывает Ollama, где находится ваш Modelfile внутри контейнера.
-
-Убедитесь, что модель появилась в списке Ollama:
-
-Bash
-
-docker exec ollama ollama list
-Вы должны увидеть fluently-lm-prinum в списке.
-
-Шаг 6: Обновите .env файл (или docker-compose.yml)
-Теперь, когда модель доступна в Ollama, сообщите Verba, какую модель использовать.
-
-Откройте ваш файл .env.
-
-Измените значение OLLAMA_MODEL на имя, которое вы использовали при создании модели в Шаге 5 (например, fluently-lm-prinum):
-
-OLLAMA_MODEL=fluently-lm-prinum
-OLLAMA_EMBED_MODEL=nomic-embed-text # Это ваша текущая модель для встраиваний. Не меняйте, если она вас устраивает.
-Важно: OLLAMA_EMBED_MODEL обычно является отдельной моделью для создания встраиваний (embeddings), а OLLAMA_MODEL - для генерации текста. Если nomic-embed-text вас устраивает как модель для встраиваний, оставьте ее как есть.
-
-Шаг 7: Перезапустите сервис Verba
-Чтобы Verba загрузила новую конфигурацию:
-
-Bash
-
-docker compose restart verba
-После этих шагов Verba должна начать использовать fluently-lm-prinum в качестве модели для генерации текста. Если возникнут проблемы, предоставьте, пожалуйста, полный вывод команд и новые логи verba.
+После внесения этих изменений, ваша система должна начать корректно обрабатывать запросы на формирование МЕМО, используя предоставленный контекст и конфигурацию RAG.
