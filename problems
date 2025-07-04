@@ -1,20 +1,10 @@
-const updateConfig = (
-  component_n: string,
-  configTitle: string,
-  value: string | boolean | string[]
-) => {
-  setRAGConfig((prevRAGConfig) => {
-    if (!prevRAGConfig) return null;
+Type error: Property 'config' does not exist on type 'RAGComponentClass'.
 
-    const newRAGConfig = { ...prevRAGConfig };
-    const component = newRAGConfig[component_n as keyof RAGConfig];
-
-    // Проверяем, что component и component.config существуют, и что configTitle является ключом в component.config
-    if (component && component.config && configTitle in component.config) {
-      const configItem = component.config[configTitle]; // Правильный доступ к свойству по ключу
-
-      configItem.value = value;
-    }
-    return newRAGConfig;
-  });
-};
+  44 |
+  45 |     // Проверяем, что component и component.config существуют, и что configTitle является ключом в component.config
+> 46 |       if (component && component.config && configTitle in component.config) {
+     |                                  ^
+  47 |         const configItem = component.config[configTitle]; // Правильный доступ к свойству по ключу
+  48 |
+  49 |         configItem.value = value;
+Next.js build worker exited with code: 1 and signal: null
