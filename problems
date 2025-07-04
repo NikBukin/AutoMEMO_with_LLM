@@ -1,14 +1,8 @@
 <VerbaButton
-                  title={label}
-                  key={"FilterLabel" + index}
-                  Icon={MdCancel}
-                  className="btn-sm min-w-min max-w-[200px]"
-                  icon_size={12}
-                  selected_color="bg-primary-verba"
-                  selected={true}
-                  text_class_name="truncate max-w-[200px]"
-                  text_size="text-xs"
-                  onClick={() => {
-                    setFilterLabels(filterLabels.filter((l) => l !== label));
-                  }}
-                />
+  type="button"
+  Icon={IoIosSend}
+  onClick={sendMemo}
+  disabled={false}
+  selected_color="bg-primary-verba"
+  title="Отправить" // <-- Текст теперь передается через проп 'title'
+/>
