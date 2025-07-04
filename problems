@@ -1,15 +1,20 @@
-info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
-   Linting and checking validity of types  ...Failed to compile.
+const updateConfig = (
+  component_n: string,
+  configTitle: string,
+  value: string | boolean | string[]
+) => {
+  setRAGConfig((prevRAGConfig) => {
+    if (!prevRAGConfig) return null;
 
-./app/components/MEMO/MEMOConfig.tsx:45:51
-Type error: This expression is not callable.
-  Type 'ConfigSetting' has no call signatures.
+    const newRAGConfig = { ...prevRAGConfig };
+    const component = newRAGConfig[component_n as keyof RAGConfig];
 
-  43 |
-  44 |             if (component && component.config) {
-> 45 |               const configItem = component.config.find(
-     |                                                   ^
-  46 |                 (item) => item.title === configTitle
-  47 |               );
-  48 |
-Next.js build worker exited with code: 1 and signal: null
+    // Проверяем, что component и component.config существуют, и что configTitle является ключом в component.config
+    if (component && component.config && configTitle in component.config) {
+      const configItem = component.config[configTitle]; // Правильный доступ к свойству по ключу
+
+      configItem.value = value;
+    }
+    return newRAGConfig;
+  });
+};
