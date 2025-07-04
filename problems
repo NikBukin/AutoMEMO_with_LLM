@@ -1,13 +1,14 @@
-./app/components/MEMO/MEMOInterface.tsx:241:10
-Type error: Type '{ children: string; type: "button"; Icon: IconType; onClick: () => Promise<void>; disabled: boolean; selected_color: string; title: string; className: string; }' is not assignable to type 'IntrinsicAttributes & VerbaButtonProps'.
-  Property 'children' does not exist on type 'IntrinsicAttributes & VerbaButtonProps'.
-
-  239 |         </div>
-  240 |
-> 241 |         <VerbaButton
-      |          ^
-  242 |           type="button"
-  243 |           Icon={IoIosSend}
-  244 |           onClick={sendMemo}
-Next.js build worker exited with code: 1 and signal: null
-developer@ac-srv-141:~/Verba/frontend$
+<VerbaButton
+                  title={label}
+                  key={"FilterLabel" + index}
+                  Icon={MdCancel}
+                  className="btn-sm min-w-min max-w-[200px]"
+                  icon_size={12}
+                  selected_color="bg-primary-verba"
+                  selected={true}
+                  text_class_name="truncate max-w-[200px]"
+                  text_size="text-xs"
+                  onClick={() => {
+                    setFilterLabels(filterLabels.filter((l) => l !== label));
+                  }}
+                />
