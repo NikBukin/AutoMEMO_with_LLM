@@ -1,91 +1,15 @@
-Эта ошибка:
-Type error: This JSX tag's 'children' prop expects type 'string' which requires multiple children, but only a single child was provided.
-в файле ./app/components/MEMO/MEMOMessage.tsx на строке 42 для компонента ReactMarkdown обычно означает, что вы не передали сам markdown-текст в качестве дочернего элемента ReactMarkdown, или передали его не так, как ожидалось.
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Linting and checking validity of types  ..Failed to compile.
 
-Компонент ReactMarkdown ожидает, что контент (строка с markdown-разметкой) будет передан ему как children (то, что находится между открывающим и закрывающим тегами компонента).
+./app/components/MEMO/MEMOMessage.tsx:61:9
+Type error: Type 'string | DocumentScore[]' is not assignable to type 'string'.
+  Type 'DocumentScore[]' is not assignable to type 'string'.
 
-Судя по предыдущим фрагментам кода, ваш компонент MEMOMessage получает проп message типа Message. Вероятнее всего, свойство content этого объекта message содержит текст, который нужно отобразить в формате markdown.
-
-Причина ошибки:
-
-Ваш код на данный момент выглядит примерно так:
-
-TypeScript
-
-// MEMOMessage.tsx
-// ...
-<ReactMarkdown
-  components={{
-    code({ node, inline, className, children, ...props }) {
-      // ...
-    },
-  }}
->
-  {/* Здесь, вероятно, отсутствует строка с markdown-текстом */}
-</ReactMarkdown>
-TypeScript видит, что ReactMarkdown ожидает children типа string, но не находит его, или находит что-то, что он ошибочно интерпретирует как "один дочерний элемент, который не является строкой, когда ожидается строка".
-
-Решение:
-
-Вам нужно передать message.content как children компоненту ReactMarkdown.
-
-Измените код на строке 42 следующим образом:
-
-TypeScript
-
-// app/components/MEMO/MEMOMessage.tsx
-
-// ... (Ваши импорты и другие части компонента) ...
-
-const MEMOMessage: React.FC<MEMOMessageProps> = ({
-  message, // Убедитесь, что 'message' деструктурирован из пропсов
-  selectedTheme,
-  // ... другие пропсы
-}) => {
-  // ... (Ваш остальной код) ...
-
-  return (
-    // ...
-    <div className={`chat-bubble w-full ${messageBgClass}`}>
-      <ReactMarkdown
-        components={{
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "");
-            return !inline && match ? (
-              <SyntaxHighlighter
-                {...props}
-                style={selectedTheme.theme === "dark" ? oneDark : oneLight}
-                language={match[1]}
-                PreTag="div"
-              >
-                {String(children).replace(/\n$/, "")}
-              </SyntaxHighlighter>
-            ) : (
-              <code {...props} className={className}>
-                {children}
-              </code>
-            );
-          },
-        }}
-      >
-        {message.content} {/* <-- Добавьте это! */}
-      </ReactMarkdown>
-    </div>
-    // ...
-  );
-};
-
-export default MEMOMessage;
-Это должно исправить ошибку компиляции. ReactMarkdown возьмет message.content (предполагается, что это строка с markdown) и отрендерит его, применяя кастомные компоненты для блоков кода.
-
-
-
-
-
-
-Deep Research
-
-Canvas
-
-
-
+  59 |         }}
+  60 |       >
+> 61 |         {message.content} {/* <-- Добавьте это! */}
+     |         ^
+  62 |       </ReactMarkdown>
+  63 |     </div>
+  64 |     // ...
+Next.js build worker exited with code: 1 and signal: null
