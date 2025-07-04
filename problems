@@ -1,24 +1,13 @@
-./app/components/MEMO/MEMOInterface.tsx
-Error:
-  × Unexpected token `div`. Expected jsx identifier
-     ╭─[/home/developer/Verba/frontend/app/components/MEMO/MEMOInterface.tsx:172:1]
- 172 │
- 173 │
- 174 │   return (
- 175 │     <div className="flex flex-col h-full w-full justify-between items-center bg-bg-alt-verba rounded-lg">
-     ·      ───
- 176 │       <div className="flex flex-row justify-between items-center w-full p-4">
- 177 │         <div className="flex items-center gap-2">
- 177 │           <img
-     ╰────
 
-Caused by:
-    Syntax Error
+./app/components/MEMO/MEMOMessage.tsx:42:10
+Type error: This JSX tag's 'children' prop expects type 'string' which requires multiple children, but only a single child was provided.
 
-Import trace for requested module:
-./app/components/MEMO/MEMOInterface.tsx
-./app/components/MEMO/MEMOView.tsx
-./app/page.tsx
+  40 |     >
+  41 |       <div className={`chat-bubble w-full ${messageBgClass}`}>
+> 42 |         <ReactMarkdown
+     |          ^
+  43 |           components={{
+  44 |             code({ node, inline, className, children, ...props }) {
+  45 |               const match = /language-(\w+)/.exec(className || "");
+Next.js build worker exited with code: 1 and signal: null
 
-
-> Build failed because of webpack errors
