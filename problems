@@ -1,38 +1,11 @@
-# goldenverba/verba_manager.py
+verba-1  | Traceback (most recent call last):
+verba-1  |   File "/usr/local/bin/verba", line 5, in <module>
+verba-1  |     from goldenverba.server.cli import cli
+verba-1  |   File "/usr/local/lib/python3.11/site-packages/goldenverba/server/cli.py", line 6, in <module>
+verba-1  |     from goldenverba import verba_manager
+verba-1  |   File "/usr/local/lib/python3.11/site-packages/goldenverba/verba_manager.py", line 25, in <module>
+verba-1  |     from goldenverba.components.managers import (
+verba-1  |   File "/usr/local/lib/python3.11/site-packages/goldenverba/components/managers.py", line 6, in <module>
+verba-1  |     from weaviate.classes.query import Filter, Sort, MetadataQuery, QueryOptions
+verba-1  | ImportError: cannot import name 'QueryOptions' from 'weaviate.classes.query' (/usr/local/lib/python3.11/site-packages/weaviate/classes/query.py)
 
-# ... (существующие импорты)
-from weaviate.client import WeaviateAsyncClient
-from weaviate.classes.query import QueryOptions # Убедитесь, что этот импорт есть
-
-# ... (ваш класс WeaviateManager)
-
-class WeaviateManager:
-    # ... (существующие методы)
-
-    async def retrieve_all_documents_metadata(self, client: WeaviateAsyncClient) -> list[dict]:
-        """
-        Retrieves UUID and title for all documents from the 'Document' class in Weaviate.
-        """
-        try:
-            # Получаем ссылку на коллекцию 'Document' (или имя вашей коллекции)
-            document_collection = client.collections.get("Document")
-            
-            # Выполняем запрос для получения всех объектов
-            # Ограничьте 'limit' подходящим значением, если у вас очень много документов,
-            # чтобы избежать чрезмерной нагрузки на память.
-            # Если документов больше, чем лимит, вам может потребоваться пагинация.
-            response = await document_collection.query.fetch_objects(
-                limit=10000,  # Установите подходящий лимит
-                return_properties=["title"] # Возвращаем только свойство 'title'. UUID всегда возвращается по умолчанию.
-            )
-
-            results = []
-            for obj in response.objects:
-                # obj.uuid содержит UUID документа
-                # obj.properties содержит другие свойства, такие как 'title'
-                if obj.uuid and "title" in obj.properties:
-                    results.append({"uuid": obj.uuid, "title": obj.properties["title"]})
-            return results
-        except Exception as e:
-            msg.fail(f"Failed to retrieve all document metadata from Weaviate: {e}")
-            return []
