@@ -1,222 +1,144 @@
-verba-1  | INFO:     Will watch for changes in these directories: ['/Verba']
-verba-1  | WARNING:  "workers" flag is ignored when reloading is enabled.
-verba-1  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-verba-1  | INFO:     Started reloader process [1] using WatchFiles
-verba-1  | ℹ No Ollama Model detected
-verba-1  | ℹ No Ollama Model detected
-verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
-verba-1  |   warnings.warn(  # deprecated in 14.0 - 2024-11-09
-verba-1  | /usr/local/lib/python3.11/site-packages/uvicorn/protocols/websockets/websockets_impl.py:14: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
-verba-1  |   from websockets.server import WebSocketServerProtocol
-verba-1  | INFO:     Started server process [38]
-verba-1  | INFO:     Waiting for application startup.
-verba-1  | INFO:     Application startup complete.
-verba-1  | ℹ No Ollama Model detected
-verba-1  | ℹ No Ollama Model detected
-verba-1  | INFO:     10.253.218.179:63506 - "GET / HTTP/1.1" 200 OK
-verba-1  | INFO:     10.253.218.179:63506 - "GET /static/_next/static/css/e1f3f1e990d33929.css HTTP/1.1" 200 OK
-verba-1  | INFO:     10.253.218.179:63505 - "GET /static/_next/static/chunks/app/page-3434cfc45a0aa353.js HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:39496 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 0 clients connected
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 0 clients connected
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 0 clients connected
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | /usr/local/lib/python3.11/site-packages/weaviate/warnings.py:133: DeprecationWarning: Dep005: You are using weaviate-client version 4.9.6. The latest version is 4.15.4.
-verba-1  |             Consider upgrading to the latest version. See https://weaviate.io/developers/weaviate/client-libraries/python for details.
-verba-1  |   warnings.warn(
-verba-1  | /usr/local/lib/python3.11/site-packages/weaviate/collections/classes/config.py:1914: PydanticDeprecatedSince211: Accessing the 'model_fields' attribute on the instance is deprecated. Instead, you should access this attribute from the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.
-verba-1  |   for cls_field in self.model_fields:
-verba-1  | ⚠ Connecting new Client
-verba-1  | ℹ Connecting to Weaviate Docker
-verba-1  | ✔ Succesfully Connected to Weaviate
-verba-1  | ℹ Collection: VERBA_CONFIGURATION does not exist, creating new
-verba-1  | collection.
-verba-1  | ℹ Connection time: 0.47 seconds
-verba-1  | ℹ Using New RAG Configuration
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/connect HTTP/1.1" 200 OK
-verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
-verba-1  |   warnings.warn("remove second argument of ws_handler", DeprecationWarning)
-verba-1  | INFO:     ('10.253.218.179', 63517) - "WebSocket /ws/generate_stream" [accepted]
-verba-1  | INFO:     connection open
-verba-1  | INFO:     ('10.253.218.179', 63519) - "WebSocket /ws/import_files" [accepted]
-verba-1  | INFO:     connection open
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | ℹ Collection: VERBA_Embedding_nomic_embed_text does not exist, creating
-verba-1  | new collection.
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_datacount HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_datacount HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:39512 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_meta HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | ℹ Collection: VERBA_DOCUMENTS does not exist, creating new
-verba-1  | collection.
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_labels HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_labels HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_datacount HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_datacount HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:60670 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_labels HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_labels HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:60686 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63542 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63542 - "POST /api/get_datacount HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63542 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63542 - "POST /api/get_labels HTTP/1.1" 200 OK
-verba-1  | ✔ Collected all Batches of проект_постановления_10.06.2025.docx
-verba-1  | ℹ Removing проект_постановления_10.06.2025.docx from BatchManager
-verba-1  | ℹ Found existing Client
-verba-1  | ℹ FileStatus.STARTING | проект_постановления_10.06.2025.docx | Starting
-verba-1  | Import | 0
-verba-1  | ℹ Loading проект_постановления_10.06.2025.docx (docx)
-verba-1  | ℹ FileStatus.LOADING | проект_постановления_10.06.2025.docx | Loaded
-verba-1  | проект_постановления_10.06.2025.docx | 0.63
-verba-1  | ℹ FileStatus.CHUNKING | проект_постановления_10.06.2025.docx |  | 0
-verba-1  | ℹ FileStatus.CHUNKING | проект_постановления_10.06.2025.docx | Split
-verba-1  | проект_постановления_10.06.2025.docx into 17 chunks | 0.0
-verba-1  | ℹ FileStatus.EMBEDDING | проект_постановления_10.06.2025.docx |  |
-verba-1  | 0
-verba-1  | ℹ Vectorizing 17 chunks in 1 batches
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63553 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63553 - "POST /api/get_datacount HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63553 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63553 - "POST /api/get_labels HTTP/1.1" 200 OK
-verba-1  | ℹ FileStatus.EMBEDDING | проект_постановления_10.06.2025.docx |
-verba-1  | Vectorized all chunks | 16.69
-verba-1  | ℹ FileStatus.INGESTING | проект_постановления_10.06.2025.docx |  |
-verba-1  | 0
-verba-1  | ℹ FileStatus.INGESTING | проект_постановления_10.06.2025.docx |
-verba-1  | Imported проект_постановления_10.06.2025.docx into Weaviate | 16.77
-verba-1  | ℹ FileStatus.DONE | проект_постановления_10.06.2025.docx | Import for
-verba-1  | проект_постановления_10.06.2025.docx completed successfully | 16.77
-verba-1  | ℹ FileStatus.INGESTING | проект_постановления_10.06.2025.docx |
-verba-1  | Imported проект_постановления_10.06.2025.docx and 17 chunks into Weaviate |
-verba-1  | 17.41
-verba-1  | ℹ FileStatus.DONE | проект_постановления_10.06.2025.docx | Import for
-verba-1  | проект_постановления_10.06.2025.docx completed successfully | 17.41
-verba-1  | INFO:     127.0.0.1:50884 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:54044 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63560 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63560 - "POST /api/get_datacount HTTP/1.1" 200 OK
-verba-1  | ℹ Cleaning Clients Cache
-verba-1  | ℹ Cleaned up 0 clients
-verba-1  | ℹ 1 clients connected
-verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-06 13:06:52.780996
-verba-1  | INFO:     10.253.218.179:63560 - "GET /api/health HTTP/1.1" 200 OK
-verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.179:63560 - "POST /api/get_labels HTTP/1.1" 200 OK
-verba-1  | INFO:     10.253.218.179:63560 - "GET /static/_next/static/css/e1f3f1e990d33929.css HTTP/1.1" 304 Not Modified
+Вам нужно интегрировать похожий механизм получения и отображения документов в MEMOView.tsx или MEMOInterface.tsx.
+
+Предлагаемые шаги:
+
+Используйте fetchAllSuggestions (или переименуйте/создайте fetchAllDocuments):
+
+Функция fetchAllSuggestions из api.ts уже возвращает список Suggestion (который, судя по структуре, очень похож на то, что вам нужно для документов: uuid, title, chunks).
+
+Вам нужно убедиться, что эндпоинт /api/get_all_suggestions на бэкенде действительно возвращает все загруженные документы, а не только те, которые являются "предложениями" в контексте поиска. Если он возвращает только часть, то вам все равно потребуется создать новый эндпоинт /api/get_all_documents_metadata (как я предлагал ранее) и соответствующую функцию fetchAllDocumentsMetadata в api.ts.
+
+Предпочтительный вариант: Используйте уже существующий fetchAllSuggestions, если он возвращает все документы. Если нет, то реализуйте fetchAllDocumentsMetadata и используйте ее.
+
+Интегрируйте логику получения и хранения состояния в MEMOView.tsx:
+
+В MEMOView.tsx (или MEMOInterface.tsx, если вы хотите, чтобы логика была ближе к UI), добавьте состояния для хранения списка документов:
+
+TypeScript
+const [allDocuments, setAllDocuments] = useState<DocumentFilter[]>([]); // Или Suggestion[]
+const [filteredDocuments, setFilteredDocuments] = useState<DocumentFilter[]>([]);
+Используйте useEffect для вызова fetchAllDocumentsMetadata (или fetchAllSuggestions) при монтировании компонента:
+
+TypeScript
+import { fetchAllDocumentsMetadata } from "@/app/api"; // Или fetchAllSuggestions
+
+// ...
+
+useEffect(() => {
+  const loadDocuments = async () => {
+    const response = await fetchAllDocumentsMetadata(credentials); // Или fetchAllSuggestions
+    if (response && response.documents) { // Или response.suggestions
+      setAllDocuments(response.documents);
+      setFilteredDocuments(response.documents); // Изначально все документы отображаются
+    }
+  };
+  loadDocuments();
+}, [credentials]); // Зависимость от credentials
+Передайте список документов в DocumentExplorer:
+
+Компонент DocumentExplorer в MEMOView.tsx уже принимает проп documentFilter. Вам нужно будет передать ему filteredDocuments.
+
+Также убедитесь, что DocumentExplorer может отображать эти документы (он, вероятно, уже это делает, поскольку используется в FileSelectionView).
+
+Обработка выбора документа:
+
+MEMOView.tsx уже имеет состояния selectedDocument и setSelectedDocument.
+
+Вам нужно будет передать функцию, которая будет обновлять selectedDocument при выборе документа из списка.
+
+Пример изменений в MEMOView.tsx:
+
+TypeScript
+// app/components/MEMO/MEMOView.tsx
+
+"use client";
+
+import React, { useState, useEffect } from "react";
+import {
+  Credentials,
+  Theme,
+  DocumentFilter,
+  ChunkScore,
+} from "@/app/types";
+import { fetchAllDocumentsMetadata } from "@/app/api"; // Или fetchAllSuggestions
+
+import MEMOInterface from "./MEMOInterface";
+import DocumentExplorer from "../DocumentExplorer/DocumentExplorer"; // Убедитесь, что это правильный путь
+
+interface MEMOViewProps {
+  selectedTheme: Theme;
+  credentials: Credentials;
+  addStatusMessage: (
+    message: string,
+    type: "INFO" | "WARNING" | "SUCCESS" | "ERROR"
+  ) => void;
+  production: "Local" | "Demo" | "Production";
+  currentPage: string;
+}
+
+const MEMOView: React.FC<MEMOViewProps> = ({
+  credentials,
+  selectedTheme,
+  addStatusMessage,
+  production,
+  currentPage,
+}) => {
+  const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
+  const [selectedChunkScore, setSelectedChunkScore] = useState<ChunkScore[]>([]);
+
+  // Новые состояния для списка документов
+  const [allDocuments, setAllDocuments] = useState<DocumentFilter[]>([]);
+  const [documentFilter, setDocumentFilter] = useState<DocumentFilter[]>([]); // Это будет filteredDocuments
+
+  // Эффект для загрузки всех документов при монтировании
+  useEffect(() => {
+    const loadAllDocuments = async () => {
+      const response = await fetchAllDocumentsMetadata(credentials); // Или fetchAllSuggestions
+      if (response && response.documents) { // Или response.suggestions
+        setAllDocuments(response.documents);
+        setDocumentFilter(response.documents); // Изначально отображаем все документы
+      }
+    };
+    loadAllDocuments();
+  }, [credentials]); // Зависимость от credentials
+
+  return (
+    <div className="flex flex-row h-full w-full justify-center items-start gap-4 p-4">
+      <div className="flex flex-col h-full w-full max-w-[50%]">
+        <MEMOInterface
+          addStatusMessage={addStatusMessage}
+          production={production}
+          credentials={credentials}
+          selectedTheme={selectedTheme}
+          setSelectedDocument={setSelectedDocument}
+          setSelectedChunkScore={setSelectedChunkScore}
+          currentPage={currentPage}
+          documentFilter={documentFilter} // Передаем отфильтрованные документы
+          setDocumentFilter={setDocumentFilter} // Позволяем MEMOInterface управлять фильтрацией
+        />
+      </div>
+      <div className="flex flex-col h-full w-full max-w-[50%]">
+        <DocumentExplorer
+          selectedTheme={selectedTheme}
+          credentials={credentials}
+          addStatusMessage={addStatusMessage}
+          selectedDocument={selectedDocument}
+          setSelectedDocument={setSelectedDocument}
+          setSelectedChunkScore={setSelectedChunkScore}
+          documentFilter={documentFilter} // Передаем список документов
+          setDocumentFilter={setDocumentFilter} // Передаем функцию для обновления фильтров
+          production={production}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default MEMOView;
+Дополнительные соображения:
+
+Обновление после загрузки: Если вы загружаете новые документы через другой интерфейс (например, IngestionView), вам нужно будет найти способ повторно вызвать loadAllDocuments в MEMOView после успешной загрузки, чтобы список обновился. Это можно сделать, например, через глобальное состояние или механизм контекста, или передавая функцию обновления как проп.
+
+Имена свойств: Убедитесь, что имена свойств (uuid, title, chunks) в DocumentFilter и Suggestion (если вы используете Suggestion) совпадают с тем, что возвращает ваш бэкенд.
+
+Эта адаптация должна позволить вам отображать список загруженных документов в разделе МЕМО
