@@ -1,20 +1,11 @@
-> verba@2.1.0 build
-> next build && cp -r out/* ../goldenverba/server/frontend/out/ && rm -r out
+./app/components/MEMO/MEMOView.tsx:55:10
+Type error: Property 'selectedDocument' is missing in type '{ addStatusMessage: (message: string, type: "INFO" | "WARNING" | "SUCCESS" | "ERROR") => void; production: "Local" | "Demo" | "Production"; credentials: Credentials; ... 5 more ...; setDocumentFilter: Dispatch<...>; }' but required in type 'MEMOInterfaceProps'.
 
- ⚠ Specified "redirects" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
- ⚠ Specified "redirects" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
-  ▲ Next.js 14.2.25
-
-   Creating an optimized production build ...
-Failed to compile.
-
-./app/components/MEMO/MEMOView.tsx
-Module not found: Can't resolve '../DocumentExplorer/DocumentExplorer'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./app/page.tsx
-
-
-> Build failed because of webpack errors
+  53 |     <div className="flex flex-row h-full w-full justify-center items-start gap-4 p-4">
+  54 |       <div className="flex flex-col h-full w-full max-w-[50%]">
+> 55 |         <MEMOInterface
+     |          ^
+  56 |           addStatusMessage={addStatusMessage}
+  57 |           production={production}
+  58 |           credentials={credentials}
+Next.js build worker exited with code: 1 and signal: null
