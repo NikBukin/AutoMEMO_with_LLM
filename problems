@@ -1,65 +1,38 @@
-Уже была функция в api.py
+# goldenverba/verba_manager.py
 
-## Retrieve and search documents imported to Weaviate
-@app.post("/api/get_all_documents")
-async def get_all_documents(payload: SearchQueryPayload):
-    try:
-        client = await client_manager.connect(payload.credentials)
-        documents, total_count = await manager.weaviate_manager.get_documents(
-            client,
-            payload.query,
-            payload.pageSize,
-            payload.page,
-            payload.labels,
-            properties=["title", "extension", "fileSize", "labels", "source", "meta"],
-        )
-        labels = await manager.weaviate_manager.get_labels(client)
+# ... (существующие импорты)
+from weaviate.client import WeaviateAsyncClient
+from weaviate.classes.query import QueryOptions # Убедитесь, что этот импорт есть
 
-        msg.good(f"Succesfully retrieved document: {len(documents)} documents")
-        return JSONResponse(
-            content={
-                "documents": documents,
-                "labels": labels,
-                "error": "",
-                "totalDocuments": total_count,
-            }
-        )
-    except Exception as e:
-        msg.fail(f"Retrieving all documents failed: {str(e)}")
-        return JSONResponse(
-            content={
-                "documents": [],
-                "label": [],
-                "error": f"All Document retrieval failed: {str(e)}",
-                "totalDocuments": 0,
-            }
-        )
+# ... (ваш класс WeaviateManager)
 
+class WeaviateManager:
+    # ... (существующие методы)
 
+    async def retrieve_all_documents_metadata(self, client: WeaviateAsyncClient) -> list[dict]:
+        """
+        Retrieves UUID and title for all documents from the 'Document' class in Weaviate.
+        """
+        try:
+            # Получаем ссылку на коллекцию 'Document' (или имя вашей коллекции)
+            document_collection = client.collections.get("Document")
+            
+            # Выполняем запрос для получения всех объектов
+            # Ограничьте 'limit' подходящим значением, если у вас очень много документов,
+            # чтобы избежать чрезмерной нагрузки на память.
+            # Если документов больше, чем лимит, вам может потребоваться пагинация.
+            response = await document_collection.query.fetch_objects(
+                limit=10000,  # Установите подходящий лимит
+                return_properties=["title"] # Возвращаем только свойство 'title'. UUID всегда возвращается по умолчанию.
+            )
 
-Но мы еще добавили:
-# Добавьте этот класс полезной нагрузки для запроса документов
-class GetAllDocumentsMetadataPayload(BaseModel):
-    credentials: Credentials
-
-# Добавьте этот эндпоинт
-@app.post("/api/get_all_documents_metadata")
-async def get_all_documents_metadata(payload: GetAllDocumentsMetadataPayload):
-    try:
-        client = await client_manager.connect(payload.credentials)
-        documents_metadata = await manager.weaviate_manager.retrieve_all_documents_metadata(client)
-        return JSONResponse(
-            content={
-                "documents": documents_metadata,
-            }
-        )
-    except Exception as e:
-        msg.fail(f"Error getting all document metadata: {e}")
-        return JSONResponse(
-            content={
-                "documents": [],
-            },
-            status_code=500
-        )
-
-
+            results = []
+            for obj in response.objects:
+                # obj.uuid содержит UUID документа
+                # obj.properties содержит другие свойства, такие как 'title'
+                if obj.uuid and "title" in obj.properties:
+                    results.append({"uuid": obj.uuid, "title": obj.properties["title"]})
+            return results
+        except Exception as e:
+            msg.fail(f"Failed to retrieve all document metadata from Weaviate: {e}")
+            return []
