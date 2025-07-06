@@ -1,13 +1,15 @@
-./app/components/MEMO/MEMOView.tsx:75:11
-Type error: Type '{ selectedTheme: Theme; credentials: Credentials; addStatusMessage: (message: string, type: "INFO" | "WARNING" | "SUCCESS" | "ERROR") => void; selectedDocument: string | null; ... 4 more ...; production: "Local" | ... 1 more ... | "Production"; }' is not assignable to type 'IntrinsicAttributes & DocumentExplorerProps'.
-  Property 'setSelectedChunkScore' does not exist on type 'IntrinsicAttributes & DocumentExplorerProps'.
+./app/page.tsx:242:17
+Type error: Type '{ addStatusMessage: (message: string, type: "INFO" | "WARNING" | "SUCCESS" | "ERROR") => void; credentials: Credentials; production: "Local" | "Demo" | "Production"; selectedTheme: Theme; currentPage: string; documentFilter: DocumentFilter[]; setDocumentFilter: Dispatch<...>; }' is not assignable to type 'IntrinsicAttributes & MEMOViewProps'.
+  Property 'documentFilter' does not exist on type 'IntrinsicAttributes & MEMOViewProps'.
 
-  73 |           selectedDocument={selectedDocument}
-  74 |           setSelectedDocument={setSelectedDocument}
-> 75 |           setSelectedChunkScore={setSelectedChunkScore}
-     |           ^
-  76 |           documentFilter={documentFilter} // Передаем список документов
-  77 |           setDocumentFilter={setDocumentFilter} // Передаем функцию для обновления фильтров
-  78 |           production={production}
+  240 |                 selectedTheme={selectedTheme}
+  241 |                 currentPage={currentPage}
+> 242 |                 documentFilter={documentFilter}
+      |                 ^
+  243 |                 setDocumentFilter={setDocumentFilter}
+  244 |               />
+  245 |             </div>
 Next.js build worker exited with code: 1 and signal: null
+developer@ac-srv-141:~/Verba/frontend$
+
 
