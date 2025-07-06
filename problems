@@ -1,15 +1,65 @@
-./app/page.tsx:242:17
-Type error: Type '{ addStatusMessage: (message: string, type: "INFO" | "WARNING" | "SUCCESS" | "ERROR") => void; credentials: Credentials; production: "Local" | "Demo" | "Production"; selectedTheme: Theme; currentPage: string; documentFilter: DocumentFilter[]; setDocumentFilter: Dispatch<...>; }' is not assignable to type 'IntrinsicAttributes & MEMOViewProps'.
-  Property 'documentFilter' does not exist on type 'IntrinsicAttributes & MEMOViewProps'.
+Уже была функция в api.py
 
-  240 |                 selectedTheme={selectedTheme}
-  241 |                 currentPage={currentPage}
-> 242 |                 documentFilter={documentFilter}
-      |                 ^
-  243 |                 setDocumentFilter={setDocumentFilter}
-  244 |               />
-  245 |             </div>
-Next.js build worker exited with code: 1 and signal: null
-developer@ac-srv-141:~/Verba/frontend$
+## Retrieve and search documents imported to Weaviate
+@app.post("/api/get_all_documents")
+async def get_all_documents(payload: SearchQueryPayload):
+    try:
+        client = await client_manager.connect(payload.credentials)
+        documents, total_count = await manager.weaviate_manager.get_documents(
+            client,
+            payload.query,
+            payload.pageSize,
+            payload.page,
+            payload.labels,
+            properties=["title", "extension", "fileSize", "labels", "source", "meta"],
+        )
+        labels = await manager.weaviate_manager.get_labels(client)
+
+        msg.good(f"Succesfully retrieved document: {len(documents)} documents")
+        return JSONResponse(
+            content={
+                "documents": documents,
+                "labels": labels,
+                "error": "",
+                "totalDocuments": total_count,
+            }
+        )
+    except Exception as e:
+        msg.fail(f"Retrieving all documents failed: {str(e)}")
+        return JSONResponse(
+            content={
+                "documents": [],
+                "label": [],
+                "error": f"All Document retrieval failed: {str(e)}",
+                "totalDocuments": 0,
+            }
+        )
+
+
+
+Но мы еще добавили:
+# Добавьте этот класс полезной нагрузки для запроса документов
+class GetAllDocumentsMetadataPayload(BaseModel):
+    credentials: Credentials
+
+# Добавьте этот эндпоинт
+@app.post("/api/get_all_documents_metadata")
+async def get_all_documents_metadata(payload: GetAllDocumentsMetadataPayload):
+    try:
+        client = await client_manager.connect(payload.credentials)
+        documents_metadata = await manager.weaviate_manager.retrieve_all_documents_metadata(client)
+        return JSONResponse(
+            content={
+                "documents": documents_metadata,
+            }
+        )
+    except Exception as e:
+        msg.fail(f"Error getting all document metadata: {e}")
+        return JSONResponse(
+            content={
+                "documents": [],
+            },
+            status_code=500
+        )
 
 
