@@ -1,166 +1,222 @@
-Я понял вашу логику работы: сначала выбирается документ, затем вводится шаблон МЕМО, и отправляется запрос на формирование. Извините, что мои предыдущие объяснения были сосредоточены на message.content – это было связано с предыдущей ошибкой компиляции, которую вы прислали.
-
-Ваша текущая проблема "Он все еще не предлагает загруженные документы в списке. Сейчас список пустой, хотя документы уже загружены" означает, что компонент, который должен отображать список документов (вероятно, DocumentExplorer, который используется внутри MEMOView.tsx), не получает данные о загруженных документах.
-
-Проанализировав предоставленные вами файлы (api.py, managers.py, api.ts, types.ts), я не нашел явного API-эндпоинта или функции на фронтенде, которые бы запрашивали полный список всех загруженных документов (только их метаданные, такие как название и UUID) из Weaviate. Существующие эндпоинты в api.py предназначены для получения предложений (get_all_suggestions) или конкретного документа по UUID (get_document).
-
-Чтобы решить эту проблему, нам нужно выполнить следующие шаги:
-
-Создать новый метод в managers.py, который будет запрашивать из Weaviate метаданные всех загруженных документов (UUID и название).
-
-Создать новый эндпоинт в api.py, который будет вызывать этот новый метод и возвращать список документов на фронтенд.
-
-Создать новую функцию в api.ts, которая будет вызывать этот новый эндпоинт.
-
-Изменить MEMOView.tsx (или MEMOInterface.tsx), чтобы он вызывал эту новую функцию при загрузке и обновлял состояние documentFilter, которое затем передается в DocumentExplorer.
-
-Начнем с бэкенда.
-
-Шаг 1: Обновление managers.py
-
-Добавьте новый метод retrieve_all_documents_metadata в класс, который управляет взаимодействием с Weaviate (скорее всего, это класс, содержащий weaviate_manager или похожий, который вы используете в api.py). Я предполагаю, что это класс WeaviateManager внутри verba_manager.
-
-В goldenverba/verba_manager.py (или соответствующем файле, где находится WeaviateManager), добавьте следующий метод:
-
-Python
-# managers.py (или goldenverba/verba_manager.py)
-
-import weaviate.classes.query as wq
-from goldenverba.components.document import Document # Убедитесь, что этот импорт есть
-
-class WeaviateManager: # Убедитесь, что это правильный класс
-    # ... (существующие методы) ...
-
-    async def retrieve_all_documents_metadata(self, client: WeaviateAsyncClient, limit: int = 1000) -> list[dict]:
-        """
-        Retrieves metadata (UUID and title) for all documents from Weaviate.
-        """
-        try:
-            documents_collection = client.collections.get("Document") # Убедитесь, что имя коллекции "Document"
-            
-            # Запрос всех документов, выбирая только UUID и название
-            response = documents_collection.query.fetch_objects(
-                limit=limit,
-                return_properties=["doc_uuid", "title"], # Предполагаемые имена свойств в Weaviate
-            )
-            
-            all_documents_metadata = []
-            for obj in response.objects:
-                if obj.properties and "doc_uuid" in obj.properties and "title" in obj.properties:
-                    all_documents_metadata.append({
-                        "uuid": obj.properties["doc_uuid"],
-                        "title": obj.properties["title"],
-                    })
-            return all_documents_metadata
-        except Exception as e:
-            msg.fail(f"Error retrieving all document metadata from Weaviate: {e}")
-            return []
-
-Важное примечание:
-
-Убедитесь, что имя вашей коллекции документов в Weaviate действительно "Document". Если нет, измените client.collections.get("Document") на правильное имя.
-
-Я предположил, что UUID документа хранится в свойстве doc_uuid и название в свойстве title в вашей схеме Weaviate. Если у вас другие имена свойств (например, uuid вместо doc_uuid), измените return_properties=["doc_uuid", "title"] и доступ к obj.properties соответствующим образом.
-
-Шаг 2: Обновление api.py
-
-Добавьте новый эндпоинт /api/get_all_documents_metadata, который будет использовать новый метод из managers.py.
-
-Python
-# api.py
-
-from goldenverba.server.types import DocumentFilter # Убедитесь, что DocumentFilter импортирован
-from pydantic import BaseModel # Убедитесь, что BaseModel импортирован
-
-# ... (существующие импорты и код) ...
-
-# Добавьте этот класс полезной нагрузки для запроса документов
-class GetAllDocumentsMetadataPayload(BaseModel):
-    credentials: Credentials
-
-# Добавьте этот эндпоинт
-@app.post("/api/get_all_documents_metadata")
-async def get_all_documents_metadata(payload: GetAllDocumentsMetadataPayload):
-    try:
-        client = await client_manager.connect(payload.credentials)
-        documents_metadata = await manager.weaviate_manager.retrieve_all_documents_metadata(client)
-        return JSONResponse(
-            content={
-                "documents": documents_metadata,
-            }
-        )
-    except Exception as e:
-        msg.fail(f"Error getting all document metadata: {e}")
-        return JSONResponse(
-            content={
-                "documents": [],
-            },
-            status_code=500
-        )
-
-Шаг 3: Обновление types.ts (если требуется)
-
-Убедитесь, что в types.ts есть тип для ответа API GetAllDocumentsMetadataPayload и DocumentFilter (который вы уже предоставили):
-
-TypeScript
-// types.ts
-
-export type DocumentFilter = {
-  title: string;
-  uuid: string;
-};
-
-export type AllDocumentsMetadataResponse = {
-  documents: DocumentFilter[];
-};
-
-// ... (остальные типы) ...
-Шаг 4: Обновление api.ts
-
-Добавьте новую функцию fetchAllDocumentsMetadata для вызова нового эндпоинта.
-
-TypeScript
-// api.ts
-
-import {
-  Credentials,
-  DocumentFilter, // Убедитесь, что DocumentFilter импортирован
-  AllDocumentsMetadataResponse, // Импортируйте новый тип
-} from "./types";
-
-// ... (существующие функции и импорты) ...
-
-export const fetchAllDocumentsMetadata = async (
-  credentials: Credentials
-): Promise<AllDocumentsMetadataResponse | null> => {
-  try {
-    const host = await detectHost();
-    const response = await fetch(`${host}/api/get_all_documents_metadata`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        credentials: credentials,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error(
-        `Error ${response.status}: Failed to fetch all document metadata.`
-      );
-      return null;
-    }
-
-    const data: AllDocumentsMetadataResponse = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching all document metadata:", error);
-    return null;
-  }
-};
-
-После внесения этих изменений, следующим шагом будет изменение MEMOView.tsx или MEMOInterface.tsx для использования этой новой функции и отображения документов.
-Я бы рекомендовал начать с реализации этих изменений на бэкенде и в api.ts, а затем проверить, работает ли новый эндпоинт (например, с помощью Postman или curl), прежде чем переходить к изменениям на фронтенде.
-
-Сообщите мне, когда вы будете готовы, и мы перейдем к изменениям на фронтенде.
+verba-1  | INFO:     Will watch for changes in these directories: ['/Verba']
+verba-1  | WARNING:  "workers" flag is ignored when reloading is enabled.
+verba-1  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+verba-1  | INFO:     Started reloader process [1] using WatchFiles
+verba-1  | ℹ No Ollama Model detected
+verba-1  | ℹ No Ollama Model detected
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
+verba-1  |   warnings.warn(  # deprecated in 14.0 - 2024-11-09
+verba-1  | /usr/local/lib/python3.11/site-packages/uvicorn/protocols/websockets/websockets_impl.py:14: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+verba-1  |   from websockets.server import WebSocketServerProtocol
+verba-1  | INFO:     Started server process [38]
+verba-1  | INFO:     Waiting for application startup.
+verba-1  | INFO:     Application startup complete.
+verba-1  | ℹ No Ollama Model detected
+verba-1  | ℹ No Ollama Model detected
+verba-1  | INFO:     10.253.218.179:63506 - "GET / HTTP/1.1" 200 OK
+verba-1  | INFO:     10.253.218.179:63506 - "GET /static/_next/static/css/e1f3f1e990d33929.css HTTP/1.1" 200 OK
+verba-1  | INFO:     10.253.218.179:63505 - "GET /static/_next/static/chunks/app/page-3434cfc45a0aa353.js HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:39496 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 0 clients connected
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 0 clients connected
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 0 clients connected
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | /usr/local/lib/python3.11/site-packages/weaviate/warnings.py:133: DeprecationWarning: Dep005: You are using weaviate-client version 4.9.6. The latest version is 4.15.4.
+verba-1  |             Consider upgrading to the latest version. See https://weaviate.io/developers/weaviate/client-libraries/python for details.
+verba-1  |   warnings.warn(
+verba-1  | /usr/local/lib/python3.11/site-packages/weaviate/collections/classes/config.py:1914: PydanticDeprecatedSince211: Accessing the 'model_fields' attribute on the instance is deprecated. Instead, you should access this attribute from the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.
+verba-1  |   for cls_field in self.model_fields:
+verba-1  | ⚠ Connecting new Client
+verba-1  | ℹ Connecting to Weaviate Docker
+verba-1  | ✔ Succesfully Connected to Weaviate
+verba-1  | ℹ Collection: VERBA_CONFIGURATION does not exist, creating new
+verba-1  | collection.
+verba-1  | ℹ Connection time: 0.47 seconds
+verba-1  | ℹ Using New RAG Configuration
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/connect HTTP/1.1" 200 OK
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+verba-1  |   warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+verba-1  | INFO:     ('10.253.218.179', 63517) - "WebSocket /ws/generate_stream" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | INFO:     ('10.253.218.179', 63519) - "WebSocket /ws/import_files" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ Collection: VERBA_Embedding_nomic_embed_text does not exist, creating
+verba-1  | new collection.
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:39512 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_meta HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ Collection: VERBA_DOCUMENTS does not exist, creating new
+verba-1  | collection.
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:60670 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63505 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63505 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:60686 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63542 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63542 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63542 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63542 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ✔ Collected all Batches of проект_постановления_10.06.2025.docx
+verba-1  | ℹ Removing проект_постановления_10.06.2025.docx from BatchManager
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ FileStatus.STARTING | проект_постановления_10.06.2025.docx | Starting
+verba-1  | Import | 0
+verba-1  | ℹ Loading проект_постановления_10.06.2025.docx (docx)
+verba-1  | ℹ FileStatus.LOADING | проект_постановления_10.06.2025.docx | Loaded
+verba-1  | проект_постановления_10.06.2025.docx | 0.63
+verba-1  | ℹ FileStatus.CHUNKING | проект_постановления_10.06.2025.docx |  | 0
+verba-1  | ℹ FileStatus.CHUNKING | проект_постановления_10.06.2025.docx | Split
+verba-1  | проект_постановления_10.06.2025.docx into 17 chunks | 0.0
+verba-1  | ℹ FileStatus.EMBEDDING | проект_постановления_10.06.2025.docx |  |
+verba-1  | 0
+verba-1  | ℹ Vectorizing 17 chunks in 1 batches
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63553 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63553 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63553 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63553 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ FileStatus.EMBEDDING | проект_постановления_10.06.2025.docx |
+verba-1  | Vectorized all chunks | 16.69
+verba-1  | ℹ FileStatus.INGESTING | проект_постановления_10.06.2025.docx |  |
+verba-1  | 0
+verba-1  | ℹ FileStatus.INGESTING | проект_постановления_10.06.2025.docx |
+verba-1  | Imported проект_постановления_10.06.2025.docx into Weaviate | 16.77
+verba-1  | ℹ FileStatus.DONE | проект_постановления_10.06.2025.docx | Import for
+verba-1  | проект_постановления_10.06.2025.docx completed successfully | 16.77
+verba-1  | ℹ FileStatus.INGESTING | проект_постановления_10.06.2025.docx |
+verba-1  | Imported проект_постановления_10.06.2025.docx and 17 chunks into Weaviate |
+verba-1  | 17.41
+verba-1  | ℹ FileStatus.DONE | проект_постановления_10.06.2025.docx | Import for
+verba-1  | проект_постановления_10.06.2025.docx completed successfully | 17.41
+verba-1  | INFO:     127.0.0.1:50884 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:54044 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63560 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63560 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-06 13:06:52.780996
+verba-1  | INFO:     10.253.218.179:63560 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.179:63560 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | INFO:     10.253.218.179:63560 - "GET /static/_next/static/css/e1f3f1e990d33929.css HTTP/1.1" 304 Not Modified
