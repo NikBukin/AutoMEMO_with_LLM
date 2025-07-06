@@ -1,144 +1,20 @@
-Вам нужно интегрировать похожий механизм получения и отображения документов в MEMOView.tsx или MEMOInterface.tsx.
+> verba@2.1.0 build
+> next build && cp -r out/* ../goldenverba/server/frontend/out/ && rm -r out
 
-Предлагаемые шаги:
+ ⚠ Specified "redirects" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+ ⚠ Specified "redirects" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+  ▲ Next.js 14.2.25
 
-Используйте fetchAllSuggestions (или переименуйте/создайте fetchAllDocuments):
+   Creating an optimized production build ...
+Failed to compile.
 
-Функция fetchAllSuggestions из api.ts уже возвращает список Suggestion (который, судя по структуре, очень похож на то, что вам нужно для документов: uuid, title, chunks).
+./app/components/MEMO/MEMOView.tsx
+Module not found: Can't resolve '../DocumentExplorer/DocumentExplorer'
 
-Вам нужно убедиться, что эндпоинт /api/get_all_suggestions на бэкенде действительно возвращает все загруженные документы, а не только те, которые являются "предложениями" в контексте поиска. Если он возвращает только часть, то вам все равно потребуется создать новый эндпоинт /api/get_all_documents_metadata (как я предлагал ранее) и соответствующую функцию fetchAllDocumentsMetadata в api.ts.
+https://nextjs.org/docs/messages/module-not-found
 
-Предпочтительный вариант: Используйте уже существующий fetchAllSuggestions, если он возвращает все документы. Если нет, то реализуйте fetchAllDocumentsMetadata и используйте ее.
+Import trace for requested module:
+./app/page.tsx
 
-Интегрируйте логику получения и хранения состояния в MEMOView.tsx:
 
-В MEMOView.tsx (или MEMOInterface.tsx, если вы хотите, чтобы логика была ближе к UI), добавьте состояния для хранения списка документов:
-
-TypeScript
-const [allDocuments, setAllDocuments] = useState<DocumentFilter[]>([]); // Или Suggestion[]
-const [filteredDocuments, setFilteredDocuments] = useState<DocumentFilter[]>([]);
-Используйте useEffect для вызова fetchAllDocumentsMetadata (или fetchAllSuggestions) при монтировании компонента:
-
-TypeScript
-import { fetchAllDocumentsMetadata } from "@/app/api"; // Или fetchAllSuggestions
-
-// ...
-
-useEffect(() => {
-  const loadDocuments = async () => {
-    const response = await fetchAllDocumentsMetadata(credentials); // Или fetchAllSuggestions
-    if (response && response.documents) { // Или response.suggestions
-      setAllDocuments(response.documents);
-      setFilteredDocuments(response.documents); // Изначально все документы отображаются
-    }
-  };
-  loadDocuments();
-}, [credentials]); // Зависимость от credentials
-Передайте список документов в DocumentExplorer:
-
-Компонент DocumentExplorer в MEMOView.tsx уже принимает проп documentFilter. Вам нужно будет передать ему filteredDocuments.
-
-Также убедитесь, что DocumentExplorer может отображать эти документы (он, вероятно, уже это делает, поскольку используется в FileSelectionView).
-
-Обработка выбора документа:
-
-MEMOView.tsx уже имеет состояния selectedDocument и setSelectedDocument.
-
-Вам нужно будет передать функцию, которая будет обновлять selectedDocument при выборе документа из списка.
-
-Пример изменений в MEMOView.tsx:
-
-TypeScript
-// app/components/MEMO/MEMOView.tsx
-
-"use client";
-
-import React, { useState, useEffect } from "react";
-import {
-  Credentials,
-  Theme,
-  DocumentFilter,
-  ChunkScore,
-} from "@/app/types";
-import { fetchAllDocumentsMetadata } from "@/app/api"; // Или fetchAllSuggestions
-
-import MEMOInterface from "./MEMOInterface";
-import DocumentExplorer from "../DocumentExplorer/DocumentExplorer"; // Убедитесь, что это правильный путь
-
-interface MEMOViewProps {
-  selectedTheme: Theme;
-  credentials: Credentials;
-  addStatusMessage: (
-    message: string,
-    type: "INFO" | "WARNING" | "SUCCESS" | "ERROR"
-  ) => void;
-  production: "Local" | "Demo" | "Production";
-  currentPage: string;
-}
-
-const MEMOView: React.FC<MEMOViewProps> = ({
-  credentials,
-  selectedTheme,
-  addStatusMessage,
-  production,
-  currentPage,
-}) => {
-  const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
-  const [selectedChunkScore, setSelectedChunkScore] = useState<ChunkScore[]>([]);
-
-  // Новые состояния для списка документов
-  const [allDocuments, setAllDocuments] = useState<DocumentFilter[]>([]);
-  const [documentFilter, setDocumentFilter] = useState<DocumentFilter[]>([]); // Это будет filteredDocuments
-
-  // Эффект для загрузки всех документов при монтировании
-  useEffect(() => {
-    const loadAllDocuments = async () => {
-      const response = await fetchAllDocumentsMetadata(credentials); // Или fetchAllSuggestions
-      if (response && response.documents) { // Или response.suggestions
-        setAllDocuments(response.documents);
-        setDocumentFilter(response.documents); // Изначально отображаем все документы
-      }
-    };
-    loadAllDocuments();
-  }, [credentials]); // Зависимость от credentials
-
-  return (
-    <div className="flex flex-row h-full w-full justify-center items-start gap-4 p-4">
-      <div className="flex flex-col h-full w-full max-w-[50%]">
-        <MEMOInterface
-          addStatusMessage={addStatusMessage}
-          production={production}
-          credentials={credentials}
-          selectedTheme={selectedTheme}
-          setSelectedDocument={setSelectedDocument}
-          setSelectedChunkScore={setSelectedChunkScore}
-          currentPage={currentPage}
-          documentFilter={documentFilter} // Передаем отфильтрованные документы
-          setDocumentFilter={setDocumentFilter} // Позволяем MEMOInterface управлять фильтрацией
-        />
-      </div>
-      <div className="flex flex-col h-full w-full max-w-[50%]">
-        <DocumentExplorer
-          selectedTheme={selectedTheme}
-          credentials={credentials}
-          addStatusMessage={addStatusMessage}
-          selectedDocument={selectedDocument}
-          setSelectedDocument={setSelectedDocument}
-          setSelectedChunkScore={setSelectedChunkScore}
-          documentFilter={documentFilter} // Передаем список документов
-          setDocumentFilter={setDocumentFilter} // Передаем функцию для обновления фильтров
-          production={production}
-        />
-      </div>
-    </div>
-  );
-};
-
-export default MEMOView;
-Дополнительные соображения:
-
-Обновление после загрузки: Если вы загружаете новые документы через другой интерфейс (например, IngestionView), вам нужно будет найти способ повторно вызвать loadAllDocuments в MEMOView после успешной загрузки, чтобы список обновился. Это можно сделать, например, через глобальное состояние или механизм контекста, или передавая функцию обновления как проп.
-
-Имена свойств: Убедитесь, что имена свойств (uuid, title, chunks) в DocumentFilter и Suggestion (если вы используете Suggestion) совпадают с тем, что возвращает ваш бэкенд.
-
-Эта адаптация должна позволить вам отображать список загруженных документов в разделе МЕМО
+> Build failed because of webpack errors
