@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
-import MEMOInterface from "./MEMOInterface";
-
-import DocumentExplorer from "../Document/DocumentExplorer";
-
+import React, { useState, useEffect } from "react";
 import {
   Credentials,
-  RAGConfig,
-  ChunkScore,
   Theme,
   DocumentFilter,
+  ChunkScore,
 } from "@/app/types";
+import { fetchAllDocumentsMetadata } from "@/app/api"; // Или fetchAllSuggestions
+
+import MEMOInterface from "./MEMOInterface";
+import DocumentExplorer from "../Document/DocumentExplorer"; // Убедитесь, что это правильный путь
 
 interface MEMOViewProps {
   selectedTheme: Theme;
@@ -22,8 +21,6 @@ interface MEMOViewProps {
   ) => void;
   production: "Local" | "Demo" | "Production";
   currentPage: string;
-  RAGConfig: RAGConfig | null;
-  setRAGConfig: React.Dispatch<React.SetStateAction<RAGConfig | null>>;
   documentFilter: DocumentFilter[];
   setDocumentFilter: React.Dispatch<React.SetStateAction<DocumentFilter[]>>;
 }
@@ -34,20 +31,29 @@ const MEMOView: React.FC<MEMOViewProps> = ({
   addStatusMessage,
   production,
   currentPage,
-  RAGConfig,
-  setRAGConfig,
-  documentFilter,
-  setDocumentFilter,
 }) => {
   const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
-  const [selectedChunkScore, setSelectedChunkScore] = useState<ChunkScore[]>(
-    []
-  );
+  const [selectedChunkScore, setSelectedChunkScore] = useState<ChunkScore[]>([]);
+
+  // Новые состояния для списка документов
+  const [allDocuments, setAllDocuments] = useState<DocumentFilter[]>([]);
+  const [documentFilter, setDocumentFilter] = useState<DocumentFilter[]>([]); // Это будет filteredDocuments
+
+  // Эффект для загрузки всех документов при монтировании
+  useEffect(() => {
+    const loadAllDocuments = async () => {
+      const response = await fetchAllDocumentsMetadata(credentials); // Или fetchAllSuggestions
+      if (response && response.documents) { // Или response.suggestions
+        setAllDocuments(response.documents);
+        setDocumentFilter(response.documents); // Изначально отображаем все документы
+      }
+    };
+    loadAllDocuments();
+  }, [credentials]); // Зависимость от credentials
+
   return (
-    <div className="flex md:flex-row flex-col justify-center gap-3 h-[50vh] md:h-[80vh] ">
-      <div
-        className={`${selectedDocument ? "hidden md:flex md:w-[45vw]" : "w-full md:w-[45vw] md:flex"}`}
-      >
+    <div className="flex flex-row h-full w-full justify-center items-start gap-4 p-4">
+      <div className="flex flex-col h-full w-full max-w-[50%]">
         <MEMOInterface
           addStatusMessage={addStatusMessage}
           production={production}
@@ -56,26 +62,21 @@ const MEMOView: React.FC<MEMOViewProps> = ({
           setSelectedDocument={setSelectedDocument}
           setSelectedChunkScore={setSelectedChunkScore}
           currentPage={currentPage}
-          RAGConfig={RAGConfig}
-          setRAGConfig={setRAGConfig}
-          documentFilter={documentFilter}
-          setDocumentFilter={setDocumentFilter}
+          documentFilter={documentFilter} // Передаем отфильтрованные документы
+          setDocumentFilter={setDocumentFilter} // Позволяем MEMOInterface управлять фильтрацией
+          selectedDocument={selectedDocument}
         />
       </div>
-
-      <div
-        className={`${selectedDocument ? "md:w-[55vw] w-full flex" : "hidden md:flex md:w-[55vw]"}`}
-      >
+      <div className="flex flex-col h-full w-full max-w-[50%]">
         <DocumentExplorer
-          addStatusMessage={addStatusMessage}
-          credentials={credentials}
-          production={production}
-          documentFilter={documentFilter}
-          setDocumentFilter={setDocumentFilter}
-          setSelectedDocument={setSelectedDocument}
           selectedTheme={selectedTheme}
+          credentials={credentials}
+          addStatusMessage={addStatusMessage}
           selectedDocument={selectedDocument}
-          chunkScores={selectedChunkScore}
+          setSelectedDocument={setSelectedDocument}
+          documentFilter={documentFilter} // Передаем список документов
+          setDocumentFilter={setDocumentFilter} // Передаем функцию для обновления фильтров
+          production={production}
         />
       </div>
     </div>
