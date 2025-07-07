@@ -1,283 +1,184 @@
-// app/components/MEMO/MEMOInterface.tsx
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
-import { MdCancel, MdOutlineRefresh } from "react-icons/md";
-import { TbPlugConnected } from "react-icons/tb";
-import { IoIosSend } from "react-icons/io";
-import VerbaButton from "../Navigation/VerbaButton";
-
-import {
-  updateRAGConfig,
-  fetchDatacount,
-  fetchRAGConfig,
-  fetchSuggestions,
-  fetchLabels,
-  sendMemoRequest, // Import the new memo API call
-} from "@/app/api";
-import {
-  Credentials,
-  Suggestion,
-  DataCountPayload,
-  ChunkScore,
-  Message,
-  LabelsResponse,
-  RAGConfig,
-  Theme,
-  DocumentFilter,
-  MemoPayload, // Import MemoPayload type
-  MemoResponse, // Import MemoResponse type
-} from "@/app/types";
-
-import InfoComponent from "../Navigation/InfoComponent";
-import MEMOMessage from "./MEMOMessage"; // Assuming MEMOMessage exists
-
-interface MEMOInterfaceProps {
-  credentials: Credentials;
-  setSelectedDocument: (s: string | null) => void;
-  setSelectedChunkScore: (c: ChunkScore[]) => void;
-  currentPage: string;
-  selectedTheme: Theme;
-  addStatusMessage: (
-    message: string,
-    type: "INFO" | "WARNING" | "SUCCESS" | "ERROR"
-  ) => void;
-  production: "Local" | "Demo" | "Production";
-  RAGConfig: RAGConfig | null; // ADDED
-  setRAGConfig: React.Dispatch<React.SetStateAction<RAGConfig | null>>; // ADDED
-  documentFilter: DocumentFilter[];
-  setDocumentFilter: React.Dispatch<React.SetStateAction<DocumentFilter[]>>;
-  selectedDocument: string | null;
-}
-
-const MEMOInterface: React.FC<MEMOInterfaceProps> = ({
-  credentials,
-  setSelectedDocument,
-  setSelectedChunkScore,
-  currentPage,
-  selectedTheme,
-  addStatusMessage,
-  production,
-  RAGConfig, // ADDED
-  setRAGConfig, // ADDED
-  documentFilter,
-  setDocumentFilter,
-  selectedDocument,
-}) => {
-  const [userInput, setUserInput] = useState("");
-  const [memoTemplate, setMemoTemplate] = useState("");
-  const [memoResult, setMemoResult] = useState<string | null>(null);
-  const [currentSuggestions, setCurrentSuggestions] = useState<Suggestion[]>(
-    []
-  );
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      type: "system",
-      content: selectedTheme.intro_message.text,
-    },
-  ]);
-  const [isSending, setIsSending] = useState(false);
-  const [documentCount, setDocumentCount] = useState<number | null>(null);
-  const [connected, setConnected] = useState<boolean>(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [labels, setLabels] = useState<LabelsResponse | null>(null);
-  const [documentCountFetching, setDocumentCountFetching] = useState(false);
-  const [selectedDocumentScore, setSelectedDocumentScore] = useState<
-    string | null
-  >(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const fetchDatacounts = async () => {
-    setDocumentCountFetching(true);
-    try {
-      const payload: DataCountPayload = {
-        embedding_model: RAGConfig?.embedder.selected_component || "",
-        documentFilter: documentFilter,
-        credentials: credentials,
-      };
-      const response = await fetchDatacount(payload);
-      if (response) {
-        setDocumentCount(response.total_count);
-      } else {
-        setDocumentCount(null);
-      }
-    } catch (error) {
-      console.error("Error fetching datacount:", error);
-      setDocumentCount(null);
-    } finally {
-      setDocumentCountFetching(false);
-    }
-  };
-
-  const fetchLabelsList = async () => {
-    try {
-      const response = await fetchLabels(credentials);
-      if (response) {
-        setLabels(response);
-      }
-    } catch (error) {
-      console.error("Error fetching labels:", error);
-    }
-  };
-
-  const handleFetchRAGConfig = useCallback(async () => {
-    try {
-      const config = await fetchRAGConfig(credentials);
-      if (config) {
-        setRAGConfig(config);
-        addStatusMessage("RAG Config fetched!", "SUCCESS");
-      } else {
-        addStatusMessage("Failed to fetch RAG Config!", "ERROR");
-      }
-    } catch (error) {
-      addStatusMessage("Failed to fetch RAG Config!", "ERROR");
-      console.error("Error fetching RAG config:", error);
-    }
-  }, [credentials, addStatusMessage, setRAGConfig]);
-
-  useEffect(() => {
-    const initializeChat = async () => {
-      await handleFetchRAGConfig();
-    };
-
-    initializeChat();
-  }, [handleFetchRAGConfig]);
-
-  const checkConnection = useCallback(async () => {
-    if (RAGConfig) {
-      setConnected(true);
-      fetchDatacounts();
-      fetchLabelsList();
-      fetchSuggestions(credentials, addStatusMessage, setCurrentSuggestions);
-    } else {
-      setConnected(false);
-    }
-  }, [RAGConfig, credentials, addStatusMessage, documentFilter]);
-
-  useEffect(() => {
-    checkConnection();
-  }, [checkConnection]);
-
-  const reconnectToVerba = async () => {
-    addStatusMessage("Reconnecting to Verba...", "INFO");
-    await checkConnection();
-  };
-
-  const sendMemo = async () => {
-    if (!memoTemplate) {
-      addStatusMessage("Memo template cannot be empty.", "WARNING");
-      return;
-    }
-
-    setIsSending(true);
-    setMemoResult(null); // Clear previous result
-
-    try {
-      const payload: MemoPayload = {
-        memo_template: memoTemplate,
-        document_uuid: selectedDocument || undefined,
-        text_content: userInput || undefined,
-        credentials: credentials,
-        rag_config: RAGConfig || undefined,
-      };
-
-      const response = await sendMemoRequest(payload);
-      if (response) {
-        setMemoResult(response.memo_text);
-        addStatusMessage("Memo generated successfully!", "SUCCESS");
-      } else {
-        setMemoResult("Error: Could not generate memo.");
-        addStatusMessage("Failed to generate memo.", "ERROR");
-      }
-    } catch (error) {
-      console.error("Error sending memo request:", error);
-      setMemoResult(`Error: ${error instanceof Error ? error.message : String(error)}`);
-      addStatusMessage("Failed to generate memo.", "ERROR");
-    } finally {
-      setIsSending(false);
-    }
-  };
-
-  return (
-    <div className="relative flex flex-col h-full w-full justify-between rounded-2xl bg-gradient-to-br from-bg-alt-verba to-bg-verba p-3">
-      <div className="flex-grow overflow-hidden flex flex-col items-center">
-        <h2 className="text-xl font-bold text-text-verba mb-4">Memo Generator</h2>
-
-        <textarea
-          className="textarea textarea-bordered w-full p-3 rounded-lg border border-border-verba bg-background-verba text-text-verba placeholder-text-alt-verba focus:outline-none focus:ring-2 focus:ring-primary-verba resize-y min-h-[100px]"
-          placeholder="Enter your memo template here..."
-          value={memoTemplate}
-          onChange={(e) => setMemoTemplate(e.target.value)}
-        ></textarea>
-
-        <div className="flex flex-col gap-2 w-full mt-4">
-          <label className="text-text-verba font-semibold">Additional Text Content (Optional):</label>
-          <textarea
-            className="textarea textarea-bordered w-full p-3 rounded-lg border border-border-verba bg-background-verba text-text-verba placeholder-text-alt-verba focus:outline-none focus:ring-2 focus:ring-primary-verba resize-y min-h-[80px]"
-            placeholder="Enter additional text content to include in the memo generation..."
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-          ></textarea>
-        </div>
-
-        {selectedDocument && (
-          <div className="flex flex-col gap-2 w-full mt-4 p-3 border rounded-lg border-border-verba bg-bg-verba">
-            <h4 className="text-text-verba font-semibold">Selected Document:</h4>
-            <p className="text-text-alt-verba text-sm">UUID: {selectedDocument}</p>
-            <p className="text-text-alt-verba text-sm">This document's content will be used for memo generation.</p>
-          </div>
-        )}
-
-        <div className="flex gap-2 items-center justify-end w-full mt-4">
-          <VerbaButton
-            type="button"
-            Icon={IoIosSend}
-            onClick={sendMemo}
-            disabled={isSending || (!memoTemplate)}
-            selected_color="bg-primary-verba"
-            title={isSending ? "Generating..." : "Generate Memo"}
-          />
-        </div>
-
-        {memoResult && (
-          <div className="flex flex-col gap-2 w-full mt-4">
-            <h3 className="text-lg font-bold text-text-verba">Generated Memo:</h3>
-            <div className="p-4 rounded-lg bg-bg-verba text-text-verba whitespace-pre-wrap">
-              {memoResult}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-col p-4 w-full">
-        {connected ? (
-          <div className="flex gap-2 items-center justify-end w-full">
-            <div className="flex gap-2">
-              {/* This section can be repurposed if needed, or removed if no user input chat is desired */}
-            </div>
-          </div>
-        ) : (
-          <div className="flex gap-2 items-center justify-end w-full">
-            <button
-              onClick={reconnectToVerba}
-              className="flex btn border-none text-text-verba bg-button-verba hover:bg-button-hover-verba gap-2 items-center"
-            >
-              <TbPlugConnected size={15} />
-              <p>Reconnecting...</p>
-              <span className="loading loading-spinner loading-xs"></span>
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default MEMOInterface;
+verba-1  | ⚠ Connecting new Client
+verba-1  | ℹ Connecting to Weaviate Docker
+verba-1  | ✔ Succesfully Connected to Weaviate
+verba-1  | ℹ Collection: VERBA_CONFIGURATION does not exist, creating new
+verba-1  | collection.
+verba-1  | ℹ Connection time: 0.46 seconds
+verba-1  | ℹ Using New RAG Configuration
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/connect HTTP/1.1" 200 OK
+verba-1  | INFO:     10.253.218.90:63818 - "GET /static/weaviate.png HTTP/1.1" 200 OK
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+verba-1  |   warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+verba-1  | INFO:     ('10.253.218.90', 63832) - "WebSocket /ws/generate_stream" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/exceptions.py:125: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
+verba-1  |   warnings.warn(  # deprecated in 13.1 - 2024-09-21
+verba-1  | INFO:     connection closed
+verba-1  | INFO:     ('10.253.218.90', 63834) - "WebSocket /ws/generate_stream" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | INFO:     ('10.253.218.90', 63836) - "WebSocket /ws/import_files" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | ⚠ WebSocket connection closed by client.
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ Collection: VERBA_Embedding_nomic_embed_text does not exist, creating
+verba-1  | new collection.
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:36308 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_meta HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ Collection: VERBA_DOCUMENTS does not exist, creating new
+verba-1  | collection.
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:43378 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ✔ Succesfully retrieved document: 0 documents
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_all_documents HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ✔ Succesfully retrieved document: 0 documents
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_all_documents HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:43380 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:55384 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:55390 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:43460 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:43472 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:37682 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:37686 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:36462 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ✔ Collected all Batches of проект_постановления_10.06.2025.docx
+verba-1  | ℹ Removing проект_постановления_10.06.2025.docx from BatchManager
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ FileStatus.STARTING | проект_постановления_10.06.2025.docx | Starting
+verba-1  | Import | 0
+verba-1  | ℹ Loading проект_постановления_10.06.2025.docx (docx)
+verba-1  | ℹ FileStatus.LOADING | проект_постановления_10.06.2025.docx | Loaded
+verba-1  | проект_постановления_10.06.2025.docx | 0.62
+verba-1  | ℹ FileStatus.CHUNKING | проект_постановления_10.06.2025.docx |  | 0
+verba-1  | ℹ FileStatus.CHUNKING | проект_постановления_10.06.2025.docx | Split
+verba-1  | проект_постановления_10.06.2025.docx into 17 chunks | 0.0
+verba-1  | ℹ FileStatus.EMBEDDING | проект_постановления_10.06.2025.docx |  |
+verba-1  | 0
+verba-1  | ℹ Vectorizing 17 chunks in 1 batches
+verba-1  | INFO:     127.0.0.1:36472 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:45740 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:45752 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ FileStatus.EMBEDDING | проект_постановления_10.06.2025.docx |
+verba-1  | Vectorized all chunks | 16.99
+verba-1  | ℹ FileStatus.INGESTING | проект_постановления_10.06.2025.docx |  |
+verba-1  | 0
+verba-1  | ℹ FileStatus.INGESTING | проект_постановления_10.06.2025.docx |
+verba-1  | Imported проект_постановления_10.06.2025.docx into Weaviate | 17.05
+verba-1  | ℹ FileStatus.DONE | проект_постановления_10.06.2025.docx | Import for
+verba-1  | проект_постановления_10.06.2025.docx completed successfully | 17.05
+verba-1  | ℹ FileStatus.INGESTING | проект_постановления_10.06.2025.docx |
+verba-1  | Imported проект_постановления_10.06.2025.docx and 17 chunks into Weaviate |
+verba-1  | 17.68
+verba-1  | ℹ FileStatus.DONE | проект_постановления_10.06.2025.docx | Import for
+verba-1  | проект_постановления_10.06.2025.docx completed successfully | 17.68
+verba-1  | INFO:     127.0.0.1:47396 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63898 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:63898 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 08:33:02.374534
+verba-1  | INFO:     10.253.218.90:63898 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
