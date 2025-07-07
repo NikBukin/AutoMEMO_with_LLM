@@ -1,205 +1,359 @@
-Понимаю, что список документов по-прежнему пуст, и вы хотите, чтобы я сосредоточился на файлах, которые вы предоставили, не затрагивая /components/Documents.
+(F12) MEMOView: Credentials not ready for fetching documents.
 
-Проблема пустого списка документов, скорее всего, связана с тем, что данные не доходят до компонента DocumentExplorer (который находится в /components/Documents) либо из-за проблем на бэкенде, либо из-за того, как фронтенд получает и передает эти данные.
+developer@ac-srv-141:~/Verba$ docker compose logs weaviate
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+weaviate-1  | {"action":"startup","default_vectorizer_module":"none","level":"info","msg":"the default vectorizer modules is set to \"none\", as a result all new schema classes without an explicit vectorizer setting, will use this vectorizer","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"action":"startup","auto_schema_enabled":true,"level":"info","msg":"auto schema enabled setting is set to \"true\"","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"level":"info","msg":"No resource limits set, weaviate will use all available memory and CPU. To limit resources, set LIMIT_RESOURCES=true","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"level":"info","msg":"open cluster service","servers":{"node1":8300},"time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"address":"172.18.0.3:8301","level":"info","msg":"starting cloud rpc server ...","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"level":"info","msg":"starting raft sub-system ...","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"address":"172.18.0.3:8300","level":"info","msg":"tcp transport","tcpMaxPool":3,"tcpTimeout":10000000000,"time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"level":"info","msg":"loading local db","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"level":"info","msg":"local DB successfully loaded","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"level":"info","msg":"schema manager loaded","n":0,"time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"level":"info","metadata_only_voters":false,"msg":"construct a new raft node","name":"node1","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"action":"raft","index":0,"level":"info","msg":"raft initial configuration","servers":"[[]]","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"last_snapshot_index":0,"last_store_applied_index":0,"last_store_log_applied_index":0,"level":"info","msg":"raft node constructed","raft_applied_index":0,"raft_last_index":0,"time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"action":"raft","follower":{},"leader-address":"","leader-id":"","level":"info","msg":"raft entering follower state","time":"2025-07-07T07:47:38Z"}
+weaviate-1  | {"level":"warning","msg":"raft no known peers, aborting election","time":"2025-07-07T07:47:39Z"}
+weaviate-1  | {"action":"bootstrap","error":"could not join a cluster from [172.18.0.3:8300]","level":"warning","msg":"failed to join cluster, will notify next if voter","servers":["172.18.0.3:8300"],"time":"2025-07-07T07:47:40Z","voter":true}
+weaviate-1  | {"action":"bootstrap","candidates":[{"Suffrage":0,"ID":"node1","Address":"172.18.0.3:8300"}],"level":"info","msg":"starting cluster bootstrapping","time":"2025-07-07T07:47:40Z"}
+weaviate-1  | {"action":"bootstrap","level":"info","msg":"notified peers this node is ready to join as voter","servers":["172.18.0.3:8300"],"time":"2025-07-07T07:47:40Z"}
+weaviate-1  | {"docker_image_tag":"1.25.10","level":"info","msg":"configured versions","server_version":"1.25.10","time":"2025-07-07T07:47:40Z"}
+weaviate-1  | {"action":"grpc_startup","level":"info","msg":"grpc server listening at [::]:50051","time":"2025-07-07T07:47:40Z"}
+weaviate-1  | {"action":"restapi_management","docker_image_tag":"1.25.10","level":"info","msg":"Serving weaviate at http://[::]:8080","time":"2025-07-07T07:47:40Z"}
+weaviate-1  | {"action":"telemetry_push","level":"info","msg":"telemetry started","payload":"\u0026{MachineID:890a9080-13ab-4f96-9de3-0fd4dc775c57 Type:INIT Version:1.25.10 NumObjects:0 OS:linux Arch:amd64 UsedModules:[]}","time":"2025-07-07T07:47:40Z"}
+weaviate-1  | {"action":"raft","last-leader-addr":"","last-leader-id":"","level":"warning","msg":"raft heartbeat timeout reached, starting election","time":"2025-07-07T07:47:41Z"}
+weaviate-1  | {"action":"raft","level":"info","msg":"raft entering candidate state","node":{},"term":2,"time":"2025-07-07T07:47:41Z"}
+weaviate-1  | {"action":"raft","level":"info","msg":"raft election won","tally":1,"term":2,"time":"2025-07-07T07:47:41Z"}
+weaviate-1  | {"action":"raft","leader":{},"level":"info","msg":"raft entering leader state","time":"2025-07-07T07:47:41Z"}
+weaviate-1  | {"address":"172.18.0.3:8300","level":"info","msg":"current Leader","time":"2025-07-07T07:47:41Z"}
+weaviate-1  | {"level":"info","msg":"starting migration from old schema","time":"2025-07-07T07:47:41Z"}
+weaviate-1  | {"level":"info","msg":"legacy schema is empty, nothing to migrate","time":"2025-07-07T07:47:41Z"}
+weaviate-1  | {"level":"info","msg":"migration from the old schema has been successfully completed","time":"2025-07-07T07:47:41Z"}
+weaviate-1  | {"action":"bootstrap","level":"info","msg":"node reporting ready, node has probably recovered cluster from raft config. Exiting bootstrap process","time":"2025-07-07T07:47:41Z"}
+weaviate-1  | {"level":"warning","msg":"prop len tracker file /var/lib/weaviate/verba_configuration/k2bVuJQuUgyb/proplengths does not exist, creating new tracker","time":"2025-07-07T07:48:46Z"}
+weaviate-1  | {"action":"hnsw_prefill_cache_async","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-07-07T07:48:46Z","wait_for_cache_prefill":false}
+weaviate-1  | {"level":"info","msg":"Created shard verba_configuration_k2bVuJQuUgyb in 2.261376ms","time":"2025-07-07T07:48:46Z"}
+weaviate-1  | {"action":"hnsw_vector_cache_prefill","count":1000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-07-07T07:48:46Z","took":239636}
+weaviate-1  | {"level":"warning","msg":"prop len tracker file /var/lib/weaviate/verba_embedding_nomic_embed_text/KPy0fNJfTZfp/proplengths does not exist, creating new tracker","time":"2025-07-07T07:48:48Z"}
+weaviate-1  | {"action":"hnsw_prefill_cache_async","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-07-07T07:48:48Z","wait_for_cache_prefill":false}
+weaviate-1  | {"level":"info","msg":"Created shard verba_embedding_nomic_embed_text_KPy0fNJfTZfp in 1.915052ms","time":"2025-07-07T07:48:48Z"}
+weaviate-1  | {"action":"hnsw_vector_cache_prefill","count":1000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-07-07T07:48:48Z","took":226334}
+weaviate-1  | {"level":"warning","msg":"prop len tracker file /var/lib/weaviate/verba_documents/ZX8MhoE8gGTs/proplengths does not exist, creating new tracker","time":"2025-07-07T07:48:51Z"}
+weaviate-1  | {"action":"hnsw_prefill_cache_async","level":"info","msg":"not waiting for vector cache prefill, running in background","time":"2025-07-07T07:48:51Z","wait_for_cache_prefill":false}
+weaviate-1  | {"level":"info","msg":"Created shard verba_documents_ZX8MhoE8gGTs in 1.978537ms","time":"2025-07-07T07:48:51Z"}
+weaviate-1  | {"action":"hnsw_vector_cache_prefill","count":1000,"index_id":"main","level":"info","limit":1000000000000,"msg":"prefilled vector cache","time":"2025-07-07T07:48:51Z","took":240590}
 
-Так как мы не можем изменять файлы в /components/Documents, мы должны убедиться, что данные, которые передаются в эти компоненты, корректны. В вашем случае, MEMOView.tsx отвечает за получение списка документов и передачу его в DocumentExplorer через пропс documentFilter.
 
-Вот что необходимо проверить и, возможно, исправить, чтобы документы появились в списке:
 
-1. Проверка и отладка бэкенда (Python)
-Наиболее вероятная причина пустого списка — это то, что ваш бэкенд не возвращает документы из Weaviate.
-
-1.1. Проверьте goldenverba/verba_manager.py (файл managers.py)
-
-Убедитесь, что метод retrieve_all_documents_metadata в вашем классе WeaviateManager (или аналогичном, который взаимодействует с Weaviate) правильно запрашивает документы.
-
-Коллекция Weaviate: Убедитесь, что имя коллекции ("Document") точно соответствует имени коллекции, где хранятся ваши документы в Weaviate. Если вы назвали ее по-другому, измените.
-
-Имена свойств: Убедитесь, что return_properties=["title"] соответствует точному имени свойства, в котором хранится заголовок документа в вашей схеме Weaviate.
-
-Логирование: Добавьте логирование, чтобы увидеть, что метод возвращает.
-
-Python
-
-# goldenverba/verba_manager.py (или ваш файл managers.py)
-
-# ... (импорты)
-from weaviate.client import WeaviateAsyncClient
-from wasabi import Printer # Убедитесь, что Printer импортирован, если используете msg
-msg = Printer() # Инициализация Printer, если еще не сделано
-
-class WeaviateManager:
-    # ... (существующие методы)
-
-    async def retrieve_all_documents_metadata(self, client: WeaviateAsyncClient) -> list[dict]:
-        """
-        Retrieves UUID and title for all documents from the 'Document' class in Weaviate.
-        """
-        try:
-            document_collection = client.collections.get("Document") # Убедитесь, что имя коллекции верное
-
-            response = await document_collection.query.fetch_objects(
-                limit=10000,  # Увеличьте лимит, если у вас много документов
-                return_properties=["title"] # Убедитесь, что 'title' - это правильное имя свойства
-            )
-
-            results = []
-            for obj in response.objects:
-                if obj.uuid and "title" in obj.properties:
-                    results.append({"uuid": str(obj.uuid), "title": obj.properties["title"]})
-
-            msg.good(f"WeaviateManager: retrieve_all_documents_metadata found {len(results)} documents.") # Добавьте этот лог
-            return results
-        except Exception as e:
-            msg.fail(f"WeaviateManager: Failed to retrieve all document metadata: {e}") # Добавьте этот лог
-            return []
-1.2. Проверьте api.py
-
-Убедитесь, что эндпоинт /api/get_all_documents_metadata правильно вызывает менеджер и возвращает данные.
-
-Логирование: Добавьте логирование, чтобы увидеть, что эндпоинт получает от менеджера и что отправляет на фронтенд.
-
-Python
-
-# api.py
-
-# ... (импорты)
-from wasabi import Printer # Убедитесь, что Printer импортирован
-msg = Printer() # Инициализация Printer
-
-# ... (существующий код)
-
-@app.post("/api/get_all_documents_metadata")
-async def get_all_documents_metadata(payload: GetAllDocumentsMetadataPayload):
-    try:
-        client = await client_manager.connect(payload.credentials)
-        documents_metadata = await manager.weaviate_manager.retrieve_all_documents_metadata(client)
-        msg.good(f"API: /get_all_documents_metadata returning {len(documents_metadata)} documents.") # Добавьте этот лог
-        return JSONResponse(
-            content={
-                "documents": documents_metadata,
-            }
-        )
-    except Exception as e:
-        msg.fail(f"API: Error in /get_all_documents_metadata: {e}") # Добавьте этот лог
-        return JSONResponse(
-            content={
-                "documents": [],
-            },
-            status_code=500
-        )
-2. Проверка и отладка фронтенда (TypeScript/React)
-2.1. Проверьте frontend/app/api.ts
-
-Убедитесь, что функция fetchAllDocumentsMetadata успешно получает ответ от бэкенда.
-
-Логирование: Добавьте console.log для проверки ответа.
-
-TypeScript
-
-// frontend/app/api.ts
-
-// ... (импорты)
-
-export const fetchAllDocumentsMetadata = async (
-  credentials: Credentials
-): Promise<DocumentsPreviewPayload | null> => {
-  try {
-    const host = await detectHost();
-    const response = await fetch(`${host}/api/get_all_documents_metadata`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ credentials }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(
-        `Error ${response.status}: ${response.statusText} - Failed to fetch all documents metadata. Details: ${errorText}`
-      );
-      return null;
-    }
-
-    const data: DocumentsPreviewPayload = await response.json();
-    console.log("API.ts: Received documents metadata:", data); // Добавьте этот лог
-    return data;
-  } catch (error) {
-    console.error("API.ts: Error fetching all documents metadata:", error); // Добавьте этот лог
-    return null;
-  }
-};
-2.2. Проверьте frontend/app/components/MEMO/MEMOView.tsx
-
-Убедитесь, что MEMOView получает данные и правильно обновляет состояние documentFilter.
-
-Логирование: Добавьте console.log в useEffect для проверки полученных данных.
-
-TypeScript
-
-// frontend/app/components/MEMO/MEMOView.tsx
-
-// ... (импорты и определения)
-
-const MEMOView: React.FC<MEMOViewProps> = ({
-  // ... (пропсы)
-}) => {
-  // ... (состояния)
-
-  useEffect(() => {
-    const loadDocuments = async () => {
-      if (credentials && credentials.url && credentials.key) {
-        console.log("MEMOView: Attempting to fetch documents..."); // Добавьте этот лог
-        const result = await fetchAllDocumentsMetadata(credentials);
-        if (result && result.documents) {
-          console.log("MEMOView: Fetched documents:", result.documents); // Добавьте этот лог
-          setDocumentFilter(result.documents);
-          addStatusMessage("Документы успешно загружены.", "SUCCESS");
-        } else {
-          console.log("MEMOView: No documents or error in fetch result.", result); // Добавьте этот лог
-          addStatusMessage("Не удалось загрузить документы.", "ERROR");
-          setDocumentFilter([]); // Убедитесь, что список пуст, если нет документов
-        }
-      } else {
-        console.log("MEMOView: Credentials not ready for fetching documents."); // Добавьте этот лог
-      }
-    };
-
-    loadDocuments();
-  }, [credentials, setDocumentFilter, addStatusMessage]);
-
-  // ... (остальной код рендеринга)
-};
-3. Выполнение отладки и анализ логов
-Перезапустите Docker-контейнеры: После всех изменений в Python-файлах выполните docker compose down и docker compose up --build, чтобы убедиться, что все изменения применены.
-
-Откройте приложение в браузере.
-
-Откройте консоль разработчика в браузере (F12) и перейдите на вкладку "Console".
-
-Проверьте логи бэкенда: В терминале, где запущен Docker Compose, следите за выводом docker compose logs verba (или аналогичной командой).
-
-Что искать в логах:
-
-Логи бэкенда (verba-1):
-
-WeaviateManager: retrieve_all_documents_metadata found X documents. (Какое значение X? Если 0, то проблема в запросе к Weaviate или Weaviate пуст.)
-
-WeaviateManager: Failed to retrieve all document metadata: ... (Если есть эта ошибка, то в чем ее причина?)
-
-API: /get_all_documents_metadata returning X documents. (Какое значение X? Должно быть таким же, как и в менеджере.)
-
-API: Error in /get_all_documents_metadata: ... (Если есть эта ошибка, то в чем ее причина?)
-
-Логи браузера (консоль F12):
-
-MEMOView: Attempting to fetch documents... (Вызывается ли вообще функция?)
-
-API.ts: Received documents metadata: ... (Что здесь? Пустой массив documents: [] или есть объекты?)
-
-MEMOView: Fetched documents: ... (Что здесь? Пустой массив или есть объекты?)
-
-MEMOView: No documents or error in fetch result. (Если это сообщение, то почему? Смотрите предыдущие логи.)
-
-На основе этих логов мы сможем точно определить, на каком этапе теряются документы. Сообщите мне, что показывают логи на каждом из этих этапов.
+developer@ac-srv-141:~/Verba$ docker compose logs verba
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+verba-1  | INFO:     Will watch for changes in these directories: ['/Verba']
+verba-1  | WARNING:  "workers" flag is ignored when reloading is enabled.
+verba-1  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+verba-1  | INFO:     Started reloader process [1] using WatchFiles
+verba-1  | ℹ No Ollama Model detected
+verba-1  | ℹ No Ollama Model detected
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
+verba-1  |   warnings.warn(  # deprecated in 14.0 - 2024-11-09
+verba-1  | /usr/local/lib/python3.11/site-packages/uvicorn/protocols/websockets/websockets_impl.py:14: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+verba-1  |   from websockets.server import WebSocketServerProtocol
+verba-1  | INFO:     Started server process [38]
+verba-1  | INFO:     Waiting for application startup.
+verba-1  | INFO:     Application startup complete.
+verba-1  | ℹ No Ollama Model detected
+verba-1  | ℹ No Ollama Model detected
+verba-1  | INFO:     127.0.0.1:36352 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 0 clients connected
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 0 clients connected
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 0 clients connected
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | /usr/local/lib/python3.11/site-packages/weaviate/warnings.py:133: DeprecationWarning: Dep005: You are using weaviate-client version 4.9.6. The latest version is 4.15.4.
+verba-1  |             Consider upgrading to the latest version. See https://weaviate.io/developers/weaviate/client-libraries/python for details.
+verba-1  |   warnings.warn(
+verba-1  | /usr/local/lib/python3.11/site-packages/weaviate/collections/classes/config.py:1914: PydanticDeprecatedSince211: Accessing the 'model_fields' attribute on the instance is deprecated. Instead, you should access this attribute from the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.
+verba-1  |   for cls_field in self.model_fields:
+verba-1  | ⚠ Connecting new Client
+verba-1  | ℹ Connecting to Weaviate Docker
+verba-1  | ✔ Succesfully Connected to Weaviate
+verba-1  | ℹ Collection: VERBA_CONFIGURATION does not exist, creating new
+verba-1  | collection.
+verba-1  | ℹ Connection time: 0.50 seconds
+verba-1  | ℹ Using New RAG Configuration
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/connect HTTP/1.1" 200 OK
+verba-1  | INFO:     10.253.218.90:62396 - "GET /static/weaviate.png HTTP/1.1" 200 OK
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+verba-1  |   warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+verba-1  | INFO:     ('10.253.218.90', 62408) - "WebSocket /ws/generate_stream" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/exceptions.py:125: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
+verba-1  |   warnings.warn(  # deprecated in 13.1 - 2024-09-21
+verba-1  | INFO:     connection closed
+verba-1  | INFO:     ('10.253.218.90', 62410) - "WebSocket /ws/generate_stream" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | INFO:     ('10.253.218.90', 62412) - "WebSocket /ws/import_files" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | ⚠ WebSocket connection closed by client.
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ Collection: VERBA_Embedding_nomic_embed_text does not exist, creating
+verba-1  | new collection.
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:34532 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_meta HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ Collection: VERBA_DOCUMENTS does not exist, creating new
+verba-1  | collection.
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:34538 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:37098 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62434 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62434 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62434 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62434 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:37108 - "HEAD / HTTP/1.1" 200 OK
+developer@ac-srv-141:~/Verba$ docker compose logs verba
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "OPENAI_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "COHERE_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_KEY" variable is not set. Defaulting to a blank string.
+WARN[0000] The "UNSTRUCTURED_API_URL" variable is not set. Defaulting to a blank string.
+WARN[0000] The "GITHUB_TOKEN" variable is not set. Defaulting to a blank string.
+verba-1  | INFO:     Will watch for changes in these directories: ['/Verba']
+verba-1  | WARNING:  "workers" flag is ignored when reloading is enabled.
+verba-1  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+verba-1  | INFO:     Started reloader process [1] using WatchFiles
+verba-1  | ℹ No Ollama Model detected
+verba-1  | ℹ No Ollama Model detected
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
+verba-1  |   warnings.warn(  # deprecated in 14.0 - 2024-11-09
+verba-1  | /usr/local/lib/python3.11/site-packages/uvicorn/protocols/websockets/websockets_impl.py:14: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated
+verba-1  |   from websockets.server import WebSocketServerProtocol
+verba-1  | INFO:     Started server process [38]
+verba-1  | INFO:     Waiting for application startup.
+verba-1  | INFO:     Application startup complete.
+verba-1  | ℹ No Ollama Model detected
+verba-1  | ℹ No Ollama Model detected
+verba-1  | INFO:     127.0.0.1:36352 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 0 clients connected
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 0 clients connected
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 0 clients connected
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | /usr/local/lib/python3.11/site-packages/weaviate/warnings.py:133: DeprecationWarning: Dep005: You are using weaviate-client version 4.9.6. The latest version is 4.15.4.
+verba-1  |             Consider upgrading to the latest version. See https://weaviate.io/developers/weaviate/client-libraries/python for details.
+verba-1  |   warnings.warn(
+verba-1  | /usr/local/lib/python3.11/site-packages/weaviate/collections/classes/config.py:1914: PydanticDeprecatedSince211: Accessing the 'model_fields' attribute on the instance is deprecated. Instead, you should access this attribute from the model class. Deprecated in Pydantic V2.11 to be removed in V3.0.
+verba-1  |   for cls_field in self.model_fields:
+verba-1  | ⚠ Connecting new Client
+verba-1  | ℹ Connecting to Weaviate Docker
+verba-1  | ✔ Succesfully Connected to Weaviate
+verba-1  | ℹ Collection: VERBA_CONFIGURATION does not exist, creating new
+verba-1  | collection.
+verba-1  | ℹ Connection time: 0.50 seconds
+verba-1  | ℹ Using New RAG Configuration
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/connect HTTP/1.1" 200 OK
+verba-1  | INFO:     10.253.218.90:62396 - "GET /static/weaviate.png HTTP/1.1" 200 OK
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
+verba-1  |   warnings.warn("remove second argument of ws_handler", DeprecationWarning)
+verba-1  | INFO:     ('10.253.218.90', 62408) - "WebSocket /ws/generate_stream" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | /usr/local/lib/python3.11/site-packages/websockets/exceptions.py:125: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
+verba-1  |   warnings.warn(  # deprecated in 13.1 - 2024-09-21
+verba-1  | INFO:     connection closed
+verba-1  | INFO:     ('10.253.218.90', 62410) - "WebSocket /ws/generate_stream" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | INFO:     ('10.253.218.90', 62412) - "WebSocket /ws/import_files" [accepted]
+verba-1  | INFO:     connection open
+verba-1  | ⚠ WebSocket connection closed by client.
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ Collection: VERBA_Embedding_nomic_embed_text does not exist, creating
+verba-1  | new collection.
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:34532 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_meta HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | ℹ Collection: VERBA_DOCUMENTS does not exist, creating new
+verba-1  | collection.
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62396 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62396 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:34538 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | INFO:     127.0.0.1:37098 - "HEAD / HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62434 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62434 - "POST /api/get_datacount HTTP/1.1" 200 OK
+verba-1  | ℹ Cleaning Clients Cache
+verba-1  | ℹ Cleaned up 0 clients
+verba-1  | ℹ 1 clients connected
+verba-1  | ℹ Client
+verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
+verba-1  | 2025-07-07 07:48:46.444948
+verba-1  | INFO:     10.253.218.90:62434 - "GET /api/health HTTP/1.1" 200 OK
+verba-1  | ℹ Found existing Client
+verba-1  | INFO:     10.253.218.90:62434 - "POST /api/get_labels HTTP/1.1" 200 OK
+verba-1  | INFO:     10.253.218.90:62440 - "GET /static/_next/static/css/f6049fbab82250da.css HTTP/1.1" 304 Not Modified
+verba-1  | INFO:     10.253.218.90:62441 - "GET /static/_next/static/css/fd8d77da4d075ee8.css HTTP/1.1" 304 Not Modified
