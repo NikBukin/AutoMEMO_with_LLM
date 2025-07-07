@@ -1,11 +1,205 @@
-verba-1  | Traceback (most recent call last):
-verba-1  |   File "/usr/local/bin/verba", line 5, in <module>
-verba-1  |     from goldenverba.server.cli import cli
-verba-1  |   File "/usr/local/lib/python3.11/site-packages/goldenverba/server/cli.py", line 6, in <module>
-verba-1  |     from goldenverba import verba_manager
-verba-1  |   File "/usr/local/lib/python3.11/site-packages/goldenverba/verba_manager.py", line 25, in <module>
-verba-1  |     from goldenverba.components.managers import (
-verba-1  |   File "/usr/local/lib/python3.11/site-packages/goldenverba/components/managers.py", line 6, in <module>
-verba-1  |     from weaviate.classes.query import Filter, Sort, MetadataQuery, QueryOptions
-verba-1  | ImportError: cannot import name 'QueryOptions' from 'weaviate.classes.query' (/usr/local/lib/python3.11/site-packages/weaviate/classes/query.py)
+Понимаю, что список документов по-прежнему пуст, и вы хотите, чтобы я сосредоточился на файлах, которые вы предоставили, не затрагивая /components/Documents.
 
+Проблема пустого списка документов, скорее всего, связана с тем, что данные не доходят до компонента DocumentExplorer (который находится в /components/Documents) либо из-за проблем на бэкенде, либо из-за того, как фронтенд получает и передает эти данные.
+
+Так как мы не можем изменять файлы в /components/Documents, мы должны убедиться, что данные, которые передаются в эти компоненты, корректны. В вашем случае, MEMOView.tsx отвечает за получение списка документов и передачу его в DocumentExplorer через пропс documentFilter.
+
+Вот что необходимо проверить и, возможно, исправить, чтобы документы появились в списке:
+
+1. Проверка и отладка бэкенда (Python)
+Наиболее вероятная причина пустого списка — это то, что ваш бэкенд не возвращает документы из Weaviate.
+
+1.1. Проверьте goldenverba/verba_manager.py (файл managers.py)
+
+Убедитесь, что метод retrieve_all_documents_metadata в вашем классе WeaviateManager (или аналогичном, который взаимодействует с Weaviate) правильно запрашивает документы.
+
+Коллекция Weaviate: Убедитесь, что имя коллекции ("Document") точно соответствует имени коллекции, где хранятся ваши документы в Weaviate. Если вы назвали ее по-другому, измените.
+
+Имена свойств: Убедитесь, что return_properties=["title"] соответствует точному имени свойства, в котором хранится заголовок документа в вашей схеме Weaviate.
+
+Логирование: Добавьте логирование, чтобы увидеть, что метод возвращает.
+
+Python
+
+# goldenverba/verba_manager.py (или ваш файл managers.py)
+
+# ... (импорты)
+from weaviate.client import WeaviateAsyncClient
+from wasabi import Printer # Убедитесь, что Printer импортирован, если используете msg
+msg = Printer() # Инициализация Printer, если еще не сделано
+
+class WeaviateManager:
+    # ... (существующие методы)
+
+    async def retrieve_all_documents_metadata(self, client: WeaviateAsyncClient) -> list[dict]:
+        """
+        Retrieves UUID and title for all documents from the 'Document' class in Weaviate.
+        """
+        try:
+            document_collection = client.collections.get("Document") # Убедитесь, что имя коллекции верное
+
+            response = await document_collection.query.fetch_objects(
+                limit=10000,  # Увеличьте лимит, если у вас много документов
+                return_properties=["title"] # Убедитесь, что 'title' - это правильное имя свойства
+            )
+
+            results = []
+            for obj in response.objects:
+                if obj.uuid and "title" in obj.properties:
+                    results.append({"uuid": str(obj.uuid), "title": obj.properties["title"]})
+
+            msg.good(f"WeaviateManager: retrieve_all_documents_metadata found {len(results)} documents.") # Добавьте этот лог
+            return results
+        except Exception as e:
+            msg.fail(f"WeaviateManager: Failed to retrieve all document metadata: {e}") # Добавьте этот лог
+            return []
+1.2. Проверьте api.py
+
+Убедитесь, что эндпоинт /api/get_all_documents_metadata правильно вызывает менеджер и возвращает данные.
+
+Логирование: Добавьте логирование, чтобы увидеть, что эндпоинт получает от менеджера и что отправляет на фронтенд.
+
+Python
+
+# api.py
+
+# ... (импорты)
+from wasabi import Printer # Убедитесь, что Printer импортирован
+msg = Printer() # Инициализация Printer
+
+# ... (существующий код)
+
+@app.post("/api/get_all_documents_metadata")
+async def get_all_documents_metadata(payload: GetAllDocumentsMetadataPayload):
+    try:
+        client = await client_manager.connect(payload.credentials)
+        documents_metadata = await manager.weaviate_manager.retrieve_all_documents_metadata(client)
+        msg.good(f"API: /get_all_documents_metadata returning {len(documents_metadata)} documents.") # Добавьте этот лог
+        return JSONResponse(
+            content={
+                "documents": documents_metadata,
+            }
+        )
+    except Exception as e:
+        msg.fail(f"API: Error in /get_all_documents_metadata: {e}") # Добавьте этот лог
+        return JSONResponse(
+            content={
+                "documents": [],
+            },
+            status_code=500
+        )
+2. Проверка и отладка фронтенда (TypeScript/React)
+2.1. Проверьте frontend/app/api.ts
+
+Убедитесь, что функция fetchAllDocumentsMetadata успешно получает ответ от бэкенда.
+
+Логирование: Добавьте console.log для проверки ответа.
+
+TypeScript
+
+// frontend/app/api.ts
+
+// ... (импорты)
+
+export const fetchAllDocumentsMetadata = async (
+  credentials: Credentials
+): Promise<DocumentsPreviewPayload | null> => {
+  try {
+    const host = await detectHost();
+    const response = await fetch(`${host}/api/get_all_documents_metadata`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ credentials }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(
+        `Error ${response.status}: ${response.statusText} - Failed to fetch all documents metadata. Details: ${errorText}`
+      );
+      return null;
+    }
+
+    const data: DocumentsPreviewPayload = await response.json();
+    console.log("API.ts: Received documents metadata:", data); // Добавьте этот лог
+    return data;
+  } catch (error) {
+    console.error("API.ts: Error fetching all documents metadata:", error); // Добавьте этот лог
+    return null;
+  }
+};
+2.2. Проверьте frontend/app/components/MEMO/MEMOView.tsx
+
+Убедитесь, что MEMOView получает данные и правильно обновляет состояние documentFilter.
+
+Логирование: Добавьте console.log в useEffect для проверки полученных данных.
+
+TypeScript
+
+// frontend/app/components/MEMO/MEMOView.tsx
+
+// ... (импорты и определения)
+
+const MEMOView: React.FC<MEMOViewProps> = ({
+  // ... (пропсы)
+}) => {
+  // ... (состояния)
+
+  useEffect(() => {
+    const loadDocuments = async () => {
+      if (credentials && credentials.url && credentials.key) {
+        console.log("MEMOView: Attempting to fetch documents..."); // Добавьте этот лог
+        const result = await fetchAllDocumentsMetadata(credentials);
+        if (result && result.documents) {
+          console.log("MEMOView: Fetched documents:", result.documents); // Добавьте этот лог
+          setDocumentFilter(result.documents);
+          addStatusMessage("Документы успешно загружены.", "SUCCESS");
+        } else {
+          console.log("MEMOView: No documents or error in fetch result.", result); // Добавьте этот лог
+          addStatusMessage("Не удалось загрузить документы.", "ERROR");
+          setDocumentFilter([]); // Убедитесь, что список пуст, если нет документов
+        }
+      } else {
+        console.log("MEMOView: Credentials not ready for fetching documents."); // Добавьте этот лог
+      }
+    };
+
+    loadDocuments();
+  }, [credentials, setDocumentFilter, addStatusMessage]);
+
+  // ... (остальной код рендеринга)
+};
+3. Выполнение отладки и анализ логов
+Перезапустите Docker-контейнеры: После всех изменений в Python-файлах выполните docker compose down и docker compose up --build, чтобы убедиться, что все изменения применены.
+
+Откройте приложение в браузере.
+
+Откройте консоль разработчика в браузере (F12) и перейдите на вкладку "Console".
+
+Проверьте логи бэкенда: В терминале, где запущен Docker Compose, следите за выводом docker compose logs verba (или аналогичной командой).
+
+Что искать в логах:
+
+Логи бэкенда (verba-1):
+
+WeaviateManager: retrieve_all_documents_metadata found X documents. (Какое значение X? Если 0, то проблема в запросе к Weaviate или Weaviate пуст.)
+
+WeaviateManager: Failed to retrieve all document metadata: ... (Если есть эта ошибка, то в чем ее причина?)
+
+API: /get_all_documents_metadata returning X documents. (Какое значение X? Должно быть таким же, как и в менеджере.)
+
+API: Error in /get_all_documents_metadata: ... (Если есть эта ошибка, то в чем ее причина?)
+
+Логи браузера (консоль F12):
+
+MEMOView: Attempting to fetch documents... (Вызывается ли вообще функция?)
+
+API.ts: Received documents metadata: ... (Что здесь? Пустой массив documents: [] или есть объекты?)
+
+MEMOView: Fetched documents: ... (Что здесь? Пустой массив или есть объекты?)
+
+MEMOView: No documents or error in fetch result. (Если это сообщение, то почему? Смотрите предыдущие логи.)
+
+На основе этих логов мы сможем точно определить, на каком этапе теряются документы. Сообщите мне, что показывают логи на каждом из этих этапов.
