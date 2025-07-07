@@ -5,27 +5,11 @@ verba-1  | ℹ Collection: VERBA_CONFIGURATION does not exist, creating new
 verba-1  | collection.
 verba-1  | ℹ Connection time: 0.46 seconds
 verba-1  | ℹ Using New RAG Configuration
-verba-1  | INFO:     10.253.218.90:63818 - "POST /api/connect HTTP/1.1" 200 OK
-verba-1  | INFO:     10.253.218.90:63818 - "GET /static/weaviate.png HTTP/1.1" 200 OK
-verba-1  | /usr/local/lib/python3.11/site-packages/websockets/legacy/server.py:1178: DeprecationWarning: remove second argument of ws_handler
-verba-1  |   warnings.warn("remove second argument of ws_handler", DeprecationWarning)
-verba-1  | INFO:     ('10.253.218.90', 63832) - "WebSocket /ws/generate_stream" [accepted]
-verba-1  | INFO:     connection open
-verba-1  | /usr/local/lib/python3.11/site-packages/websockets/exceptions.py:125: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
-verba-1  |   warnings.warn(  # deprecated in 13.1 - 2024-09-21
-verba-1  | INFO:     connection closed
-verba-1  | INFO:     ('10.253.218.90', 63834) - "WebSocket /ws/generate_stream" [accepted]
-verba-1  | INFO:     connection open
-verba-1  | INFO:     ('10.253.218.90', 63836) - "WebSocket /ws/import_files" [accepted]
-verba-1  | INFO:     connection open
 verba-1  | ⚠ WebSocket connection closed by client.
 verba-1  | ℹ Cleaning Clients Cache
 verba-1  | ℹ Cleaned up 0 clients
 verba-1  | ℹ 1 clients connected
 verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-07 08:33:02.374534
-verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
 verba-1  | ℹ Found existing Client
 verba-1  | ℹ Collection: VERBA_Embedding_nomic_embed_text does not exist, creating
 verba-1  | new collection.
@@ -122,18 +106,7 @@ verba-1  | ℹ Cleaning Clients Cache
 verba-1  | ℹ Cleaned up 0 clients
 verba-1  | ℹ 1 clients connected
 verba-1  | ℹ Client
-verba-1  | 0f0167cf238eea2cbe5d7495fec4d3d745555fdd592d82744cccdb9f103aeb77 connected at
-verba-1  | 2025-07-07 08:33:02.374534
-verba-1  | INFO:     10.253.218.90:63818 - "GET /api/health HTTP/1.1" 200 OK
 verba-1  | ℹ Found existing Client
-verba-1  | INFO:     10.253.218.90:63818 - "POST /api/get_labels HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:55384 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:55390 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:43460 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:43472 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:37682 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:37686 - "HEAD / HTTP/1.1" 200 OK
-verba-1  | INFO:     127.0.0.1:36462 - "HEAD / HTTP/1.1" 200 OK
 verba-1  | ✔ Collected all Batches of проект_постановления_10.06.2025.docx
 verba-1  | ℹ Removing проект_постановления_10.06.2025.docx from BatchManager
 verba-1  | ℹ Found existing Client
