@@ -1,118 +1,14 @@
-Хорошо, я понял. Лог (F12) MEMOView: Credentials not ready for fetching documents. указывает на то, что компонент MEMOView пытается получить документы до того, как объект credentials будет полностью инициализирован с url и key.
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Linting and checking validity of types  ...Failed to compile.
 
-Хотя проверка if (credentials && credentials.url && credentials.key) уже существует, этот лог говорит о том, что credentials не соответствует этому условию. Чтобы понять, почему это происходит, нам нужно проверить текущее состояние объекта credentials в тот момент, когда срабатывает else ветка.
+./app/page.tsx:236:16
+Type error: Type '{ addStatusMessage: (message: string, type: "INFO" | "WARNING" | "SUCCESS" | "ERROR") => void; credentials: Credentials; production: "Local" | "Demo" | "Production"; selectedTheme: Theme; currentPage: string; documentFilter: DocumentFilter[]; setDocumentFilter: Dispatch<...>; }' is missing the following properties from type 'MEMOViewProps': RAGConfig, setRAGConfig
 
-Пожалуйста, внесите следующие изменения в файл frontend/app/components/MEMO/MEMOView.tsx, чтобы добавить подробное логирование. Это поможет нам увидеть, какое значение имеет credentials в момент возникновения проблемы.
-
-TypeScript
-
-// frontend/app/components/MEMO/MEMOView.tsx
-
-"use client";
-
-import React, { useState, useEffect } from "react";
-import {
-  Credentials,
-  Theme,
-  DocumentFilter,
-  ChunkScore,
-  RAGConfig, // Добавьте, если еще нет
-} from "@/app/types";
-import { fetchAllDocumentsMetadata } from "@/app/api";
-
-import MEMOInterface from "./MEMOInterface";
-import DocumentExplorer from "../Document/DocumentExplorer";
-
-interface MEMOViewProps {
-  selectedTheme: Theme;
-  credentials: Credentials;
-  addStatusMessage: (
-    message: string,
-    type: "INFO" | "WARNING" | "SUCCESS" | "ERROR"
-  ) => void;
-  production: "Local" | "Demo" | "Production";
-  currentPage: string;
-  documentFilter: DocumentFilter[];
-  setDocumentFilter: React.Dispatch<React.SetStateAction<DocumentFilter[]>>;
-  RAGConfig: RAGConfig | null; // Добавьте, если еще нет
-  setRAGConfig: React.Dispatch<React.SetStateAction<RAGConfig | null>>; // Добавьте, если еще нет
-}
-
-const MEMOView: React.FC<MEMOViewProps> = ({
-  credentials,
-  selectedTheme,
-  addStatusMessage,
-  production,
-  currentPage,
-  documentFilter,
-  setDocumentFilter,
-  RAGConfig,
-  setRAGConfig,
-}) => {
-  const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
-  const [selectedChunkScore, setSelectedChunkScore] = useState<ChunkScore[]>([]);
-
-  // Это состояние может быть использовано для хранения всех документов,
-  // если documentFilter используется для отфильтрованного списка.
-  // Если documentFilter всегда должен отображать все, то setAllDocuments не обязателен.
-  const [allDocuments, setAllDocuments] = useState<DocumentFilter[]>([]); 
-
-  useEffect(() => {
-    const loadAllDocuments = async () => {
-      // Проверяем, существуют ли учетные данные и есть ли в них url/key
-      if (credentials && credentials.url && credentials.key) {
-        console.log("MEMOView: Учетные данные готовы. Загрузка документов...");
-        const response = await fetchAllDocumentsMetadata(credentials);
-        if (response && response.documents) {
-          console.log("MEMOView: Документы получены:", response.documents);
-          setAllDocuments(response.documents); // Обновляем полный список документов
-          setDocumentFilter(response.documents); // Изначально отображаем все документы
-          addStatusMessage("Документы успешно загружены.", "SUCCESS");
-        } else {
-          console.log("MEMOView: Документов нет или ошибка при получении. Результат:", response);
-          addStatusMessage("Не удалось загрузить документы.", "ERROR");
-          setDocumentFilter([]); // Очищаем список при ошибке/отсутствии документов
-        }
-      } else {
-        // Логируем объект credentials, чтобы увидеть его состояние
-        console.log("MEMOView: Учетные данные не готовы для получения документов. Текущее состояние credentials:", credentials);
-      }
-    };
-    loadAllDocuments();
-  }, [credentials, setDocumentFilter, addStatusMessage]); // Добавил setDocumentFilter и addStatusMessage в зависимости
-
-  return (
-    <div className="flex flex-row h-full w-full justify-center items-start gap-4 p-4">
-      <div className="flex flex-col h-full w-full max-w-[50%]">
-        <MEMOInterface
-          addStatusMessage={addStatusMessage}
-          production={production}
-          credentials={credentials}
-          selectedTheme={selectedTheme}
-          setSelectedDocument={setSelectedDocument}
-          setSelectedChunkScore={setSelectedChunkScore}
-          currentPage={currentPage}
-          RAGConfig={RAGConfig}
-          setRAGConfig={setRAGConfig}
-          documentFilter={documentFilter}
-          setDocumentFilter={setDocumentFilter}
-          selectedDocument={selectedDocument}
-        />
-      </div>
-      <div className="flex flex-col h-full w-full max-w-[50%]">
-        <DocumentExplorer
-          selectedTheme={selectedTheme}
-          credentials={credentials}
-          addStatusMessage={addStatusMessage}
-          selectedDocument={selectedDocument}
-          setSelectedDocument={setSelectedDocument}
-          documentFilter={documentFilter}
-          setDocumentFilter={setDocumentFilter}
-          production={production}
-        />
-      </div>
-    </div>
-  );
-};
-
-export default MEMOView;
+  234 |
+  235 |             <div className={`${currentPage === "MEMO" ? "" : "hidden"}`}>
+> 236 |               <MEMOView
+      |                ^
+  237 |                 addStatusMessage={addStatusMessage}
+  238 |                 credentials={credentials}
+  239 |                 production={production}
+Next.js build worker exited with code: 1 and signal: null
