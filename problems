@@ -1,13 +1,13 @@
-useEffect(() => {
-  const loadAllDocuments = async () => {
-    const response = await fetchAllDocumentsMetadata(credentials);
-    console.log("Response from fetchAllDocumentsMetadata:", response); // Добавьте это
-    if (response && response.documents) {
-      setAllDocuments(response.documents);
-      setDocumentFilter(response.documents);
-    } else {
-      console.error("No documents found or error in response:", response); // Добавьте это
-    }
-  };
-  loadAllDocuments();
-}, [credentials]);
+
+./app/components/MEMO/MEMOInterface.tsx:100:9
+Type error: Type '{ embedding_model: any; documentFilter: DocumentFilter[]; credentials: Credentials; }' is not assignable to type 'DataCountPayload'.
+  Object literal may only specify known properties, and 'embedding_model' does not exist in type 'DataCountPayload'.
+
+   98 |     try {
+   99 |       const payload: DataCountPayload = {
+> 100 |         embedding_model: RAGConfig?.embedder.selected_component || "",
+      |         ^
+  101 |         documentFilter: documentFilter,
+  102 |         credentials: credentials,
+  103 |       };
+Next.js build worker exited with code: 1 and signal: null
